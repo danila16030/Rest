@@ -1,8 +1,5 @@
 package com.epam.dto;
 
-import lombok.Data;
-
-
 public class BookDTO {
     private String author;
     private String description;
