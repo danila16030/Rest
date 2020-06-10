@@ -32,4 +32,10 @@ public class GenreServiceImpl implements GenreService {
         }
         return dtoList;
     }
+
+    @Override
+    public GenreDTO getGenre(String genreName) {
+        Genre genre = genreDAO.getGenreByName(genreName);
+        return genreMapper.toDto(genre);
+    }
 }

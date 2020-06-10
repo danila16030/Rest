@@ -12,4 +12,9 @@ public interface GenreDAO extends SetData {
     public void removeGenre(String genreName);
 
     public List<Genre> getGenreList();
+
+    public Genre getGenreByName(String genreName);
+
+    public Genre getGenreById(int id);
+
 }

@@ -20,11 +20,11 @@ import java.util.List;
 public class BookGenreDAOImpl implements BookGenreDAO {
 
     private JdbcTemplate jdbcTemplate;
-    private static final String sqlGetAllBooksByGenre = "SELECT * FROM book_genre sc INNER JOIN book c ON  +" +
+    private static final String getAllBooksByGenre = "SELECT * FROM book_genre sc INNER JOIN book c ON  +" +
             "c.book_id=sc.book_id WHERE sc.genre_id=?";
-    private static final String sqlGetAllGenresOnBook = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
+    private static final String getAllGenresOnBook = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
             "c.genre_id=sc.genre_id WHERE sc.book_id=?";
-    private static final String sqlCreateNew = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
+    private static final String createNew = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
 
     @Override
     @Autowired
@@ -35,7 +35,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public List<Book> getAllBooksByGenre(int genreId) {
         try {
-            return jdbcTemplate.query(sqlGetAllBooksByGenre, new Object[]{genreId}, new BookMapper());
+            return jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper());
         } catch (
                 EmptyResultDataAccessException e) {
             return null;//optional
@@ -45,7 +45,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public List<Genre> getAllGenresOnBook(int bookId) {
         try {
-            return jdbcTemplate.query(sqlGetAllGenresOnBook, new Object[]{bookId}, new GenreMapper());
+            return jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper());
         } catch (
                 EmptyResultDataAccessException e) {
             return null;
@@ -54,7 +54,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
 
     @Override
     public void createNew(int bookId, int genreId) {
-        jdbcTemplate.update(sqlCreateNew, bookId, genreId);
+        jdbcTemplate.update(createNew, bookId, genreId);
     }
 
 }

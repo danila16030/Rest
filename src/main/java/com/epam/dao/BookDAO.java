@@ -15,5 +15,8 @@ public interface BookDAO extends SetData {
 
     void updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages, float price, String title);
 
-    Book findBook(String bookName);
+    Book getBookByName(String bookName);
+
+    Book findBookById(int id);
+
 }
