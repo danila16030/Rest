@@ -1,5 +1,8 @@
 package com.epam.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class BookDTO {
     private String author;
     private String description;
