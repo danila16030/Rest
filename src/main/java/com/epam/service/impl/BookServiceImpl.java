@@ -32,4 +32,11 @@ public class BookServiceImpl implements BookService {
         }
         return dtoList;
     }
+
+    @Override
+    public BookDTO getBook(String bookName) {
+        Book book = bookDAO.getBookByName(bookName);
+        return bookMapper.toDto(book);
+    }
+
 }

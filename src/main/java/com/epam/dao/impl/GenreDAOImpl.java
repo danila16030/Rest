@@ -17,10 +17,11 @@ import java.util.List;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class GenreDAOImpl implements GenreDAO {
     private JdbcTemplate jdbcTemplate;
-    private String sqlCreateNewGenre = "INSERT INTO genre genre_name=?";
-    private String sqlGetGenreList = "SELECT * FROM genre";
-    private String sqlRemoveGenre = "DELETE FROM genre WHERE genre_name = ?";
-
+    private static final String createNewGenre = "INSERT INTO genre genre_name=?";
+    private static final String getGenreList = "SELECT * FROM genre";
+    private static final String removeGenre = "DELETE FROM genre WHERE genre_name = ?";
+    private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
+    private static final String findGenreById = "SELECT * FROM genre WHERE id = ?";
     @Override
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -29,20 +30,38 @@ public class GenreDAOImpl implements GenreDAO {
 
     @Override
     public void createGenre(String genreName) {
-        jdbcTemplate.update(sqlCreateNewGenre, genreName);
+        jdbcTemplate.update(createNewGenre, genreName);
     }
 
     @Override
     public void removeGenre(String genreName) {
-        jdbcTemplate.update(sqlRemoveGenre, genreName);
+        jdbcTemplate.update(removeGenre, genreName);
     }
 
     @Override
     public List<Genre> getGenreList() {
         try {
-            return jdbcTemplate.query(sqlGetGenreList, new GenreMapper());
+            return jdbcTemplate.query(getGenreList, new GenreMapper());
         } catch (
                 EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Genre getGenreByName(String genreName) {
+        try {
+            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Genre getGenreById(int id) {
+        try {
+            return jdbcTemplate.queryForObject(findGenreById, new Object[]{id}, new GenreMapper());
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
