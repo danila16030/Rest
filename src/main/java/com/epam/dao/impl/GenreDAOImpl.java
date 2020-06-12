@@ -22,7 +22,6 @@ public class GenreDAOImpl implements GenreDAO {
     private static final String getGenreList = "SELECT * FROM genre";
     private static final String removeGenre = "DELETE FROM genre WHERE genre_name = ?";
     private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
-    private static final String findGenreById = "SELECT * FROM genre WHERE id = ?";
 
     @Override
     @Autowired

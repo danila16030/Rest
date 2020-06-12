@@ -29,8 +29,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBook(String bookName) {
-        Book book = bookDAO.getBookByName(bookName);
+    public BookDTO getBookByPartialCoincidence(String value) {
+        Book book = bookDAO.getBookByPartialCoincidence(value);
+        return bookGenreMapper.bookToBookDTO(book);
+    }
+
+    @Override
+    public BookDTO getBookByFullCoincidence(String value) {
+        Book book = bookDAO.getBookByFullCoincidence(value);
         return bookGenreMapper.bookToBookDTO(book);
     }
 

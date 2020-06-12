@@ -1,5 +1,6 @@
 package com.epam.controller;
 
+import com.epam.converter.JsonConverter;
 import com.epam.dto.GenreDTO;
 import com.epam.entyty.Genre;
 import com.epam.service.impl.GenreServiceImpl;
@@ -20,28 +21,19 @@ import java.util.List;
 public class GenreController {
     @Autowired
     private GenreServiceImpl genreService;
+    @Autowired
+    private JsonConverter jsonConverter = new JsonConverter();
 
-    private GenreDTO getGenre(String json) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String decodedJson = java.net.URLDecoder.decode(json, "UTF-8");
-            return objectMapper.readValue(decodedJson, new TypeReference<GenreDTO>() {
-            });
-        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return new GenreDTO();
-        }
-    }
 
     @PostMapping(value = "/removeGenre", headers = {"Accept=application/json"})
     public String removeGenre(Model model, @RequestBody String json) {
-        model.addAttribute("result", genreService.removeGenre(getGenre(json).getGenreName()));
+        model.addAttribute("result", genreService.removeGenre(jsonConverter.convertToGenreDTO(json).getGenreName()));
         return "jsonTemplate";
     }
 
     @PostMapping(value = "/createNewGenre", headers = {"Accept=application/json"})
-    public String creteNewGenre(Model model,@RequestBody String json) {
-        model.addAttribute("result", genreService.createGenre(getGenre(json)));
+    public String creteNewGenre(Model model, @RequestBody String json) {
+        model.addAttribute("result", genreService.createGenre(jsonConverter.convertToGenreDTO(json)));
         return "jsonTemplate";
     }
 
