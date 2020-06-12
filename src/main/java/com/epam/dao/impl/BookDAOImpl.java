@@ -6,12 +6,18 @@ import com.epam.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -34,14 +40,33 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public void createNewBook(String author, String description, int price, String writingDate, int numberOfPages,
-                              String title) {
-        jdbcTemplate.update(createNewBook, author, description, price, writingDate, numberOfPages, title);
+    public int createNewBook(String author, String description, float price, String writingDate, int numberOfPages,
+                             String title) {
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement statement = connection.prepareStatement(createNewBook, Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, author);
+                statement.setString(2, description);
+                statement.setFloat(3, price);
+                statement.setString(4, writingDate);
+                statement.setInt(5, numberOfPages);
+                statement.setString(6, title);
+                return statement;
+            }, keyHolder);
+            Map<String, Object> keys = keyHolder.getKeys();
+            return (int) keys.get("book_id");
+        } catch (DuplicateKeyException e) {
+            return 0;
+        }
     }
 
     @Override
-    public void removeBook(String bookName) {
-        jdbcTemplate.update(removeBook, bookName);
+    public boolean removeBook(String bookName) {
+        if (jdbcTemplate.update(removeBook, bookName) < 1) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -54,9 +79,12 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public void updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages,
-                           float price, String title) {
-        jdbcTemplate.update(updateBook, newTitle, author, writingDate, description, numberOfPages, price, title);
+    public boolean updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages,
+                              float price, String title) {
+        if (jdbcTemplate.update(updateBook, newTitle, author, writingDate, description, numberOfPages, price, title) < 1) {
+            return false;
+        }
+        return true;
     }
 
 
@@ -69,12 +97,5 @@ public class BookDAOImpl implements BookDAO {
         }
     }
 
-    @Override
-    public Book findBookById(int id) {
-        try {
-            return jdbcTemplate.queryForObject(findBookById, new Object[]{id}, new BookMapper());
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
+
 }

@@ -24,7 +24,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
             "c.book_id=sc.book_id WHERE sc.genre_id=?";
     private static final String getAllGenresOnBook = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
             "c.genre_id=sc.genre_id WHERE sc.book_id=?";
-    private static final String createNew = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
+    private static final String createConnection = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
 
     @Override
     @Autowired
@@ -53,8 +53,8 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     }
 
     @Override
-    public void createNew(int bookId, int genreId) {
-        jdbcTemplate.update(createNew, bookId, genreId);
+    public void createConnection(int bookId, int genreId) {
+        jdbcTemplate.update(createConnection, bookId, genreId);
     }
 
 }

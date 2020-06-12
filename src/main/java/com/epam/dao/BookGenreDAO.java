@@ -12,5 +12,5 @@ public interface BookGenreDAO extends SetData {
 
     public List<Genre> getAllGenresOnBook(int bookId);
 
-    public void createNew(int bookId,int genreId);
+    public void createConnection(int bookId,int genreId);
 }

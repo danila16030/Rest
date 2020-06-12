@@ -6,6 +6,7 @@ import com.epam.mapper.GenreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,11 +18,12 @@ import java.util.List;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class GenreDAOImpl implements GenreDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String createNewGenre = "INSERT INTO genre genre_name=?";
+    private static final String createNewGenre = "INSERT INTO genre (genre_name) VALUES (?)";
     private static final String getGenreList = "SELECT * FROM genre";
     private static final String removeGenre = "DELETE FROM genre WHERE genre_name = ?";
     private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
     private static final String findGenreById = "SELECT * FROM genre WHERE id = ?";
+
     @Override
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -29,13 +31,21 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public void createGenre(String genreName) {
-        jdbcTemplate.update(createNewGenre, genreName);
+    public boolean createGenre(String genreName) {
+        try {
+            jdbcTemplate.update(createNewGenre, genreName);
+            return true;
+        } catch (DuplicateKeyException e) {
+            return false;
+        }
     }
 
     @Override
-    public void removeGenre(String genreName) {
-        jdbcTemplate.update(removeGenre, genreName);
+    public boolean removeGenre(String genreName) {
+        if (jdbcTemplate.update(removeGenre, genreName) < 1) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -52,15 +62,6 @@ public class GenreDAOImpl implements GenreDAO {
     public Genre getGenreByName(String genreName) {
         try {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public Genre getGenreById(int id) {
-        try {
-            return jdbcTemplate.queryForObject(findGenreById, new Object[]{id}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

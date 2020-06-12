@@ -32,12 +32,4 @@ public class BookMapper implements RowMapper<Book> {
         book.setBookId(resultSet.getInt(BookFields.ID));
         return book;
     }
-
-    public Book toEntity(BookDTO dto) {
-        return Objects.isNull(dto) ? null : mapper.map(dto, Book.class);
-    }
-
-    public BookDTO toDto(Book entity) {
-        return Objects.isNull(entity) ? null : mapper.map(entity, BookDTO.class);
-    }
 }

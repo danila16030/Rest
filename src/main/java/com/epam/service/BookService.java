@@ -8,4 +8,7 @@ import java.util.List;
 public interface BookService {
     public List<BookDTO> getAllBooks();
     public BookDTO getBook(String bookName);
+    boolean removeBook(String bookName);
+    int createBook(BookDTO book);
+    boolean updateBook(BookDTO book);
 }
