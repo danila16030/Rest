@@ -26,8 +26,8 @@ public class BookDAOImpl implements BookDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String createNewBook = "INSERT INTO book (author,description,price,writing_date,page_number," +
             "title) VALUES(?,?,?,?,?,?)";
-    private static final String findBookByName = "SELECT * FROM book WHERE title = ?";
-    private static final String findBookById = "SELECT * FROM book WHERE id = ?";
+    private static final String findBookByPartialName = "SELECT * FROM book WHERE title LIKE('%' || ? || '%')";
+    private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
     private static final String removeBook = "DELETE FROM book WHERE title = ?";
     private static final String getBookList = "SELECT * FROM book";
     private static final String updateBook = "UPDATE book SET title = ?, author = ?, writing_date = ? ,description=? " +
@@ -87,11 +87,19 @@ public class BookDAOImpl implements BookDAO {
         return true;
     }
 
+    @Override
+    public Book getBookByPartialCoincidence(String value) {
+        try {
+            return jdbcTemplate.queryForObject(findBookByPartialName, new Object[]{value}, new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 
     @Override
-    public Book getBookByName(String bookName) {
+    public Book getBookByFullCoincidence(String value) {
         try {
-            return jdbcTemplate.queryForObject(findBookByName, new Object[]{bookName}, new BookMapper());
+            return jdbcTemplate.queryForObject(findBookByFullName, new Object[]{value}, new BookMapper());
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

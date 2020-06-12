@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface BookService {
     public List<BookDTO> getAllBooks();
-    public BookDTO getBook(String bookName);
+    public BookDTO getBookByPartialCoincidence(String value);
+    public BookDTO getBookByFullCoincidence(String value);
     boolean removeBook(String bookName);
     int createBook(BookDTO book);
     boolean updateBook(BookDTO book);

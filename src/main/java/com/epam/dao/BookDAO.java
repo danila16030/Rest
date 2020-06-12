@@ -14,7 +14,9 @@ public interface BookDAO extends SetData {
 
     boolean updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages, float price, String title);
 
-    Book getBookByName(String bookName);
+    Book getBookByPartialCoincidence(String value);
+
+    Book getBookByFullCoincidence(String value);
 
 
 }
