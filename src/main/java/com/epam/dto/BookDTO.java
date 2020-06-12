@@ -11,7 +11,8 @@ public class BookDTO {
     private int numberOfPages;
     private String title;
     private int bookId;
-
+    private String oldTitle;
+    private GenreDTO genre;
     public String getAuthor() {
         return author;
     }
@@ -66,5 +67,21 @@ public class BookDTO {
 
     public void setBookId(int bookId) {
         this.bookId = bookId;
+    }
+
+    public String getOldTitle() {
+        return oldTitle;
+    }
+
+    public void setOldTitle(String oldTitle) {
+        this.oldTitle = oldTitle;
+    }
+
+    public GenreDTO getGenre() {
+        return genre;
+    }
+
+    public void setGenre(GenreDTO genre) {
+        this.genre = genre;
     }
 }

@@ -16,7 +16,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(String author, String description, float price, String writingDate, int numberOfPages, String title) {
+    public Book(String author, String description, float price, String writingDate, int numberOfPages, String title,String oldTitle) {
         this.author = author;
         this.description = description;
         this.price = price;

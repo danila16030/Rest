@@ -25,12 +25,4 @@ public class GenreMapper implements RowMapper<Genre> {
         genre.setGenreId(resultSet.getInt(GenreFields.ID));
         return genre;
     }
-
-    public Genre toEntity(GenreDTO dto) {
-        return Objects.isNull(dto) ? null : mapper.map(dto, Genre.class);
-    }
-
-    public GenreDTO toDto(Genre entity) {
-        return Objects.isNull(entity) ? null : mapper.map(entity, GenreDTO.class);
-    }
 }
