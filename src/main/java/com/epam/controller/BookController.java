@@ -2,6 +2,7 @@ package com.epam.controller;
 
 import com.epam.converter.JsonConverter;
 import com.epam.dto.BookDTO;
+import com.epam.dto.ParametersDTO;
 import com.epam.service.impl.BookGenreServiceImpl;
 import com.epam.service.impl.BookServiceImpl;
 import com.epam.service.impl.GenreServiceImpl;
@@ -57,15 +58,24 @@ public class BookController {
         return "jsonTemplate";
     }
 
-    @GetMapping(value = "/getBook/PartialName/{name}", headers = {"Accept=application/json"})
-    public String getBookByPartialName(Model model, @PathVariable String name) {
-        model.addAttribute("book", bookService.getBookByPartialCoincidence(name));
+    @GetMapping(value = "/getBook/searchByPartialCoincidence", headers = {"Accept=application/json"})
+    public String searchByPartialCoincidence(Model model, @RequestBody String json) {
+        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+        model.addAttribute("book", bookService.getBookByPartialCoincidence(parametersDTO));
         return "jsonTemplate";
     }
 
-    @GetMapping(value = "/getBook/FullName/{name}", headers = {"Accept=application/json"})
-    public String getBookByFullName(Model model, @PathVariable String name) {
-        model.addAttribute("book", bookService.getBookByFullCoincidence(name));
+    @GetMapping(value = "/getBook/searchByFullCoincidence", headers = {"Accept=application/json"})
+    public String searchByFullCoincidence(Model model, @RequestBody String json) {
+        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+        model.addAttribute("book", bookService.getBookByFullCoincidence(parametersDTO));
+        return "jsonTemplate";
+    }
+
+    @GetMapping(value = "/getBook/filter", headers = {"Accept=application/json"})
+    public String filterByDate(Model model, @RequestBody String json) {
+        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+        model.addAttribute("book", bookService.filter(parametersDTO));
         return "jsonTemplate";
     }
 }

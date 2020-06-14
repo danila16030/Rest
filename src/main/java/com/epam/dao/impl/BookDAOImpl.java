@@ -1,6 +1,8 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.BookDAO;
+import com.epam.dao.impl.fields.BookFields;
+import com.epam.dto.ParametersDTO;
 import com.epam.entyty.Book;
 import com.epam.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Repository
@@ -26,8 +29,9 @@ public class BookDAOImpl implements BookDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String createNewBook = "INSERT INTO book (author,description,price,writing_date,page_number," +
             "title) VALUES(?,?,?,?,?,?)";
-    private static final String findBookByPartialName = "SELECT * FROM book WHERE title LIKE('%' || ? || '%')";
-    private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
+    private static final String blank = "SELECT * FROM book WHERE";
+    //private static final String findBookByPartialName = "SELECT * FROM book WHERE title LIKE('%' || ? || '%')";
+    //private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
     private static final String removeBook = "DELETE FROM book WHERE title = ?";
     private static final String getBookList = "SELECT * FROM book";
     private static final String updateBook = "UPDATE book SET title = ?, author = ?, writing_date = ? ,description=? " +
@@ -55,7 +59,7 @@ public class BookDAOImpl implements BookDAO {
                 return statement;
             }, keyHolder);
             Map<String, Object> keys = keyHolder.getKeys();
-            return (int) keys.get("book_id");
+            return (int) keys.get(BookFields.ID);
         } catch (DuplicateKeyException e) {
             return 0;
         }
@@ -70,11 +74,11 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public List<Book> getBookList() {
+    public Optional<List<Book>> getBookList() {
         try {
-            return jdbcTemplate.query(getBookList, new BookMapper());
+            return Optional.of(jdbcTemplate.query(getBookList, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -88,22 +92,45 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Book getBookByPartialCoincidence(String value) {
+    public Optional<List<Book>> searchByPartialCoincidence(ParametersDTO parameters) {
+        final String[] newFilter = {blank};
+        parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " LIKE '%" + v + "%'");
+        String search = newFilter[0];
         try {
-            return jdbcTemplate.queryForObject(findBookByPartialName, new Object[]{value}, new BookMapper());
+            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
-    public Book getBookByFullCoincidence(String value) {
+    public Optional<List<Book>> searchByFullCoincidence(ParametersDTO parameters) {
+        final String[] newFilter = {blank};
+        parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'");
+        String search = newFilter[0];
         try {
-            return jdbcTemplate.queryForObject(findBookByFullName, new Object[]{value}, new BookMapper());
+            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
+    private String replace(String string, int number) {
+        string = string.substring(0, string.length() - number);
+        return string;
+    }
 
+    @Override
+    public Optional<List<Book>> filter(ParametersDTO parameters) {
+        final String[] newFilter = {blank};
+        parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'" + " AND");
+        String newFilterString = newFilter[0];
+        newFilterString = replace(newFilterString, 4);
+        try {
+            return Optional.of(jdbcTemplate.query(newFilterString, new BookMapper()));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
 }
+
