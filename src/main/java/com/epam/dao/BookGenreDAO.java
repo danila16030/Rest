@@ -5,12 +5,13 @@ import com.epam.entyty.Genre;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookGenreDAO extends SetData {
 
-    public List<Book> getAllBooksByGenre(int genreId);
+    public Optional<List<Book>> getAllBooksByGenre(int genreId);
 
-    public List<Genre> getAllGenresOnBook(int bookId);
+    public Optional<List<Genre>> getAllGenresOnBook(int bookId);
 
     public void createConnection(int bookId,int genreId);
 }

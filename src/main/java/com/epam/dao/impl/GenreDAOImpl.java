@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -48,12 +49,12 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getGenreList() {
+    public Optional<List<Genre>> getGenreList() {
         try {
-            return jdbcTemplate.query(getGenreList, new GenreMapper());
+            return Optional.of(jdbcTemplate.query(getGenreList, new GenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -62,7 +63,7 @@ public class GenreDAOImpl implements GenreDAO {
         try {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return new Genre();
         }
     }
 }

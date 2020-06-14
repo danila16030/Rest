@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -33,22 +34,22 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     }
 
     @Override
-    public List<Book> getAllBooksByGenre(int genreId) {
+    public Optional<List<Book>> getAllBooksByGenre(int genreId) {
         try {
-            return jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper());
+            return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
-            return null;//optional
+            return Optional.empty();
         }
     }
 
     @Override
-    public List<Genre> getAllGenresOnBook(int bookId) {
+    public Optional<List<Genre>> getAllGenresOnBook(int bookId) {
         try {
-            return jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper());
+            return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

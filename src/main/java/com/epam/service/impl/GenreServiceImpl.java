@@ -26,7 +26,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<GenreDTO> getAllGenres() {
-        List<Genre> genreList = genreDAO.getGenreList();
+        List<Genre> genreList = genreDAO.getGenreList().get();
         return bookGenreMapper.genreListToGenreDTOList(genreList);
     }
 

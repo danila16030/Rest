@@ -3,7 +3,6 @@ package com.epam.service.impl;
 import com.epam.dao.impl.BookDAOImpl;
 import com.epam.dao.impl.BookGenreDAOImpl;
 import com.epam.dao.impl.GenreDAOImpl;
-import com.epam.dao.impl.fields.BookFields;
 import com.epam.dto.BookDTO;
 import com.epam.dto.GenreDTO;
 import com.epam.entyty.Book;
@@ -33,16 +32,16 @@ public class BookGenreServiceImpl implements BookGenreService {
 
     @Override
     public List<GenreDTO> getGenresByBook(String bookName) {
-        int bookId = bookDAO.getBookByPartialCoincidence(bookName).getBookId();
-        List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId);
-        return bookGenreMapper.genreListToGenreDTOList(genres);
-
+        // int bookId = bookDAO.searchByPartialCoincidence(bookName).getBookId();
+        //List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId).get();
+        //return bookGenreMapper.genreListToGenreDTOList(genres);
+        return null;
     }
 
     @Override
     public List<BookDTO> getBooksByGenre(String genreName) {
         int genreId = genreDAO.getGenreByName(genreName).getGenreId();
-        List<Book> books = bookGenreDAO.getAllBooksByGenre(genreId);
+        List<Book> books = bookGenreDAO.getAllBooksByGenre(genreId).get();
         return bookGenreMapper.bookListToBookDTOList(books);
     }
 

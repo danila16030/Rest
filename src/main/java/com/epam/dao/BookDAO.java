@@ -1,8 +1,10 @@
 package com.epam.dao;
 
+import com.epam.dto.ParametersDTO;
 import com.epam.entyty.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookDAO extends SetData {
 
@@ -10,13 +12,15 @@ public interface BookDAO extends SetData {
 
     boolean removeBook(String bookName);
 
-    List<Book> getBookList();
+    Optional<List<Book>> getBookList();
 
     boolean updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages, float price, String title);
 
-    Book getBookByPartialCoincidence(String value);
+    Optional<List<Book>> searchByPartialCoincidence(ParametersDTO parameters);
 
-    Book getBookByFullCoincidence(String value);
+    Optional<List<Book>> searchByFullCoincidence(ParametersDTO parameters);
+
+    Optional<List<Book>> filter(ParametersDTO parameters);
 
 
 }
