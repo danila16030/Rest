@@ -13,5 +13,7 @@ public interface BookService {
     boolean removeBook(String bookName);
     int createBook(BookDTO book);
     boolean updateBook(BookDTO book);
-    List<Book> filter(ParametersDTO parameters);
+    List<BookDTO> filter(ParametersDTO parameters);
+    List<BookDTO> getBooksSortedByName();
+
 }
