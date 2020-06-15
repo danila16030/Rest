@@ -1,5 +1,6 @@
 package com.epam.service.impl;
 
+import com.epam.comparator.BookDateComparator;
 import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.impl.BookDAOImpl;
 import com.epam.dto.BookDTO;
@@ -21,6 +22,7 @@ public class BookServiceImpl implements BookService {
     private BookDAOImpl bookDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
     private BookTitleComparator bookTitleComparator = new BookTitleComparator();
+    private BookDateComparator bookDateComparator = new BookDateComparator();
 
     @Autowired
     public BookServiceImpl(BookDAOImpl dao) {
@@ -72,6 +74,13 @@ public class BookServiceImpl implements BookService {
     public List<BookDTO> getBooksSortedByName() {
         List<Book> bookList = bookDAO.getBookList().get();
         bookList = bookList.stream().sorted(bookTitleComparator).collect(Collectors.toList());
+        return bookGenreMapper.bookListToBookDTOList(bookList);
+    }
+
+    @Override
+    public List<BookDTO> getBooksSortedByDate() {
+        List<Book> bookList = bookDAO.getBookList().get();
+        bookList = bookList.stream().sorted(bookDateComparator).collect(Collectors.toList());
         return bookGenreMapper.bookListToBookDTOList(bookList);
     }
 

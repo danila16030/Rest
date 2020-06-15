@@ -15,5 +15,6 @@ public interface BookService {
     boolean updateBook(BookDTO book);
     List<BookDTO> filter(ParametersDTO parameters);
     List<BookDTO> getBooksSortedByName();
+    List<BookDTO> getBooksSortedByDate();
 
 }
