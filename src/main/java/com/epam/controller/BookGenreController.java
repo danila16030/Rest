@@ -1,6 +1,5 @@
 package com.epam.controller;
 
-import com.epam.service.BookGenreService;
 import com.epam.service.impl.BookGenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

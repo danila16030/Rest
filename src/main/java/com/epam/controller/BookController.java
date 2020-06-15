@@ -58,6 +58,12 @@ public class BookController {
         return "jsonTemplate";
     }
 
+    @GetMapping(value = "/getBooksSortedByName")
+    public String getBooksSortedByName(Model model) {
+        model.addAttribute("books", bookService.getBooksSortedByName());
+        return "jsonTemplate";
+    }
+
     @GetMapping(value = "/getBook/searchByPartialCoincidence", headers = {"Accept=application/json"})
     public String searchByPartialCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);

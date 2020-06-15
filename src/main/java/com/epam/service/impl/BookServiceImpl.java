@@ -1,5 +1,6 @@
 package com.epam.service.impl;
 
+import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.impl.BookDAOImpl;
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
@@ -10,13 +11,16 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 public class BookServiceImpl implements BookService {
     private BookDAOImpl bookDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
+    private BookTitleComparator bookTitleComparator = new BookTitleComparator();
 
     @Autowired
     public BookServiceImpl(BookDAOImpl dao) {
@@ -59,8 +63,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> filter(ParametersDTO parameters) {
-        return bookDAO.filter(parameters).get();
+    public List<BookDTO> filter(ParametersDTO parameters) {
+        List<Book> bookList = bookDAO.filter(parameters).get();
+        return bookGenreMapper.bookListToBookDTOList(bookList);
+    }
+
+    @Override
+    public List<BookDTO> getBooksSortedByName() {
+        List<Book> bookList = bookDAO.getBookList().get();
+        bookList = bookList.stream().sorted(bookTitleComparator).collect(Collectors.toList());
+        return bookGenreMapper.bookListToBookDTOList(bookList);
     }
 
 }

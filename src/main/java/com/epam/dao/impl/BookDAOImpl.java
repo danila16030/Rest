@@ -30,8 +30,7 @@ public class BookDAOImpl implements BookDAO {
     private static final String createNewBook = "INSERT INTO book (author,description,price,writing_date,page_number," +
             "title) VALUES(?,?,?,?,?,?)";
     private static final String blank = "SELECT * FROM book WHERE";
-    //private static final String findBookByPartialName = "SELECT * FROM book WHERE title LIKE('%' || ? || '%')";
-    //private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
+    private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
     private static final String removeBook = "DELETE FROM book WHERE title = ?";
     private static final String getBookList = "SELECT * FROM book";
     private static final String updateBook = "UPDATE book SET title = ?, author = ?, writing_date = ? ,description=? " +
@@ -130,6 +129,15 @@ public class BookDAOImpl implements BookDAO {
             return Optional.of(jdbcTemplate.query(newFilterString, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public Book getBookByName(String name) {
+        try {
+            return jdbcTemplate.queryForObject(findBookByFullName, new Object[]{name}, new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return new Book();
         }
     }
 }
