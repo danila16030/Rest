@@ -1,4 +1,4 @@
-package com.epam.controller;
+package controller;
 
 import com.epam.converter.JsonConverter;
 import org.springframework.beans.factory.annotation.Autowired;

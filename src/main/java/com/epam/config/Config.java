@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
-@ComponentScan( )
+@ComponentScan("com.epam")
 public class Config extends HikariConfig {
     @Bean
     public DataSource dataSource() {
