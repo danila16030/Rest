@@ -12,12 +12,13 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import javax.sound.sampled.BooleanControl;
 import javax.sql.DataSource;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
-@ComponentScan(value = "com.epam")
+@ComponentScan( )
 public class Config extends HikariConfig {
     @Bean
     public DataSource dataSource() {
