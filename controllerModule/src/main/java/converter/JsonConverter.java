@@ -1,4 +1,4 @@
-package com.epam.converter;
+package converter;
 
 import dto.BookDTO;
 import dto.GenreDTO;
