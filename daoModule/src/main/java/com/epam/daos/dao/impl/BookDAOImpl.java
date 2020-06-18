@@ -1,6 +1,7 @@
 package com.epam.daos.dao.impl;
 
 import com.epam.daos.dao.BookDAO;
+import com.epam.daos.rowMapper.BookMapper;
 import com.epam.daos.dao.impl.fields.BookFields;
 import com.epam.entytys.dto.ParametersDTO;
 import com.epam.entytys.entyty.Book;
@@ -13,7 +14,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import com.epam.daos.rowMapper.BookMapper;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -73,7 +73,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> getBookList() {
+    public Optional<List<Book>> getAllBooks() {
         try {
             return Optional.of(jdbcTemplate.query(getBookList, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {

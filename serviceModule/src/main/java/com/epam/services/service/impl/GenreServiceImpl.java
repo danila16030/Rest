@@ -46,8 +46,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public boolean createGenre(GenreDTO genre) {
-        return genreDAO.createGenre(genre.getGenreName());
+    public boolean createGenre(String genreName) {
+        return genreDAO.createGenre(genreName);
     }
 
     @Override

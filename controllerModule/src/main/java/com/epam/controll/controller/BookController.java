@@ -1,9 +1,9 @@
 package com.epam.controll.controller;
 
+import com.epam.controll.converter.JsonConverter;
 import com.epam.services.service.impl.BookGenreServiceImpl;
 import com.epam.services.service.impl.BookServiceImpl;
 import com.epam.services.service.impl.GenreServiceImpl;
-import com.epam.controll.converter.JsonConverter;
 import com.epam.entytys.dto.BookDTO;
 import com.epam.entytys.dto.ParametersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class BookController {
     private JsonConverter jsonConverter = new JsonConverter();
 
 
-    @PostMapping(value = "/removeBook/{bookName}")
-    public String removeBook(Model model, @PathVariable String bookName) {
-        model.addAttribute("result", bookService.removeBook(bookName));
+    @PostMapping(value = "/removeBook", headers = {"Accept=application/json"})
+    public String removeBook(Model model, @RequestBody String json) {
+        model.addAttribute("result", bookService.removeBook(jsonConverter.convertToBookDTO(json).getTitle()));
         return "jsonTemplate";
     }
 

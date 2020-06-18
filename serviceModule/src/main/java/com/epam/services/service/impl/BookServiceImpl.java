@@ -29,8 +29,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public BookDTO getBookByName(String bookName) {
+        Book book = bookDAO.getBookByName(bookName);
+        return bookGenreMapper.bookToBookDTO(book);
+    }
+
+    @Override
     public List<BookDTO> getAllBooks() {
-        List<Book> bookList = bookDAO.getBookList().get();
+        List<Book> bookList = bookDAO.getAllBooks().get();
         return bookGenreMapper.bookListToBookDTOList(bookList);
     }
 
@@ -71,14 +77,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> getBooksSortedByName() {
-        List<Book> bookList = bookDAO.getBookList().get();
+        List<Book> bookList = bookDAO.getAllBooks().get();
         bookList = bookList.stream().sorted(bookTitleComparator).collect(Collectors.toList());
         return bookGenreMapper.bookListToBookDTOList(bookList);
     }
 
     @Override
     public List<BookDTO> getBooksSortedByDate() {
-        List<Book> bookList = bookDAO.getBookList().get();
+        List<Book> bookList = bookDAO.getAllBooks().get();
         bookList = bookList.stream().sorted(bookDateComparator).collect(Collectors.toList());
         return bookGenreMapper.bookListToBookDTOList(bookList);
     }
