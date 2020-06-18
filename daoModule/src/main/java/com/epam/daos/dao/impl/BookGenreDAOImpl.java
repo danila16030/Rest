@@ -1,5 +1,7 @@
 package com.epam.daos.dao.impl;
 
+import com.epam.daos.rowMapper.BookMapper;
+import com.epam.daos.rowMapper.GenreMapper;
 import com.epam.daos.dao.BookGenreDAO;
 import com.epam.entytys.entyty.Book;
 import com.epam.entytys.entyty.Genre;
@@ -9,8 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.epam.daos.rowMapper.BookMapper;
-import com.epam.daos.rowMapper.GenreMapper;
 
 import javax.sql.DataSource;
 import java.util.List;

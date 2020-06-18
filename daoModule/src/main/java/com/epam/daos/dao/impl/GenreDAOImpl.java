@@ -1,5 +1,6 @@
 package com.epam.daos.dao.impl;
 
+import com.epam.daos.rowMapper.GenreMapper;
 import com.epam.daos.dao.GenreDAO;
 import com.epam.entytys.entyty.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.epam.daos.rowMapper.GenreMapper;
 
 import javax.sql.DataSource;
 import java.util.List;

@@ -12,7 +12,7 @@ public interface BookDAO extends SetData {
 
     boolean removeBook(String bookName);
 
-    Optional<List<Book>> getBookList();
+    Optional<List<Book>> getAllBooks();
 
     boolean updateBook(String newTitle, String author, String writingDate, String description, int numberOfPages, float price, String title);
 

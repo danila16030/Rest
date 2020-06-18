@@ -11,7 +11,7 @@ public interface GenreService {
 
     public int getGenreId(String genreName);
 
-    boolean createGenre(GenreDTO genre);
+    boolean createGenre(String genreName);
 
     boolean removeGenre(String genreName);
 

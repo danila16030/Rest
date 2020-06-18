@@ -9,11 +9,13 @@ import com.epam.entytys.entyty.Book;
 import com.epam.entytys.entyty.Genre;
 import com.epam.entytys.mapper.BookGenreMapper;
 import com.epam.services.service.BookGenreService;
+import com.epam.services.service.BookService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookGenreServiceImpl implements BookGenreService {
@@ -31,16 +33,14 @@ public class BookGenreServiceImpl implements BookGenreService {
 
 
     @Override
-    public List<GenreDTO> getGenresByBook(String bookName) {
-        int bookId = bookDAO.getBookByName(bookName).getBookId();
+    public List<GenreDTO> getGenresByBook(int bookId) {
         List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId).get();
         return bookGenreMapper.genreListToGenreDTOList(genres);
     }
 
     @Override
-    public List<BookDTO> getBooksByGenre(String genreName) {
-        int genreId = genreDAO.getGenreByName(genreName).getGenreId();
-        List<Book> books = bookGenreDAO.getAllBooksByGenre(genreId).get();
+    public List<BookDTO> getBooksByGenre(int genreId) {
+        List<Book>books = bookGenreDAO.getAllBooksByGenre(genreId).get();
         return bookGenreMapper.bookListToBookDTOList(books);
     }
 

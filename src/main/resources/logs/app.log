@@ -1,24 +1,24 @@
-21:31:18.737 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:31:18.745 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:32:16.173 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:32:16.182 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:33:51.292 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:33:51.299 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:34:07.400 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:34:07.410 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:35:32.985 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:35:32.998 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:40:55.533 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:40:55.544 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:41:09.329 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:41:09.336 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:42:04.465 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:42:04.471 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:43:19.594 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
-21:43:19.690 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: Can't find driver class for database!
-21:46:38.999 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+21:31:18.737 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:31:18.745 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:32:16.173 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:32:16.182 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:33:51.292 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:33:51.299 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:34:07.400 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:34:07.410 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:35:32.985 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:35:32.998 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:40:55.533 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:40:55.544 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:41:09.329 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:41:09.336 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:42:04.465 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:42:04.471 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:43:19.594 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+21:43:19.690 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: Can't find driver class for database!
+21:46:38.999 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-21:46:39.091 [main] ERROR epam.servlets.com.epam.daos.dao.pool.ConnectionPool - com.epam.servlets.com.epam.daos.dao.pool.PoolException: SQL Exception during initializing Connection Pool!
-13:24:25.094 [http-nio-8080-exec-9] DEBUG epam.servlets.command.impl.ChangeMenuPageCommand - file is temp1.png
-13:24:43.931 [http-nio-8080-exec-3] DEBUG epam.servlets.command.impl.ChangeMenuPageCommand - file is temp2.png
+21:46:39.091 [main] ERROR com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.ConnectionPool - com.entytys.epam.servlets.com.entytys.epam.daos.dao.pool.PoolException: SQL Exception during initializing Connection Pool!
+13:24:25.094 [http-nio-8080-exec-9] DEBUG com.entytys.epam.servlets.command.impl.ChangeMenuPageCommand - file is temp1.png
+13:24:43.931 [http-nio-8080-exec-3] DEBUG com.entytys.epam.servlets.command.impl.ChangeMenuPageCommand - file is temp2.png

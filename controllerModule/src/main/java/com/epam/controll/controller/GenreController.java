@@ -1,7 +1,7 @@
 package com.epam.controll.controller;
 
-import com.epam.services.service.impl.GenreServiceImpl;
 import com.epam.controll.converter.JsonConverter;
+import com.epam.services.service.impl.GenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +24,7 @@ public class GenreController {
 
     @PostMapping(value = "/createNewGenre", headers = {"Accept=application/json"})
     public String creteNewGenre(Model model, @RequestBody String json) {
-        model.addAttribute("result", genreService.createGenre(jsonConverter.convertToGenreDTO(json)));
+        model.addAttribute("result", genreService.createGenre(jsonConverter.convertToGenreDTO(json).getGenreName()));
         return "jsonTemplate";
     }
 
