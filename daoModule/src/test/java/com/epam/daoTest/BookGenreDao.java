@@ -2,7 +2,6 @@ package com.epam.daoTest;
 
 import com.epam.config.TestConfig;
 import com.epam.daos.dao.BookGenreDAO;
-import com.epam.daos.dao.impl.GenreDAOImpl;
 import com.epam.entytys.entyty.Book;
 import com.epam.entytys.entyty.Genre;
 import org.junit.After;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
-public class BookGenreDaoTest {
+public class BookGenreDao {
     @InjectMocks
     private JdbcTemplate jdbcTemplate;
 
@@ -45,12 +44,12 @@ public class BookGenreDaoTest {
     @Before
     public void setUp() {
         ResourceDatabasePopulator tables = new ResourceDatabasePopulator();
-        tables.addScript(new ClassPathResource("/genre-table.sql"));
-        tables.addScript(new ClassPathResource("/genre-data.sql"));
-        tables.addScript(new ClassPathResource("/book-table.sql"));
-        tables.addScript(new ClassPathResource("/book-data.sql"));
-        tables.addScript(new ClassPathResource("/book_genre-table.sql"));
-        tables.addScript(new ClassPathResource("/book_genre-data.sql"));
+        tables.addScript(new ClassPathResource("/dao/genre-table.sql"));
+        tables.addScript(new ClassPathResource("/dao/genre-data.sql"));
+        tables.addScript(new ClassPathResource("/dao/book-table.sql"));
+        tables.addScript(new ClassPathResource("/dao/book-data.sql"));
+        tables.addScript(new ClassPathResource("/dao/book_genre-table.sql"));
+        tables.addScript(new ClassPathResource("/dao/book_genre-data.sql"));
         DatabasePopulatorUtils.execute(tables, dataSource);
     }
 

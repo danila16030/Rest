@@ -25,7 +25,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
-public class BookDaoTest {
+public class BookDao {
     @InjectMocks
     private JdbcTemplate jdbcTemplate;
 
@@ -45,9 +45,8 @@ public class BookDaoTest {
     @Before
     public void setUp() {
         ResourceDatabasePopulator tables = new ResourceDatabasePopulator();
-        tables.addScript(new ClassPathResource("/book-table.sql"));
-        tables.addScript(new ClassPathResource("/book-data.sql"));
-
+        tables.addScript(new ClassPathResource("/dao/book-table.sql"));
+        tables.addScript(new ClassPathResource("/dao/book-data.sql"));
         DatabasePopulatorUtils.execute(tables, dataSource);
     }
 

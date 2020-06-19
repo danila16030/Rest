@@ -47,11 +47,16 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public boolean createGenre(String genreName) {
-        return genreDAO.createGenre(genreName);
+        int genreId = genreDAO.createGenre(genreName);
+        if (genreId == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    @Override
-    public boolean removeGenre(String genreName) {
-        return genreDAO.removeGenre(genreName);
+        @Override
+        public boolean removeGenre (String genreName){
+            return genreDAO.removeGenre(genreName);
+        }
     }
-}

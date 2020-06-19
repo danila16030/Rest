@@ -37,8 +37,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     public Optional<List<Book>> getAllBooksByGenre(int genreId) {
         try {
             return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper()));
-        } catch (
-                EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -47,8 +46,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     public Optional<List<Genre>> getAllGenresOnBook(int bookId) {
         try {
             return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper()));
-        } catch (
-                EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
