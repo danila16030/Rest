@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
-@ComponentScan({"com.epam.controll", "com.epam.daos", "com.epam.entytys", "com.epam.services"})
+@ComponentScan({"com.epam.daos", "com.epam.entytys"})
 public class TestConfig {
 
     @Bean

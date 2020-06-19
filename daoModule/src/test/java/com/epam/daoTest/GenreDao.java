@@ -24,15 +24,14 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
-public class GenreDaoTest {
+public class GenreDao {
     @InjectMocks
     private JdbcTemplate jdbcTemplate;
 
-    @InjectMocks
     @Autowired
     private DataSource dataSource;
 
-    @InjectMocks
+
     @Autowired
     private GenreDAOImpl genreDao;
 
@@ -44,9 +43,8 @@ public class GenreDaoTest {
     @Before
     public void setUp() {
         ResourceDatabasePopulator tables = new ResourceDatabasePopulator();
-        tables.addScript(new ClassPathResource("/genre-table.sql"));
-        tables.addScript(new ClassPathResource("/genre-data.sql"));
-
+        tables.addScript(new ClassPathResource("/dao/genre-table.sql"));
+        tables.addScript(new ClassPathResource("/dao/genre-data.sql"));
         DatabasePopulatorUtils.execute(tables, dataSource);
     }
 

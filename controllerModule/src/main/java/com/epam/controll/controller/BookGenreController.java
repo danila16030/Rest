@@ -29,17 +29,19 @@ public class BookGenreController {
     @Autowired
     private BookService bookService;
 
+    private final static String jsonTemplate = "jsonTemplate";
+
     @GetMapping(value = "/getBookByGenre/{genreName}")
     public String getBookByGenre(Model model, @PathVariable String genreName) {
         int genreId = genreService.getGenre(genreName).getGenreId();
         model.addAttribute("books", bookGenreService.getBooksByGenre(genreId));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getGenreByBook/{bookName}")
     public String getGenreByBook(Model model, @PathVariable String bookName) {
         int bookId = bookService.getBookByName(bookName).getBookId();
         model.addAttribute("genres", bookGenreService.getGenresByBook(bookId));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 }

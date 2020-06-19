@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface GenreDAO extends SetData {
 
-    public boolean createGenre(String genreName);
+    public int createGenre(String genreName);
 
     public boolean removeGenre(String genreName);
 

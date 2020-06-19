@@ -24,17 +24,18 @@ public class BookController {
     @Autowired
     private JsonConverter jsonConverter = new JsonConverter();
 
+    private final static String jsonTemplate = "jsonTemplate";
 
     @PostMapping(value = "/removeBook", headers = {"Accept=application/json"})
     public String removeBook(Model model, @RequestBody String json) {
         model.addAttribute("result", bookService.removeBook(jsonConverter.convertToBookDTO(json).getTitle()));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @PostMapping(value = "/updateBook", headers = {"Accept=application/json"})
     public String updateBook(Model model, @RequestBody String json) {
         model.addAttribute("result", bookService.updateBook(jsonConverter.convertToBookDTO(json)));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @PostMapping(value = "/createNewBook", headers = {"Accept=application/json"})
@@ -43,51 +44,51 @@ public class BookController {
         int bookId = bookService.createBook(bookDTO);
         if (bookId == 0) {
             model.addAttribute("result", false);
-            return "jsonTemplate";
+            return jsonTemplate;
         }
         String genreName = bookDTO.getGenre().getGenreName();
         int genreId = genreService.getGenreId(genreName);
         bookGenreService.createConnection(bookId, genreId);
         model.addAttribute("result", true);
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getAllBooks")
     public String getAllBooks(Model model) {
         model.addAttribute("books", bookService.getAllBooks());
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getBooksSortedByName")
     public String getBooksSortedByName(Model model) {
         model.addAttribute("books", bookService.getBooksSortedByName());
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getBooksSortedByDate")
     public String getBooksSortedByDate(Model model) {
         model.addAttribute("books", bookService.getBooksSortedByDate());
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getBook/searchByPartialCoincidence", headers = {"Accept=application/json"})
     public String searchByPartialCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute("book", bookService.getBookByPartialCoincidence(parametersDTO));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getBook/searchByFullCoincidence", headers = {"Accept=application/json"})
     public String searchByFullCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute("book", bookService.getBookByFullCoincidence(parametersDTO));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 
     @GetMapping(value = "/getBook/filter", headers = {"Accept=application/json"})
     public String filterByDate(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute("book", bookService.filter(parametersDTO));
-        return "jsonTemplate";
+        return jsonTemplate;
     }
 }
