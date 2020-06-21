@@ -8,12 +8,16 @@
     <artifactId>Rest</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>daoModule</module>
-        <module>serviceModule</module>
-        <module>entytyAndDtoModule</module>
-        <module>controllerModule</module>
+        <module>rest-controller</module>
+        <module>rest-service</module>
+        <module>rest-dao</module>
+        <module>rest-model</module>
     </modules>
     <packaging>pom</packaging>
+
+    <properties>
+        <org.springframework.version>5.2.6.RELEASE</org.springframework.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -34,33 +38,33 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.2.6.RELEASE</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.2.6.RELEASE</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>5.2.6.RELEASE</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.2.6.RELEASE</version>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.4.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>5.2.4.RELEASE</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -94,7 +98,11 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -107,7 +115,6 @@
                     <source>1.8</source> <!-- or higher, depending on your project -->
                     <target>1.8</target> <!-- or higher, depending on your project -->
                     <annotationProcessorPaths>
-
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
