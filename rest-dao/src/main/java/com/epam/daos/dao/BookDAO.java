@@ -22,7 +22,7 @@ public interface BookDAO extends SetData {
 
     Optional<List<Book>> filter(ParametersDTO parameters);
 
-    Book getBookByName(String name);
+    Book getBookById(long bookId);
 
 
 }

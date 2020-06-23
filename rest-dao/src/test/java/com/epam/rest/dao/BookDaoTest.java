@@ -63,7 +63,7 @@ public class BookDaoTest {
 
     @Test
     public void getBookBeNameTest() {
-        Book book = bookDAO.getBookByName("Towers");
+        Book book = bookDAO.getBookById(3);
         Assert.assertEquals("Towers",book.getTitle() );
     }
 
@@ -102,7 +102,7 @@ public class BookDaoTest {
     public void updateBookTest() {
         bookDAO.updateBook("NewTitle", "wasya", "16.05.2008", "strashno",
                 70,48, 3);
-        Book book=bookDAO.getBookByName("NewTitle");
+        Book book=bookDAO.getBookById(3);
         Assert.assertEquals("wasya",book.getAuthor());
     }
 
@@ -110,7 +110,7 @@ public class BookDaoTest {
     public void createNewBookTest() {
         bookDAO.createNewBook("Vasiliy", "funny", 997, "16.03.2999",
                 70,"Stories");
-        Book book=bookDAO.getBookByName("Stories");
+        Book book=bookDAO.getBookById(4);
         Assert.assertEquals("Vasiliy",book.getAuthor());
     }
 

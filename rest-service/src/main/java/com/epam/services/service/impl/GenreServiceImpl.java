@@ -40,7 +40,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public boolean createGenre(GenreDTO genreDTO) {
-        if (genreDTO != null && !genreValidator.isExist(genreDTO)) {
+        if (genreDTO != null && !genreValidator.isExistByName(genreDTO)) {
             return genreDAO.createGenre(genreDTO.getGenreName());
         }
         return false;
@@ -48,7 +48,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public boolean removeGenre(GenreDTO genreDTO) {
-        if (genreDTO != null && genreValidator.isExist(genreDTO)) {
+        if (genreDTO != null && genreValidator.isExistById(genreDTO)) {
             return genreDAO.removeGenre(genreDTO.getGenreId());
         }
         return false;

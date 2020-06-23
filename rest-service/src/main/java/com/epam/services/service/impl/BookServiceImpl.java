@@ -42,8 +42,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBookByName(String bookName) {
-        Book book = bookDAO.getBookByName(bookName);
+    public BookDTO getBook(long bookId) {
+        Book book = bookDAO.getBookById(bookId);
         return bookGenreMapper.bookToBookDTO(book);
     }
 

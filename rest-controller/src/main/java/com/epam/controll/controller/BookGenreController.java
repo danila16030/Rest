@@ -26,16 +26,14 @@ public class BookGenreController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping(value = "/getBookByGenre/{genreName}")
-    public String getBookByGenre(Model model, @PathVariable String genreName) {
-        long genreId = genreService.getGenre(genreName).getGenreId();
+    @GetMapping(value = "/getBookByGenre/{genreId}")
+    public String getBookByGenre(Model model, @PathVariable long genreId) {
         model.addAttribute(ModelAttributes.BOOKS, bookGenreService.getBooksByGenre(genreId));
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getGenreByBook/{bookName}")
-    public String getGenreByBook(Model model, @PathVariable String bookName) {
-        long bookId = bookService.getBookByName(bookName).getBookId();
+    @GetMapping(value = "/getGenreByBook/{bookId}")
+    public String getGenreByBook(Model model, @PathVariable long bookId) {
         model.addAttribute(ModelAttributes.GENRES, bookGenreService.getGenresByBook(bookId));
         return jsonTemplate;
     }
