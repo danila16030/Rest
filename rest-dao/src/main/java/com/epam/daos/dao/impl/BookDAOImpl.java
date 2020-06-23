@@ -30,7 +30,7 @@ public class BookDAOImpl implements BookDAO {
     private static final String createNewBook = "INSERT INTO book (author,description,price,writing_date,page_number," +
             "title) VALUES(?,?,?,?,?,?)";
     private static final String blank = "SELECT * FROM book WHERE";
-    private static final String findBookByFullName = "SELECT * FROM book WHERE title = ?";
+    private static final String findBookById = "SELECT * FROM book WHERE book_id = ?";
     private static final String removeBook = "DELETE FROM book WHERE book_id = ?";
     private static final String getBookList = "SELECT * FROM book";
     private static final String updateBook = "UPDATE book SET title = ?, author = ?, writing_date = ? ,description=? " +
@@ -44,7 +44,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Long createNewBook(String author, String description, float price, String writingDate, int numberOfPages,
-                             String title) {
+                              String title) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
@@ -58,7 +58,7 @@ public class BookDAOImpl implements BookDAO {
                 return statement;
             }, keyHolder);
             Map<String, Object> keys = keyHolder.getKeys();
-            return new Long((Integer)keys.get(BookFields.ID));
+            return Long.parseLong(String.valueOf(keys.get(BookFields.ID)));
         } catch (DuplicateKeyException e) {
             return 0l;
         }
@@ -133,9 +133,9 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Book getBookByName(String name) {
+    public Book getBookById(long bookId) {
         try {
-            return jdbcTemplate.queryForObject(findBookByFullName, new Object[]{name}, new BookMapper());
+            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
         } catch (EmptyResultDataAccessException e) {
             return new Book();
         }

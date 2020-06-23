@@ -62,8 +62,8 @@ public class BookServiceTest {
     @Test
     public void getBookByNameTest() {
         Book expectedBook = createBook();
-        when(bookDAO.getBookByName("It")).thenReturn(expectedBook);
-        BookDTO actualBook = bookService.getBookByName("It");
+        when(bookDAO.getBookById(1)).thenReturn(expectedBook);
+        BookDTO actualBook = bookService.getBook(1);
         assertEquals(expectedBook.getWritingDate(), actualBook.getWritingDate());
     }
 

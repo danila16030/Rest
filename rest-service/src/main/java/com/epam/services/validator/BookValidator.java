@@ -12,7 +12,7 @@ public class BookValidator {
     private BookDAOImpl bookDAO;
 
     public boolean isExist(BookDTO bookDTO) {
-        Book book = bookDAO.getBookByName(bookDTO.getTitle());
+        Book book = bookDAO.getBookById(bookDTO.getBookId());
         if (book.getTitle() == null) {
             return false;
         } else {

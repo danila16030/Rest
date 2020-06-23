@@ -68,7 +68,7 @@ public class GenreServiceTest {
     public void createGenreTest() {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
-        when(genreValidator.isExist(genre)).thenReturn(false);
+        when(genreValidator.isExistById(genre)).thenReturn(false);
         genreService.createGenre(genre);
         verify(genreDAO, atLeastOnce()).createGenre(anyString());
     }
@@ -77,7 +77,7 @@ public class GenreServiceTest {
     public void removeGenreTest() {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
-        when(genreValidator.isExist(genre)).thenReturn(true);
+        when(genreValidator.isExistById(genre)).thenReturn(true);
         genreService.removeGenre(genre);
         verify(genreDAO, atLeastOnce()).removeGenre(anyLong());
     }

@@ -7,14 +7,16 @@ import java.util.Optional;
 
 public interface GenreDAO extends SetData {
 
-     Long createGenreAndReturnId(String genreName);
+    Long createGenreAndReturnId(String genreName);
 
-     boolean removeGenre(long genreId);
+    boolean removeGenre(long genreId);
 
-     Optional<List<Genre>> getGenreList();
+    Optional<List<Genre>> getGenreList();
 
-     Genre getGenreByName(String genreName);
+    Genre getGenreByName(String genreName);
 
-     boolean createGenre(String genreName);
+    Genre getGenreById(long genreId);
+
+    boolean createGenre(String genreName);
 
 }

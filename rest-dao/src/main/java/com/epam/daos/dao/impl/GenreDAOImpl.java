@@ -29,6 +29,7 @@ public class GenreDAOImpl implements GenreDAO {
     private static final String getGenreList = "SELECT * FROM genre";
     private static final String removeGenre = "DELETE FROM genre WHERE genre_id = ?";
     private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
+    private static final String findGenreById = "SELECT * FROM genre WHERE genre_id = ?";
 
     @Override
     @Autowired
@@ -46,12 +47,11 @@ public class GenreDAOImpl implements GenreDAO {
                 return statement;
             }, keyHolder);
             Map<String, Object> keys = keyHolder.getKeys();
-            return Long.valueOf((Integer) keys.get(GenreFields.ID));
+            return Long.parseLong(String.valueOf(keys.get(GenreFields.ID)));
         } catch (DuplicateKeyException e) {
             return 0l;
         }
     }
-
 
 
     @Override
@@ -76,6 +76,15 @@ public class GenreDAOImpl implements GenreDAO {
     public Genre getGenreByName(String genreName) {
         try {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return new Genre();
+        }
+    }
+
+    @Override
+    public Genre getGenreById(long genreId) {
+        try {
+            return jdbcTemplate.queryForObject(findGenreById, new Object[]{genreId}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
             return new Genre();
         }
