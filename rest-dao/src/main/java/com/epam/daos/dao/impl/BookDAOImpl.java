@@ -2,6 +2,7 @@ package com.epam.daos.dao.impl;
 
 import com.epam.daos.dao.BookDAO;
 import com.epam.daos.dao.impl.fields.BookFields;
+import com.epam.daos.exception.NoSuchElementException;
 import com.epam.models.dto.ParametersDTO;
 import com.epam.models.entity.Book;
 import com.epam.daos.rowMapper.BookMapper;
@@ -66,9 +67,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public boolean removeBook(long bookId) {
-        if (jdbcTemplate.update(removeBook, bookId) < 1) {
-            return false;
-        }
+        jdbcTemplate.update(removeBook, bookId);
         return true;
     }
 
@@ -77,17 +76,17 @@ public class BookDAOImpl implements BookDAO {
         try {
             return Optional.of(jdbcTemplate.query(getBookList, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new NoSuchElementException();
         }
     }
 
     @Override
-    public boolean updateBook(String title, String author, String writingDate, String description, int numberOfPages,
-                              float price, long bookId) {
+    public Book updateBook(String title, String author, String writingDate, String description, int numberOfPages,
+                           float price, long bookId) {
         if (jdbcTemplate.update(updateBook, title, author, writingDate, description, numberOfPages, price, bookId) < 1) {
-            return false;
+             throw new NoSuchElementException();
         }
-        return true;
+        return new Book(author, description, price, writingDate, numberOfPages, title);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             return Optional.of(jdbcTemplate.query(search, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+           throw new NoSuchElementException();
         }
     }
 
@@ -110,7 +109,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             return Optional.of(jdbcTemplate.query(search, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new NoSuchElementException();
         }
     }
 
@@ -137,7 +136,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
         } catch (EmptyResultDataAccessException e) {
-            return new Book();
+            throw new NoSuchElementException();
         }
     }
 }

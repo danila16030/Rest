@@ -48,28 +48,22 @@ public class BookGenreServiceTest {
 
     @Test
     public void getGenresByBook() {
-        List<Genre> expectedGenreList=new ArrayList<>();
-        Genre genre=new Genre();
-        genre.setGenreName("horor");
+        List<Genre> expectedGenreList = new ArrayList<>();
+        Genre genre = new Genre("horor");
         expectedGenreList.add(genre);
         when(bookGenreDAO.getAllGenresOnBook(1)).thenReturn(java.util.Optional.of(expectedGenreList));
-        List<GenreDTO> actualGenreList=bookGenreService.getGenresByBook(1);
+        List<GenreDTO> actualGenreList = bookGenreService.getGenresByBook(1);
         assertEquals(expectedGenreList.get(0).getGenreName(), actualGenreList.get(0).getGenreName());
     }
 
     @Test
     public void getBooksByGenre() {
-        List<Book> expectedBookList=new ArrayList<>();
-        Book book = new Book();
-        book.setAuthor("Vasua");
-        book.setDescription("страшно");
-        book.setNumberOfPages(88);
-        book.setWritingDate("16.03.2200");
-        book.setPrice(985);
-        book.setTitle("It");
+        List<Book> expectedBookList = new ArrayList<>();
+        Book book = new Book("Vasua", "creepy", 985, "16.03.2200",
+                88, "It");
         expectedBookList.add(book);
         when(bookGenreDAO.getAllBooksByGenre(1)).thenReturn(java.util.Optional.of(expectedBookList));
-        List<BookDTO> actualBookList=bookGenreService.getBooksByGenre(1);
+        List<BookDTO> actualBookList = bookGenreService.getBooksByGenre(1);
         assertEquals(expectedBookList.get(0).getTitle(), actualBookList.get(0).getTitle());
     }
 

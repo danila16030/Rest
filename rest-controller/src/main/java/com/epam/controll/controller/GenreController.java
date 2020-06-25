@@ -26,7 +26,7 @@ public class GenreController {
         return jsonTemplate;
     }
 
-    @PostMapping(value = "/createNew", headers = {"Accept=application/json"})
+    @PostMapping(value = "/create", headers = {"Accept=application/json"})
     public String creteNewGenre(Model model, @RequestBody String json) {
         GenreDTO genreDTO = jsonConverter.convertToGenreDTO(json);
         model.addAttribute(ModelAttributes.RESULT, genreService.createGenre(genreDTO));

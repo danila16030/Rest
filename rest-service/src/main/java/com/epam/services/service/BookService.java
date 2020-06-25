@@ -2,6 +2,7 @@ package com.epam.services.service;
 
 import com.epam.models.dto.BookDTO;
 import com.epam.models.dto.ParametersDTO;
+import com.epam.models.entity.Book;
 
 import java.util.List;
 
@@ -17,9 +18,9 @@ public interface BookService {
 
     boolean removeBook(BookDTO book);
 
-    boolean createBook(BookDTO book);
+    Book createBook(BookDTO book);
 
-    boolean updateBook(BookDTO book);
+    Book updateBook(BookDTO book);
 
     List<BookDTO> filter(ParametersDTO parameters);
 

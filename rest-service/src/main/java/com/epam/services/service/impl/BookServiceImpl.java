@@ -2,6 +2,7 @@ package com.epam.services.service.impl;
 
 import com.epam.daos.dao.impl.BookGenreDAOImpl;
 import com.epam.daos.dao.impl.GenreDAOImpl;
+import com.epam.services.exception.InvalidDataException;
 import com.epam.services.service.BookService;
 import com.epam.services.comparator.BookDateComparator;
 import com.epam.services.comparator.BookTitleComparator;
@@ -32,13 +33,13 @@ public class BookServiceImpl implements BookService {
     @Autowired
     public BookServiceImpl(BookDAOImpl bookDAO, BookDateComparator bookDateComparator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAOImpl genreDAO,BookGenreDAOImpl bookGenreDAO) {
+                           GenreDAOImpl genreDAO, BookGenreDAOImpl bookGenreDAO) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
-        this.bookGenreDAO=bookGenreDAO;
+        this.bookGenreDAO = bookGenreDAO;
     }
 
     @Override
@@ -70,34 +71,36 @@ public class BookServiceImpl implements BookService {
         if (book != null && bookValidator.isExist(book)) {
             return bookDAO.removeBook(book.getBookId());
         }
-        return false;
+        throw new InvalidDataException();
     }
 
     @Override
-    public boolean createBook(BookDTO book) {
-        if (book != null && !bookValidator.isExist(book)) {
+    public Book createBook(BookDTO book) {
+        if (book != null && bookValidator.isValidForCreate(book)) {
             long bookId = bookDAO.createNewBook(book.getAuthor(), book.getDescription(), book.getPrice(), book.getWritingDate(),
                     book.getNumberOfPages(), book.getTitle());
             String genreName = book.getGenre().getGenreName();
             long genreId = genreDAO.getGenreByName(genreName).getGenreId();
-            if (genreId==0){
-                genreId=genreDAO.createGenreAndReturnId(genreName);
+            Book resultBook = new Book(book.getAuthor(), book.getDescription(), book.getPrice(), book.getWritingDate(),
+                    book.getNumberOfPages(), book.getTitle());
+            if (genreId == 0) {
+                genreId = genreDAO.createGenreAndReturnId(genreName);
                 bookGenreDAO.createConnection(bookId, genreId);
-                return true;
+                return resultBook;
             }
             bookGenreDAO.createConnection(bookId, genreId);
-            return true;
+            return resultBook;
         }
-        return false;
+        throw new InvalidDataException();
     }
 
     @Override
-    public boolean updateBook(BookDTO book) {
-        if (book != null && bookValidator.isExist(book)) {
+    public Book updateBook(BookDTO book) {
+        if (book != null && bookValidator.isValidForUpdate(book)) {
             return bookDAO.updateBook(book.getTitle(), book.getAuthor(), book.getWritingDate(), book.getDescription(),
                     book.getNumberOfPages(), book.getPrice(), book.getBookId());
         }
-        return false;
+        throw new InvalidDataException();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.epam.daos.dao.impl.GenreDAOImpl;
 import com.epam.models.dto.GenreDTO;
 import com.epam.models.entity.Genre;
 import com.epam.models.mapper.BookGenreMapper;
+import com.epam.services.exception.InvalidDataException;
 import com.epam.services.service.GenreService;
 import com.epam.services.validator.GenreValidator;
 import org.mapstruct.factory.Mappers;
@@ -39,11 +40,11 @@ public class GenreServiceImpl implements GenreService {
 
 
     @Override
-    public boolean createGenre(GenreDTO genreDTO) {
-        if (genreDTO != null && !genreValidator.isExistByName(genreDTO)) {
+    public Genre createGenre(GenreDTO genreDTO) {
+        if (genreDTO != null&&genreValidator.isValid(genreDTO) && !genreValidator.isExistByName(genreDTO)) {
             return genreDAO.createGenre(genreDTO.getGenreName());
         }
-        return false;
+        throw new InvalidDataException();
     }
 
     @Override
@@ -51,6 +52,6 @@ public class GenreServiceImpl implements GenreService {
         if (genreDTO != null && genreValidator.isExistById(genreDTO)) {
             return genreDAO.removeGenre(genreDTO.getGenreId());
         }
-        return false;
+        throw new InvalidDataException();
     }
 }

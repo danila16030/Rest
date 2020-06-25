@@ -30,13 +30,7 @@ public class BookDateTest {
     }
 
     private Book createBook() {
-        Book book = new Book();
-        book.setAuthor("Vasua");
-        book.setDescription("страшно");
-        book.setNumberOfPages(88);
-        book.setWritingDate("16.03.2200");
-        book.setPrice(985);
-        book.setTitle("It");
-        return book;
+        return new Book("Vasua", "creepy", 985, "16.03.2200", 88,
+                "It");
     }
 }

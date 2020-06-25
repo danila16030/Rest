@@ -14,7 +14,7 @@ public interface BookDAO extends SetData {
 
     Optional<List<Book>> getAllBooks();
 
-    boolean updateBook(String title, String author, String writingDate, String description, int numberOfPages, float price, long bookId);
+    Book updateBook(String title, String author, String writingDate, String description, int numberOfPages, float price, long bookId);
 
     Optional<List<Book>> searchByPartialCoincidence(ParametersDTO parameters);
 

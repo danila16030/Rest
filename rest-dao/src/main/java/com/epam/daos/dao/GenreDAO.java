@@ -17,6 +17,6 @@ public interface GenreDAO extends SetData {
 
     Genre getGenreById(long genreId);
 
-    boolean createGenre(String genreName);
+    Genre createGenre(String genreName);
 
 }

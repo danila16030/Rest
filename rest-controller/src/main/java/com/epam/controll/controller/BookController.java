@@ -37,7 +37,7 @@ public class BookController {
         return jsonTemplate;
     }
 
-    @PostMapping(value = "/createNew", headers = {"Accept=application/json"})
+    @PostMapping(value = "/create", headers = {"Accept=application/json"})
     public String creteNewBook(Model model, @RequestBody String json) {
         BookDTO bookDTO = jsonConverter.convertToBookDTO(json);
         model.addAttribute(ModelAttributes.RESULT, bookService.createBook(bookDTO));

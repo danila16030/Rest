@@ -1,5 +1,6 @@
 package com.epam.daos.dao.impl;
 
+import com.epam.daos.exception.NoSuchElementException;
 import com.epam.daos.rowMapper.GenreMapper;
 import com.epam.daos.dao.impl.fields.GenreFields;
 import com.epam.daos.dao.GenreDAO;
@@ -68,7 +69,7 @@ public class GenreDAOImpl implements GenreDAO {
             return Optional.of(jdbcTemplate.query(getGenreList, new GenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new NoSuchElementException();
         }
     }
 
@@ -77,7 +78,7 @@ public class GenreDAOImpl implements GenreDAO {
         try {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
-            return new Genre();
+            throw new NoSuchElementException();
         }
     }
 
@@ -86,15 +87,13 @@ public class GenreDAOImpl implements GenreDAO {
         try {
             return jdbcTemplate.queryForObject(findGenreById, new Object[]{genreId}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
-            return new Genre();
+            throw new NoSuchElementException();
         }
     }
 
     @Override
-    public boolean createGenre(String genreName) {
-        if (jdbcTemplate.update(createNewGenre, genreName) < 1) {
-            return false;
-        }
-        return true;
+    public Genre createGenre(String genreName) {
+        jdbcTemplate.update(createNewGenre, genreName);
+        return new Genre(genreName);
     }
 }

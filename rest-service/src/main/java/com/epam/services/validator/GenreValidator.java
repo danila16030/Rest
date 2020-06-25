@@ -13,7 +13,7 @@ public class GenreValidator {
 
     public boolean isExistById(GenreDTO genreDTO) {
         Genre genre = genreDAO.getGenreById(genreDTO.getGenreId());
-        if (genre.getGenreName() == null) {
+        if (genre == null) {
             return false;
         } else {
             return true;
@@ -22,7 +22,16 @@ public class GenreValidator {
 
     public boolean isExistByName(GenreDTO genreDTO) {
         Genre genre = genreDAO.getGenreByName(genreDTO.getGenreName());
-        if (genre.getGenreName() == null) {
+        if (genre == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean isValid(GenreDTO genreDTO) {
+        String genreName = genreDTO.getGenreName();
+        if (genreName.isBlank() | genreName.isEmpty()) {
             return false;
         } else {
             return true;

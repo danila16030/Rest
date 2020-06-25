@@ -158,17 +158,11 @@ public class BookServiceTest {
         BookDTO book = new BookDTO();
         when(bookValidator.isExist(book)).thenReturn(true);
         bookService.updateBook(book);
-        verify(bookDAO, atLeastOnce()).updateBook(anyString(),anyString(),anyString(),anyString(),anyInt(),anyInt(),anyLong());
+        verify(bookDAO, atLeastOnce()).updateBook(anyString(), anyString(), anyString(), anyString(), anyInt(), anyInt(), anyLong());
     }
 
     private Book createBook() {
-        Book book = new Book();
-        book.setAuthor("Vasua");
-        book.setDescription("creepy");
-        book.setNumberOfPages(88);
-        book.setWritingDate("16.03.2200");
-        book.setPrice(985);
-        book.setTitle("It");
-        return book;
+        return new Book("Vasua", "creepy", 985, "16.03.2200", 88,
+                "It");
     }
 }
