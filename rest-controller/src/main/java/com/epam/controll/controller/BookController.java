@@ -44,32 +44,32 @@ public class BookController {
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getAll")
+    @GetMapping(value = "/get/all")
     public String getAllBooks(Model model) {
         model.addAttribute(ModelAttributes.BOOKS, bookService.getAllBooks());
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getSortedByName")
+    @GetMapping(value = "/get/sortedByName")
     public String getBooksSortedByName(Model model) {
         model.addAttribute(ModelAttributes.BOOKS, bookService.getBooksSortedByName());
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getSortedByDate")
+    @GetMapping(value = "/get/sortedByDate")
     public String getBooksSortedByDate(Model model) {
         model.addAttribute(ModelAttributes.BOOKS, bookService.getBooksSortedByDate());
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/searchByPartialCoincidence", headers = {"Accept=application/json"})
+    @GetMapping(value = "/search/byPartialCoincidence", headers = {"Accept=application/json"})
     public String searchByPartialCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByPartialCoincidence(parametersDTO));
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/searchByFullCoincidence", headers = {"Accept=application/json"})
+    @GetMapping(value = "/search/byFullCoincidence", headers = {"Accept=application/json"})
     public String searchByFullCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByFullCoincidence(parametersDTO));

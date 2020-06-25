@@ -1,9 +1,7 @@
 package com.epam.controll.controller;
 
 import com.epam.controll.attributes.ModelAttributes;
-import com.epam.services.service.BookService;
 import com.epam.services.service.impl.BookGenreServiceImpl;
-import com.epam.services.service.impl.GenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,19 +18,14 @@ public class BookGenreController {
     @Autowired
     private BookGenreServiceImpl bookGenreService;
 
-    @Autowired
-    private GenreServiceImpl genreService;
 
-    @Autowired
-    private BookService bookService;
-
-    @GetMapping(value = "/getBookByGenre/{genreId}")
+    @GetMapping(value = "/get/bookByGenre/{genreId}")
     public String getBookByGenre(Model model, @PathVariable long genreId) {
         model.addAttribute(ModelAttributes.BOOKS, bookGenreService.getBooksByGenre(genreId));
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getGenreByBook/{bookId}")
+    @GetMapping(value = "/get/genreByBook/{bookId}")
     public String getGenreByBook(Model model, @PathVariable long bookId) {
         model.addAttribute(ModelAttributes.GENRES, bookGenreService.getGenresByBook(bookId));
         return jsonTemplate;

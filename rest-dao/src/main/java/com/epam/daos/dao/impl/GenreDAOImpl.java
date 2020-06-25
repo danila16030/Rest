@@ -78,7 +78,7 @@ public class GenreDAOImpl implements GenreDAO {
         try {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Genre with this name is already exist");
         }
     }
 

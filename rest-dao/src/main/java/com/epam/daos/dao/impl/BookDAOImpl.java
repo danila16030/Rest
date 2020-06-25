@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -135,7 +136,7 @@ public class BookDAOImpl implements BookDAO {
     public Book getBookById(long bookId) {
         try {
             return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
-        } catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException| BadSqlGrammarException e) {
             throw new NoSuchElementException();
         }
     }

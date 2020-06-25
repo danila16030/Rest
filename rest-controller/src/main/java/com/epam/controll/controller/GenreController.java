@@ -33,13 +33,13 @@ public class GenreController {
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getAll")
+    @GetMapping(value = "/get/all")
     public String getAllGenres(Model model) {
         model.addAttribute(ModelAttributes.GENRES, genreService.getAllGenres());
         return jsonTemplate;
     }
 
-    @GetMapping(value = "/getByName/{genreName}")
+    @GetMapping(value = "/get/byName/{genreName}")
     public String getBookByName(Model model, @PathVariable String genreName) {
         model.addAttribute(ModelAttributes.GENRE, genreService.getGenre(genreName));
         return jsonTemplate;
