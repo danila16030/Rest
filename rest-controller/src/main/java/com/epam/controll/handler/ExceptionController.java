@@ -22,7 +22,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(ArgumentsNotValidException.class)
-    public ResponseEntity<ExceptionResponseDTO> hadleArgumentsNotValid(final Exception exception) {
+    public ResponseEntity<ExceptionResponseDTO> hadleBadRequest(final Exception exception) {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
         return ResponseEntity.badRequest().body(responseDTO);
     }

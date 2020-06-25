@@ -5,7 +5,8 @@ public class Genre {
     private String genreName;
     private long genreId;
 
-
+    public Genre() {
+    }
     public Genre(String genreName) {
         this.genreName = genreName;
     }

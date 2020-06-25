@@ -12,6 +12,7 @@ import com.epam.models.dto.ParametersDTO;
 import com.epam.models.entity.Book;
 import com.epam.models.mapper.BookGenreMapper;
 import com.epam.services.validator.BookValidator;
+import com.epam.services.validator.ParametersValidator;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,17 +30,19 @@ public class BookServiceImpl implements BookService {
     private BookValidator bookValidator;
     private GenreDAOImpl genreDAO;
     private BookGenreDAOImpl bookGenreDAO;
+    private ParametersValidator parametersValidator;
 
     @Autowired
     public BookServiceImpl(BookDAOImpl bookDAO, BookDateComparator bookDateComparator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAOImpl genreDAO, BookGenreDAOImpl bookGenreDAO) {
+                           GenreDAOImpl genreDAO, BookGenreDAOImpl bookGenreDAO, ParametersValidator parametersValidator) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
         this.bookGenreDAO = bookGenreDAO;
+        this.parametersValidator = parametersValidator;
     }
 
     @Override
@@ -56,14 +59,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> getBookByPartialCoincidence(ParametersDTO parameters) {
-        List<Book> book = bookDAO.searchByPartialCoincidence(parameters).get();
-        return bookGenreMapper.bookListToBookDTOList(book);
+        if (parametersValidator.isValid(parameters.getParameters())) {
+            List<Book> book = bookDAO.searchByPartialCoincidence(parameters).get();
+            return bookGenreMapper.bookListToBookDTOList(book);
+        }
+        throw new InvalidDataException();
     }
 
     @Override
     public List<BookDTO> getBookByFullCoincidence(ParametersDTO parameters) {
-        List<Book> book = bookDAO.searchByFullCoincidence(parameters).get();
-        return bookGenreMapper.bookListToBookDTOList(book);
+        if (parametersValidator.isValid(parameters.getParameters())) {
+            List<Book> book = bookDAO.searchByFullCoincidence(parameters).get();
+            return bookGenreMapper.bookListToBookDTOList(book);
+        }
+        throw new InvalidDataException();
     }
 
     @Override
@@ -105,8 +114,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> filter(ParametersDTO parameters) {
-        List<Book> bookList = bookDAO.filter(parameters).get();
-        return bookGenreMapper.bookListToBookDTOList(bookList);
+        if (parametersValidator.isValid(parameters.getParameters())) {
+            List<Book> bookList = bookDAO.filter(parameters).get();
+            return bookGenreMapper.bookListToBookDTOList(bookList);
+        }
+        throw new InvalidDataException();
     }
 
     @Override

@@ -10,6 +10,9 @@ public class Book {
     private String title;
     private long bookId;
 
+    public Book() {
+    }
+
     public Book(String author, String description, float price, String writingDate, int numberOfPages, String title) {
         this.author = author;
         this.description = description;

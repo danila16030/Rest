@@ -34,7 +34,7 @@ public class JsonConverter {
             String decodedJson = java.net.URLDecoder.decode(json, "UTF-8");
             return objectMapper.readValue(decodedJson, new TypeReference<GenreDTO>() {
             });
-        } catch (JsonProcessingException | UnsupportedEncodingException e) {
+        } catch (IOException e) {
             throw new ArgumentsNotValidException();
         }
     }
@@ -46,7 +46,7 @@ public class JsonConverter {
             parametersDTO.setParameters(objectMapper.readValue(decodedJson, new TypeReference<HashMap<String, String>>() {
             }));
             return parametersDTO;
-        } catch (JsonProcessingException | UnsupportedEncodingException e) {
+        } catch (IOException e) {
             throw new ArgumentsNotValidException();
         }
     }
