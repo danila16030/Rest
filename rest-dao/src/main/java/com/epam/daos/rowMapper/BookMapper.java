@@ -18,13 +18,13 @@ public class BookMapper implements RowMapper<Book> {
 
     @Override
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-        Book book = new Book();
-        book.setAuthor(resultSet.getString(BookFields.AUTHOR));
-        book.setDescription(resultSet.getString(BookFields.DESCRIPTION));
-        book.setNumberOfPages(resultSet.getInt(BookFields.NUMBEROFPAGES));
-        book.setPrice(resultSet.getInt(BookFields.PRICE));
-        book.setTitle(resultSet.getString(BookFields.TITLE));
-        book.setWritingDate(resultSet.getString(BookFields.WRITINGDATE));
+        String author = resultSet.getString(BookFields.AUTHOR);
+        String description = resultSet.getString(BookFields.DESCRIPTION);
+        int numberOfPage = resultSet.getInt(BookFields.NUMBEROFPAGES);
+        float price = resultSet.getInt(BookFields.PRICE);
+        String title = resultSet.getString(BookFields.TITLE);
+        String writingDate = resultSet.getString(BookFields.WRITINGDATE);
+        Book book = new Book(author, description, price, writingDate, numberOfPage, title);
         book.setBookId(resultSet.getInt(BookFields.ID));
         return book;
     }

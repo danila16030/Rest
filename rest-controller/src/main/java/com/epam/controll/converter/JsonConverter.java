@@ -1,14 +1,18 @@
 package com.epam.controll.converter;
 
+import com.epam.controll.exception.ArgumentsNotValidException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.epam.models.dto.BookDTO;
 import com.epam.models.dto.GenreDTO;
 import com.epam.models.dto.ParametersDTO;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 
 @Component
@@ -17,12 +21,11 @@ public class JsonConverter {
 
     public BookDTO convertToBookDTO(String json) {
         try {
-            String decodedJson = java.net.URLDecoder.decode(json, "UTF-8");
+            String decodedJson = URLDecoder.decode(json, "UTF-8");
             return objectMapper.readValue(decodedJson, new TypeReference<BookDTO>() {
             });
-        } catch (JsonProcessingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return new BookDTO();
+        } catch (IOException e) {
+            throw new ArgumentsNotValidException();
         }
     }
 
@@ -32,8 +35,7 @@ public class JsonConverter {
             return objectMapper.readValue(decodedJson, new TypeReference<GenreDTO>() {
             });
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return new GenreDTO();
+            throw new ArgumentsNotValidException();
         }
     }
 
@@ -45,8 +47,7 @@ public class JsonConverter {
             }));
             return parametersDTO;
         } catch (JsonProcessingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return new ParametersDTO();
+            throw new ArgumentsNotValidException();
         }
     }
 

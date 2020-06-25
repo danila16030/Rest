@@ -1,5 +1,6 @@
 package com.epam.daos.dao.impl;
 
+import com.epam.daos.exception.NoSuchElementException;
 import com.epam.daos.rowMapper.BookMapper;
 import com.epam.daos.rowMapper.GenreMapper;
 import com.epam.daos.dao.BookGenreDAO;
@@ -38,7 +39,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
         try {
             return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new NoSuchElementException();
         }
     }
 
@@ -47,7 +48,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
         try {
             return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
+            throw new NoSuchElementException();
         }
     }
 

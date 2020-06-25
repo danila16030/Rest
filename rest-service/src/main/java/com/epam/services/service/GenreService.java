@@ -1,6 +1,7 @@
 package com.epam.services.service;
 
 import com.epam.models.dto.GenreDTO;
+import com.epam.models.entity.Genre;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ public interface GenreService {
     public GenreDTO getGenre(String genreName);
 
 
-    boolean createGenre(GenreDTO genreDTO);
+    Genre createGenre(GenreDTO genreDTO);
 
-    boolean removeGenre(GenreDTO genreDTO );
+    boolean removeGenre(GenreDTO genreDTO);
 
 
 }

@@ -83,8 +83,7 @@ public class GenreServiceTest {
     }
 
     private Genre createGenre() {
-        Genre genre = new Genre();
-        genre.setGenreName("Vasua");
+        Genre genre = new Genre("Vasua");
         genre.setGenreId(1);
         return genre;
     }
