@@ -1,7 +1,7 @@
 package com.epam.rest.comparator;
 
-import com.epam.models.entity.Book;
-import com.epam.services.comparator.BookDateComparator;
+import com.epam.entity.Book;
+import com.epam.comparator.BookDateComparator;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

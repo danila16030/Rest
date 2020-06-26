@@ -1,8 +1,8 @@
 package com.epam.rest.dao;
 
-import com.epam.daos.dao.BookGenreDAO;
-import com.epam.models.entity.Book;
-import com.epam.models.entity.Genre;
+import com.epam.dao.BookGenreDAO;
+import com.epam.entity.Book;
+import com.epam.entity.Genre;
 import com.epam.rest.config.TestConfig;
 import org.junit.After;
 import org.junit.Assert;

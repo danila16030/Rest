@@ -1,12 +1,13 @@
 package com.epam.rest.service;
 
+import com.epam.dao.BookGenreDAO;
 import com.epam.rest.config.TestConfig;
-import com.epam.daos.dao.impl.BookGenreDAOImpl;
-import com.epam.models.dto.BookDTO;
-import com.epam.models.dto.GenreDTO;
-import com.epam.models.entity.Book;
-import com.epam.models.entity.Genre;
-import com.epam.services.service.BookGenreService;
+import com.epam.dao.impl.BookGenreDAOImpl;
+import com.epam.dto.BookDTO;
+import com.epam.dto.GenreDTO;
+import com.epam.entity.Book;
+import com.epam.entity.Genre;
+import com.epam.service.BookGenreService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,8 +50,7 @@ public class BookGenreServiceTest {
     @Test
     public void getGenresByBook() {
         List<Genre> expectedGenreList = new ArrayList<>();
-        Genre genre = new Genre("horor");
-        expectedGenreList.add(genre);
+        expectedGenreList.add(createGenre());
         when(bookGenreDAO.getAllGenresOnBook(1)).thenReturn(java.util.Optional.of(expectedGenreList));
         List<GenreDTO> actualGenreList = bookGenreService.getGenresByBook(1);
         assertEquals(expectedGenreList.get(0).getGenreName(), actualGenreList.get(0).getGenreName());
@@ -62,9 +62,16 @@ public class BookGenreServiceTest {
         Book book = new Book("Vasua", "creepy", 985, "16.03.2200",
                 88, "It");
         expectedBookList.add(book);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(createGenre());
         when(bookGenreDAO.getAllBooksByGenre(1)).thenReturn(java.util.Optional.of(expectedBookList));
+        when(bookGenreDAO.getAllGenresOnBook(anyInt())).thenReturn(java.util.Optional.of(genres));
         List<BookDTO> actualBookList = bookGenreService.getBooksByGenre(1);
         assertEquals(expectedBookList.get(0).getTitle(), actualBookList.get(0).getTitle());
+    }
+
+    private Genre createGenre(){
+        return new Genre("horor");
     }
 
 

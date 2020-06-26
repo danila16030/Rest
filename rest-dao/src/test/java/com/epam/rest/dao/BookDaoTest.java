@@ -1,9 +1,9 @@
 package com.epam.rest.dao;
 
-import com.epam.daos.dao.BookDAO;
-import com.epam.daos.dao.impl.fields.BookFields;
-import com.epam.models.dto.ParametersDTO;
-import com.epam.models.entity.Book;
+import com.epam.dao.BookDAO;
+import com.epam.dao.impl.fields.BookFields;
+import com.epam.dto.ParametersDTO;
+import com.epam.entity.Book;
 import com.epam.rest.config.TestConfig;
 import org.junit.After;
 import org.junit.Assert;
