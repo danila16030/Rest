@@ -40,16 +40,17 @@ public class GenreServiceImpl implements GenreService {
 
 
     @Override
-    public Genre createGenre(GenreDTO genreDTO) throws InvalidDataException {
-        if (genreDTO != null&&genreValidator.isValid(genreDTO) && !genreValidator.isExistByName(genreDTO)) {
+    public Genre createGenre(GenreDTO genreDTO)  {
+        if (genreDTO != null && genreValidator.isValid(genreDTO) &&
+                !genreValidator.isExistByName(genreDTO.getGenreName())) {
             return genreDAO.createGenre(genreDTO.getGenreName());
         }
         throw new InvalidDataException();
     }
 
     @Override
-    public boolean removeGenre(GenreDTO genreDTO) throws InvalidDataException {
-        if (genreDTO != null && genreValidator.isExistById(genreDTO)) {
+    public boolean removeGenre(GenreDTO genreDTO) {
+        if (genreDTO != null && genreValidator.isExistById(genreDTO.getGenreId())) {
             return genreDAO.removeGenre(genreDTO.getGenreId());
         }
         throw new InvalidDataException();

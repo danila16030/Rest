@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getBookByPartialCoincidence(ParametersDTO parameters) throws InvalidDataException {
+    public List<BookDTO> getBookByPartialCoincidence(ParametersDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.searchByPartialCoincidence(parameters).get();
             List<BookDTO> bookDTOList = bookGenreMapper.bookListToBookDTOList(bookList);
@@ -74,7 +74,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getBookByFullCoincidence(ParametersDTO parameters) throws InvalidDataException {
+    public List<BookDTO> getBookByFullCoincidence(ParametersDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.searchByFullCoincidence(parameters).get();
             List<BookDTO> bookDTOList = bookGenreMapper.bookListToBookDTOList(bookList);
@@ -85,15 +85,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean removeBook(BookDTO book) throws InvalidDataException {
-        if (book != null && bookValidator.isExist(book)) {
+    public boolean removeBook(BookDTO book) {
+        if (book != null && bookValidator.isExist(book.getBookId())) {
             return bookDAO.removeBook(book.getBookId());
         }
         throw new InvalidDataException();
     }
 
     @Override
-    public BookDTO createBook(BookDTO bookDTO) throws InvalidDataException {
+    public BookDTO createBook(BookDTO bookDTO) {
         if (bookDTO != null && bookValidator.isValidForCreate(bookDTO)) {
             long bookId = bookDAO.createNewBook(bookDTO.getAuthor(), bookDTO.getDescription(), bookDTO.getPrice(),
                     bookDTO.getWritingDate(), bookDTO.getNumberOfPages(), bookDTO.getTitle());
@@ -117,7 +117,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO updateBook(BookDTO bookDTO) throws InvalidDataException {
+    public BookDTO updateBook(BookDTO bookDTO) {
         if (bookDTO != null && bookValidator.isValidForUpdate(bookDTO)) {
             Book book = bookDAO.updateBook(bookDTO.getTitle(), bookDTO.getAuthor(), bookDTO.getWritingDate(),
                     bookDTO.getDescription(), bookDTO.getNumberOfPages(), bookDTO.getPrice(), bookDTO.getBookId());
@@ -129,7 +129,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> filter(ParametersDTO parameters) throws InvalidDataException {
+    public List<BookDTO> filter(ParametersDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.filter(parameters).get();
             List<BookDTO> bookDTOList = bookGenreMapper.bookListToBookDTOList(bookList);

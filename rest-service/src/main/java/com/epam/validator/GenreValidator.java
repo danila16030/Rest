@@ -11,18 +11,18 @@ public class GenreValidator {
     @Autowired
     private GenreDAOImpl genreDAO;
 
-    public boolean isExistById(GenreDTO genreDTO) {
-        Genre genre = genreDAO.getGenreByIdWithoutException(genreDTO.getGenreId());
-        if (genre == null) {
+    public boolean isExistById(long genreId) {
+        Genre genre = genreDAO.getGenreByIdWithoutException(genreId);
+        if (genre.getGenreName() == null) {
             return false;
         } else {
             return true;
         }
     }
 
-    public boolean isExistByName(GenreDTO genreDTO) {
-        Genre genre = genreDAO.getGenreByNameWithoutException(genreDTO.getGenreName());
-        if (genre == null) {
+    public boolean isExistByName(String genreName) {
+        Genre genre = genreDAO.getGenreByNameWithoutException(genreName);
+        if (genre.getGenreName() == null) {
             return false;
         } else {
             return true;

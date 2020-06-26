@@ -24,5 +24,7 @@ public interface BookDAO extends SetData {
 
     Book getBookById(long bookId);
 
+    Book getBookByIdWithoutException(long bookId);
+
 
 }
