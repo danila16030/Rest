@@ -12,8 +12,8 @@ public class BookValidator {
     @Autowired
     private BookDAOImpl bookDAO;
 
-    public boolean isExist(BookDTO bookDTO) {
-        Book book = bookDAO.getBookById(bookDTO.getBookId());
+    public boolean isExist(long bookId) {
+        Book book = bookDAO.getBookByIdWithoutException(bookId);
         if (book.getTitle() == null) {
             return false;
         } else {

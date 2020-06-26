@@ -35,7 +35,6 @@ public class GenreServiceTest {
     @InjectMocks
     GenreService genreService;
 
-
     @Autowired
     @Mock
     private GenreValidator genreValidator;
@@ -66,20 +65,20 @@ public class GenreServiceTest {
     }
 
     @Test
-    public void createGenreTest() throws InvalidDataException {
+    public void createGenreTest() {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
-        when(genreValidator.isExistById(genre)).thenReturn(false);
+        when(genreValidator.isExistById(0)).thenReturn(false);
         when(genreValidator.isValid(genre)).thenReturn(true);
         genreService.createGenre(genre);
         verify(genreDAO, atLeastOnce()).createGenre(anyString());
     }
 
     @Test
-    public void removeGenreTest() throws InvalidDataException {
+    public void removeGenreTest() {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
-        when(genreValidator.isExistById(genre)).thenReturn(true);
+        when(genreValidator.isExistById(0)).thenReturn(true);
         genreService.removeGenre(genre);
         verify(genreDAO, atLeastOnce()).removeGenre(anyLong());
     }

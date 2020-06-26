@@ -1,17 +1,16 @@
 package com.epam.rest.service;
 
 
-import com.epam.dao.impl.BookGenreDAOImpl;
-import com.epam.entity.Genre;
-import com.epam.exception.InvalidDataException;
-import com.epam.rest.config.TestConfig;
 import com.epam.comparator.BookDateComparator;
 import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.impl.BookDAOImpl;
+import com.epam.dao.impl.BookGenreDAOImpl;
 import com.epam.dao.impl.fields.BookFields;
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
 import com.epam.entity.Book;
+import com.epam.entity.Genre;
+import com.epam.rest.config.TestConfig;
 import com.epam.service.BookService;
 import com.epam.validator.BookValidator;
 import org.junit.Before;
@@ -90,7 +89,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookByPartialCoincidenceTest() throws InvalidDataException {
+    public void getBookByPartialCoincidenceTest() {
         ParametersDTO parametersDTO = new ParametersDTO();
         parametersDTO.getParameters().put(BookFields.AUTHOR, "a");
         List<Book> bookList = new ArrayList<>();
@@ -105,7 +104,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookByFullCoincidenceTest() throws InvalidDataException {
+    public void getBookByFullCoincidenceTest(){
         ParametersDTO parametersDTO = new ParametersDTO();
         parametersDTO.getParameters().put(BookFields.AUTHOR, "Vasua");
         List<Book> bookList = new ArrayList<>();
@@ -120,7 +119,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void filterTest() throws InvalidDataException {
+    public void filterTest()  {
         ParametersDTO parametersDTO = new ParametersDTO();
         parametersDTO.getParameters().put(BookFields.AUTHOR, "Vasua");
         parametersDTO.getParameters().put(BookFields.PRICE, "985");
@@ -172,16 +171,16 @@ public class BookServiceTest {
 
 
     @Test
-    public void removeBookTest() throws InvalidDataException {
+    public void removeBookTest()  {
         BookDTO book = new BookDTO();
-        when(bookValidator.isExist(book)).thenReturn(true);
+        when(bookValidator.isExist(anyLong())).thenReturn(true);
         bookService.removeBook(book);
         verify(bookDAO, atLeastOnce()).removeBook(anyLong());
     }
 
 
     @Test
-    public void updateBook() throws InvalidDataException {
+    public void updateBook()  {
         BookDTO bookDTO = new BookDTO();
         Book book = createBook();
         List<Genre> genres = new ArrayList<>();

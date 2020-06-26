@@ -84,7 +84,7 @@ public class BookDAOImpl implements BookDAO {
     public Book updateBook(String title, String author, String writingDate, String description, int numberOfPages,
                            float price, long bookId) {
         if (jdbcTemplate.update(updateBook, title, author, writingDate, description, numberOfPages, price, bookId) < 1) {
-             throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
         return new Book(author, description, price, writingDate, numberOfPages, title);
     }
@@ -97,7 +97,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             return Optional.of(jdbcTemplate.query(search, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-           throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
     }
 
@@ -135,8 +135,17 @@ public class BookDAOImpl implements BookDAO {
     public Book getBookById(long bookId) {
         try {
             return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
-        } catch (EmptyResultDataAccessException| BadSqlGrammarException e) {
+        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
             throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public Book getBookByIdWithoutException(long bookId) {
+        try {
+            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
+        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
+            return new Book();
         }
     }
 }

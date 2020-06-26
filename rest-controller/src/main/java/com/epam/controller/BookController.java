@@ -4,12 +4,8 @@ import com.epam.attributes.ModelAttributes;
 import com.epam.converter.JsonConverter;
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
-import com.epam.exception.InvalidDataException;
 import com.epam.service.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +21,19 @@ public class BookController {
     private JsonConverter jsonConverter;
 
     @PostMapping(value = "/remove", headers = {"Accept=application/json"})
-    public String removeBook(Model model, @RequestBody String json) throws InvalidDataException {
+    public String removeBook(Model model, @RequestBody String json) {
         model.addAttribute(ModelAttributes.RESULT, bookService.removeBook(jsonConverter.convertToBookDTO(json)));
         return jsonTemplate;
     }
 
     @PostMapping(value = "/update", headers = {"Accept=application/json"})
-    public String updateBook(Model model, @RequestBody String json) throws InvalidDataException {
+    public String updateBook(Model model, @RequestBody String json) {
         model.addAttribute(ModelAttributes.RESULT, bookService.updateBook(jsonConverter.convertToBookDTO(json)));
         return jsonTemplate;
     }
 
     @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public String creteNewBook(Model model, @RequestBody String json) throws InvalidDataException {
+    public String creteNewBook(Model model, @RequestBody String json){
         BookDTO bookDTO = jsonConverter.convertToBookDTO(json);
         model.addAttribute(ModelAttributes.RESULT, bookService.createBook(bookDTO));
         return jsonTemplate;
@@ -62,21 +58,21 @@ public class BookController {
     }
 
     @GetMapping(value = "/search/by-partial-coincidence", headers = {"Accept=application/json"})
-    public String searchByPartialCoincidence(Model model, @RequestBody String json) throws InvalidDataException {
+    public String searchByPartialCoincidence(Model model, @RequestBody String json){
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByPartialCoincidence(parametersDTO));
         return jsonTemplate;
     }
 
     @GetMapping(value = "/search/by-full-coincidence", headers = {"Accept=application/json"})
-    public String searchByFullCoincidence(Model model, @RequestBody String json) throws InvalidDataException {
+    public String searchByFullCoincidence(Model model, @RequestBody String json) {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByFullCoincidence(parametersDTO));
         return jsonTemplate;
     }
 
     @GetMapping(value = "/filter", headers = {"Accept=application/json"})
-    public String filterByDate(Model model, @RequestBody String json) throws InvalidDataException {
+    public String filterByDate(Model model, @RequestBody String json)  {
         ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
         model.addAttribute(ModelAttributes.BOOK, bookService.filter(parametersDTO));
         return jsonTemplate;

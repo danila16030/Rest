@@ -8,6 +8,8 @@ import com.epam.dto.GenreDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.service.BookGenreService;
+import com.epam.validator.BookValidator;
+import com.epam.validator.GenreValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +35,16 @@ public class BookGenreServiceTest {
     private BookGenreDAOImpl bookGenreDAO;
 
     @Autowired
+    @Mock
+    private GenreValidator genreValidator;
+
+    @Autowired
     @InjectMocks
     BookGenreService bookGenreService;
+
+    @Autowired
+    @Mock
+    private BookValidator bookValidator;
 
     @Before
     public void initMocks() {
@@ -52,6 +62,7 @@ public class BookGenreServiceTest {
         List<Genre> expectedGenreList = new ArrayList<>();
         expectedGenreList.add(createGenre());
         when(bookGenreDAO.getAllGenresOnBook(1)).thenReturn(java.util.Optional.of(expectedGenreList));
+        when(bookValidator.isExist(anyLong())).thenReturn(true);
         List<GenreDTO> actualGenreList = bookGenreService.getGenresByBook(1);
         assertEquals(expectedGenreList.get(0).getGenreName(), actualGenreList.get(0).getGenreName());
     }
@@ -64,13 +75,14 @@ public class BookGenreServiceTest {
         expectedBookList.add(book);
         List<Genre> genres = new ArrayList<>();
         genres.add(createGenre());
+        when(genreValidator.isExistById(anyLong())).thenReturn(true);
         when(bookGenreDAO.getAllBooksByGenre(1)).thenReturn(java.util.Optional.of(expectedBookList));
         when(bookGenreDAO.getAllGenresOnBook(anyInt())).thenReturn(java.util.Optional.of(genres));
         List<BookDTO> actualBookList = bookGenreService.getBooksByGenre(1);
         assertEquals(expectedBookList.get(0).getTitle(), actualBookList.get(0).getTitle());
     }
 
-    private Genre createGenre(){
+    private Genre createGenre() {
         return new Genre("horor");
     }
 
