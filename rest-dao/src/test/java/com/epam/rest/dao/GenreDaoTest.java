@@ -1,7 +1,7 @@
 package com.epam.rest.dao;
 
-import com.epam.daos.dao.GenreDAO;
-import com.epam.models.entity.Genre;
+import com.epam.dao.GenreDAO;
+import com.epam.entity.Genre;
 import com.epam.rest.config.TestConfig;
 import org.junit.After;
 import org.junit.Assert;
@@ -68,7 +68,7 @@ public class GenreDaoTest {
     @Test
     public void removeGenreTest() {
         genreDao.removeGenre(1);
-        Genre genre = genreDao.getGenreByName("horror");
+        Genre genre = genreDao.getGenreByNameWithoutException("horror");
         Assert.assertEquals(0, genre.getGenreId());
     }
 

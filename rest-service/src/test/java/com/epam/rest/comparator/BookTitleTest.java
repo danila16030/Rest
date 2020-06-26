@@ -1,8 +1,8 @@
 package com.epam.rest.comparator;
 
-import com.epam.models.entity.Book;
+import com.epam.entity.Book;
 import com.epam.rest.config.TestConfig;
-import com.epam.services.comparator.BookTitleComparator;
+import com.epam.comparator.BookTitleComparator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,9 +11,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;

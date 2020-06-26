@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
-@ComponentScan({"com.epam.daos", "com.epam.models"})
+@ComponentScan({"com.epam"})
 public class TestConfig {
 
     @Bean

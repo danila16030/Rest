@@ -1,11 +1,12 @@
 package com.epam.rest.service;
 
+import com.epam.exception.InvalidDataException;
 import com.epam.rest.config.TestConfig;
-import com.epam.daos.dao.impl.GenreDAOImpl;
-import com.epam.models.dto.GenreDTO;
-import com.epam.models.entity.Genre;
-import com.epam.services.service.GenreService;
-import com.epam.services.validator.GenreValidator;
+import com.epam.dao.impl.GenreDAOImpl;
+import com.epam.dto.GenreDTO;
+import com.epam.entity.Genre;
+import com.epam.service.GenreService;
+import com.epam.validator.GenreValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,16 +66,17 @@ public class GenreServiceTest {
     }
 
     @Test
-    public void createGenreTest() {
+    public void createGenreTest() throws InvalidDataException {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
         when(genreValidator.isExistById(genre)).thenReturn(false);
+        when(genreValidator.isValid(genre)).thenReturn(true);
         genreService.createGenre(genre);
         verify(genreDAO, atLeastOnce()).createGenre(anyString());
     }
 
     @Test
-    public void removeGenreTest() {
+    public void removeGenreTest() throws InvalidDataException {
         GenreDTO genre = new GenreDTO();
         genre.setGenreName(anyString());
         when(genreValidator.isExistById(genre)).thenReturn(true);
