@@ -10,5 +10,5 @@ public interface BookGenreService {
 
     public List<BookDTO> getBooksByGenre(long genreId);
 
-    public void createConnection(long bookId,long genreId);
+    public void createConnection(long bookId, long genreId);
 }

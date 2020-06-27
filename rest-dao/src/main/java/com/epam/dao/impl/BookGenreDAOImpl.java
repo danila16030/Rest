@@ -1,14 +1,12 @@
 package com.epam.dao.impl;
 
-import com.epam.exception.NoSuchElementException;
-import com.epam.rowMapper.BookMapper;
-import com.epam.rowMapper.GenreMapper;
 import com.epam.dao.BookGenreDAO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
+import com.epam.exception.NoSuchElementException;
+import com.epam.rowMapper.BookMapper;
+import com.epam.rowMapper.GenreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

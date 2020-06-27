@@ -2,7 +2,6 @@ package com.epam.service;
 
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
-import com.epam.entity.Book;
 import com.epam.exception.InvalidDataException;
 
 import java.util.List;

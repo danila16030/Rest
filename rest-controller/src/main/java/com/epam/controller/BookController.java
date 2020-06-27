@@ -1,7 +1,6 @@
 package com.epam.controller;
 
 import com.epam.attributes.ModelAttributes;
-import com.epam.converter.JsonConverter;
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
 import com.epam.service.impl.BookServiceImpl;
@@ -17,24 +16,22 @@ public class BookController {
 
     @Autowired
     private BookServiceImpl bookService;
-    @Autowired
-    private JsonConverter jsonConverter;
+
 
     @PostMapping(value = "/remove", headers = {"Accept=application/json"})
-    public String removeBook(Model model, @RequestBody String json) {
-        model.addAttribute(ModelAttributes.RESULT, bookService.removeBook(jsonConverter.convertToBookDTO(json)));
+    public String removeBook(Model model, @RequestBody BookDTO bookDTO) {
+        model.addAttribute(ModelAttributes.RESULT, bookService.removeBook(bookDTO));
         return jsonTemplate;
     }
 
     @PostMapping(value = "/update", headers = {"Accept=application/json"})
-    public String updateBook(Model model, @RequestBody String json) {
-        model.addAttribute(ModelAttributes.RESULT, bookService.updateBook(jsonConverter.convertToBookDTO(json)));
+    public String updateBook(Model model, @RequestBody BookDTO bookDTO) {
+        model.addAttribute(ModelAttributes.RESULT, bookService.updateBook(bookDTO));
         return jsonTemplate;
     }
 
     @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public String creteNewBook(Model model, @RequestBody String json){
-        BookDTO bookDTO = jsonConverter.convertToBookDTO(json);
+    public String creteNewBook(Model model, @RequestBody BookDTO bookDTO){
         model.addAttribute(ModelAttributes.RESULT, bookService.createBook(bookDTO));
         return jsonTemplate;
     }
@@ -58,22 +55,19 @@ public class BookController {
     }
 
     @GetMapping(value = "/search/by-partial-coincidence", headers = {"Accept=application/json"})
-    public String searchByPartialCoincidence(Model model, @RequestBody String json){
-        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+    public String searchByPartialCoincidence(Model model, @RequestBody  ParametersDTO parametersDTO){
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByPartialCoincidence(parametersDTO));
         return jsonTemplate;
     }
 
     @GetMapping(value = "/search/by-full-coincidence", headers = {"Accept=application/json"})
-    public String searchByFullCoincidence(Model model, @RequestBody String json) {
-        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+    public String searchByFullCoincidence(Model model, @RequestBody ParametersDTO parametersDTO) {
         model.addAttribute(ModelAttributes.BOOK, bookService.getBookByFullCoincidence(parametersDTO));
         return jsonTemplate;
     }
 
     @GetMapping(value = "/filter", headers = {"Accept=application/json"})
-    public String filterByDate(Model model, @RequestBody String json)  {
-        ParametersDTO parametersDTO = jsonConverter.convertToParameters(json);
+    public String filterByDate(Model model, @RequestBody ParametersDTO parametersDTO)  {
         model.addAttribute(ModelAttributes.BOOK, bookService.filter(parametersDTO));
         return jsonTemplate;
     }

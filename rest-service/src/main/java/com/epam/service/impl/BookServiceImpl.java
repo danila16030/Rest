@@ -1,17 +1,17 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.BookGenreDAOImpl;
-import com.epam.dao.impl.GenreDAOImpl;
-import com.epam.dto.GenreDTO;
-import com.epam.exception.InvalidDataException;
-import com.epam.mapper.BookGenreMapper;
-import com.epam.service.BookService;
 import com.epam.comparator.BookDateComparator;
 import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.impl.BookDAOImpl;
+import com.epam.dao.impl.BookGenreDAOImpl;
+import com.epam.dao.impl.GenreDAOImpl;
 import com.epam.dto.BookDTO;
+import com.epam.dto.GenreDTO;
 import com.epam.dto.ParametersDTO;
 import com.epam.entity.Book;
+import com.epam.exception.InvalidDataException;
+import com.epam.mapper.BookGenreMapper;
+import com.epam.service.BookService;
 import com.epam.validator.BookValidator;
 import com.epam.validator.ParametersValidator;
 import org.mapstruct.factory.Mappers;

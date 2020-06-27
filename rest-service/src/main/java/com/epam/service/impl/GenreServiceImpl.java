@@ -18,6 +18,7 @@ public class GenreServiceImpl implements GenreService {
 
     private GenreDAOImpl genreDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
+
     private GenreValidator genreValidator;
 
     @Autowired

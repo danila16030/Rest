@@ -12,5 +12,5 @@ public interface BookGenreDAO extends SetData {
 
      Optional<List<Genre>> getAllGenresOnBook(long bookId);
 
-     void createConnection(long bookId,long genreId);
+     void createConnection(long bookId, long genreId);
 }

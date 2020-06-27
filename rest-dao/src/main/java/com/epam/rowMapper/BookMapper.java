@@ -2,8 +2,6 @@ package com.epam.rowMapper;
 
 import com.epam.dao.impl.fields.BookFields;
 import com.epam.entity.Book;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

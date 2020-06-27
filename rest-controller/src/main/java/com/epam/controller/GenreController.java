@@ -1,7 +1,6 @@
 package com.epam.controller;
 
 import com.epam.attributes.ModelAttributes;
-import com.epam.converter.JsonConverter;
 import com.epam.dto.GenreDTO;
 import com.epam.service.impl.GenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +15,16 @@ public class GenreController {
 
     @Autowired
     private GenreServiceImpl genreService;
-    @Autowired
-    private JsonConverter jsonConverter;
+
 
     @PostMapping(value = "/remove", headers = {"Accept=application/json"})
-    public String removeGenre(Model model, @RequestBody String json) {
-        GenreDTO genreDTO = jsonConverter.convertToGenreDTO(json);
+    public String removeGenre(Model model, @RequestBody GenreDTO genreDTO) {
         model.addAttribute(ModelAttributes.RESULT, genreService.removeGenre(genreDTO));
         return jsonTemplate;
     }
 
     @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public String creteNewGenre(Model model, @RequestBody String json) {
-        GenreDTO genreDTO = jsonConverter.convertToGenreDTO(json);
+    public String creteNewGenre(Model model, @RequestBody GenreDTO genreDTO) {
         model.addAttribute(ModelAttributes.RESULT, genreService.createGenre(genreDTO));
         return jsonTemplate;
     }

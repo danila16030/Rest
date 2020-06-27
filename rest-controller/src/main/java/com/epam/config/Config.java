@@ -1,7 +1,6 @@
 package com.epam.config;
 
 import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -13,37 +12,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import javax.sql.DataSource;
-
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @Configuration
 @ComponentScan({"com.epam"})
 @EnableWebMvc
 public class Config extends HikariConfig {
-    @Bean
-    public DataSource dataSource() {
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setDriverClassName("org.postgresql.Driver");
-        hikariDataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/bookstore");
-        hikariDataSource.setUsername("postgres");
-        hikariDataSource.setPassword("root");
-        hikariDataSource.addDataSourceProperty("cachePrepStmts", "true");
-        hikariDataSource.addDataSourceProperty("prepStmtCacheSize", "250");
-        hikariDataSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        return hikariDataSource;
-    }
-
-    @Bean
-    public DataSource testDataSource() {
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setDriverClassName("org.postgresql.Driver");
-        hikariDataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/test");
-        hikariDataSource.setUsername("postgres");
-        hikariDataSource.setPassword("root");
-        return hikariDataSource;
-    }
-
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();

@@ -3,8 +3,6 @@ package com.epam.rowMapper;
 
 import com.epam.dao.impl.fields.GenreFields;
 import com.epam.entity.Genre;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 

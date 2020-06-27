@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/bookstore
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: root
+    hikari:
+      idle-timeout: 10000

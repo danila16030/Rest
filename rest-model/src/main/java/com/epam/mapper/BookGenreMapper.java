@@ -1,10 +1,11 @@
 package com.epam.mapper;
 
+import com.epam.dto.BookDTO;
 import com.epam.dto.GenreDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
-import com.epam.dto.BookDTO;
 import org.mapstruct.Mapper;
+
 import java.util.List;
 
 @Mapper
