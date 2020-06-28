@@ -4,11 +4,10 @@ import com.epam.attributes.ModelAttributes;
 import com.epam.dto.GenreDTO;
 import com.epam.service.impl.GenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping(value = "/genre")
 public class GenreController {
     private final static String jsonTemplate = "jsonTemplate";

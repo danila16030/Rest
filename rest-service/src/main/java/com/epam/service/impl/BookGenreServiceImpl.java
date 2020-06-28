@@ -6,11 +6,11 @@ import com.epam.dto.GenreDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.BookGenreMapper;
+import com.epam.mapper.BookMapper;
+import com.epam.mapper.GenreMapper;
 import com.epam.service.BookGenreService;
 import com.epam.validator.BookValidator;
 import com.epam.validator.GenreValidator;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,6 @@ import java.util.List;
 public class BookGenreServiceImpl implements BookGenreService {
 
     private BookGenreDAOImpl bookGenreDAO;
-    private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
     private GenreValidator genreValidator;
     private BookValidator bookValidator;
 
@@ -37,7 +36,7 @@ public class BookGenreServiceImpl implements BookGenreService {
     public List<GenreDTO> getGenresByBook(long bookId) {
         if (bookValidator.isExist(bookId)) {
             List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId).get();
-            return bookGenreMapper.genreListToGenreDTOList(genres);
+            return GenreMapper.GENRE_MAPPER.genreListToGenreDTOList(genres);
         }
         throw new InvalidDataException();
     }
@@ -46,7 +45,7 @@ public class BookGenreServiceImpl implements BookGenreService {
     public List<BookDTO> getBooksByGenre(long genreId) {
         if (genreValidator.isExistById(genreId)) {
             List<Book> bookList = bookGenreDAO.getAllBooksByGenre(genreId).get();
-            List<BookDTO> bookDTOList = bookGenreMapper.bookListToBookDTOList(bookList);
+            List<BookDTO> bookDTOList = BookMapper.BOOK_MAPPER.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;
         }
@@ -65,7 +64,7 @@ public class BookGenreServiceImpl implements BookGenreService {
     }
 
     private List<GenreDTO> getGenre(long id) {
-        return bookGenreMapper.genreListToGenreDTOList(bookGenreDAO.getAllGenresOnBook(id).get());
+        return GenreMapper.GENRE_MAPPER.genreListToGenreDTOList(bookGenreDAO.getAllGenresOnBook(id).get());
     }
 
 }
