@@ -1,17 +1,17 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.BookGenreDAOImpl;
-import com.epam.dao.impl.GenreDAOImpl;
+import com.epam.comparator.BookDateComparator;
+import com.epam.comparator.BookTitleComparator;
+import com.epam.dao.BookDAO;
+import com.epam.dao.BookGenreDAO;
+import com.epam.dao.GenreDAO;
+import com.epam.dto.BookDTO;
 import com.epam.dto.GenreDTO;
+import com.epam.dto.ParametersDTO;
+import com.epam.entity.Book;
 import com.epam.exception.InvalidDataException;
 import com.epam.mapper.BookGenreMapper;
 import com.epam.service.BookService;
-import com.epam.comparator.BookDateComparator;
-import com.epam.comparator.BookTitleComparator;
-import com.epam.dao.impl.BookDAOImpl;
-import com.epam.dto.BookDTO;
-import com.epam.dto.ParametersDTO;
-import com.epam.entity.Book;
 import com.epam.validator.BookValidator;
 import com.epam.validator.ParametersValidator;
 import org.mapstruct.factory.Mappers;
@@ -24,19 +24,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private BookDAOImpl bookDAO;
+    private BookDAO bookDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
     private BookTitleComparator bookTitleComparator;
     private BookDateComparator bookDateComparator;
     private BookValidator bookValidator;
-    private GenreDAOImpl genreDAO;
-    private BookGenreDAOImpl bookGenreDAO;
+    private GenreDAO genreDAO;
+    private BookGenreDAO bookGenreDAO;
     private ParametersValidator parametersValidator;
 
     @Autowired
-    public BookServiceImpl(BookDAOImpl bookDAO, BookDateComparator bookDateComparator,
+    public BookServiceImpl(BookDAO bookDAO, BookDateComparator bookDateComparator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAOImpl genreDAO, BookGenreDAOImpl bookGenreDAO, ParametersValidator parametersValidator) {
+                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, ParametersValidator parametersValidator) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;

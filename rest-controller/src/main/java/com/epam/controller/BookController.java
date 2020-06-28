@@ -4,19 +4,23 @@ import com.epam.attributes.ModelAttributes;
 import com.epam.converter.JsonConverter;
 import com.epam.dto.BookDTO;
 import com.epam.dto.ParametersDTO;
-import com.epam.service.impl.BookServiceImpl;
+import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
-@RestController
+@Controller
 @RequestMapping(value = "/book")
 public class BookController {
     private final static String jsonTemplate = "jsonTemplate";
 
     @Autowired
-    private BookServiceImpl bookService;
+    private BookService bookService;
     @Autowired
     private JsonConverter jsonConverter;
 

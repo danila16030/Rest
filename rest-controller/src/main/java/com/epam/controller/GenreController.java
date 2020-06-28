@@ -3,7 +3,7 @@ package com.epam.controller;
 import com.epam.attributes.ModelAttributes;
 import com.epam.converter.JsonConverter;
 import com.epam.dto.GenreDTO;
-import com.epam.service.impl.GenreServiceImpl;
+import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ public class GenreController {
     private final static String jsonTemplate = "jsonTemplate";
 
     @Autowired
-    private GenreServiceImpl genreService;
+    private GenreService genreService;
     @Autowired
     private JsonConverter jsonConverter;
 
@@ -40,7 +40,7 @@ public class GenreController {
     }
 
     @GetMapping(value = "/get/by-name/{genreName}")
-    public String getBookByName(Model model, @PathVariable String genreName) {
+    public String getGenreByName(Model model, @PathVariable String genreName) {
         model.addAttribute(ModelAttributes.GENRE, genreService.getGenre(genreName));
         return jsonTemplate;
     }

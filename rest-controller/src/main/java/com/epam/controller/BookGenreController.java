@@ -1,7 +1,7 @@
 package com.epam.controller;
 
 import com.epam.attributes.ModelAttributes;
-import com.epam.service.impl.BookGenreServiceImpl;
+import com.epam.service.BookGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ public class BookGenreController {
     private final static String jsonTemplate = "jsonTemplate";
 
     @Autowired
-    private BookGenreServiceImpl bookGenreService;
+    private BookGenreService bookGenreService;
 
 
     @GetMapping(value = "/get/book-by-genre/{genreId}")

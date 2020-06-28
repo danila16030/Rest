@@ -18,8 +18,4 @@ public interface BookGenreMapper {
     BookDTO bookToBookDTO(Book book);
 
     List<BookDTO> bookListToBookDTOList(List<Book> genres);
-
-    Book bookDTOToBook(BookDTO bookDTO);
-
-    GenreDTO getGenreDTO(String json);
 }

@@ -1,6 +1,6 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.BookGenreDAOImpl;
+import com.epam.dao.BookGenreDAO;
 import com.epam.dto.BookDTO;
 import com.epam.dto.GenreDTO;
 import com.epam.entity.Book;
@@ -19,13 +19,13 @@ import java.util.List;
 @Service
 public class BookGenreServiceImpl implements BookGenreService {
 
-    private BookGenreDAOImpl bookGenreDAO;
+    private BookGenreDAO bookGenreDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
     private GenreValidator genreValidator;
     private BookValidator bookValidator;
 
     @Autowired
-    public BookGenreServiceImpl(BookGenreDAOImpl bookGenreDAO, GenreValidator genreValidator,
+    public BookGenreServiceImpl(BookGenreDAO bookGenreDAO, GenreValidator genreValidator,
                                 BookValidator bookValidator) {
         this.bookGenreDAO = bookGenreDAO;
         this.genreValidator = genreValidator;

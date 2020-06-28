@@ -2,13 +2,11 @@ package com.epam.dao.impl;
 
 import com.epam.dao.BookDAO;
 import com.epam.dao.impl.fields.BookFields;
-import com.epam.exception.NoSuchElementException;
 import com.epam.dto.ParametersDTO;
 import com.epam.entity.Book;
+import com.epam.exception.NoSuchElementException;
 import com.epam.rowMapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.BadSqlGrammarException;

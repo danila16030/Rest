@@ -7,8 +7,7 @@ import java.util.Map;
 @Component
 public class ParametersValidator {
     public boolean isValid(Map<String, String> map) {
-        final boolean[] result = {true
-        };
+        final boolean[] result = {true};
         map.forEach((k, v) -> {
             if (v.isEmpty() | v.isBlank()) {
                 result[0] = false;

@@ -1,3 +1,9 @@
 .idea/
+
 target/
+
 Rest.iml
+rest-controller.iml
+rest-dao.iml
+rest-service.iml
+rest-model.iml

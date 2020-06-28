@@ -1,6 +1,6 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.GenreDAOImpl;
+import com.epam.dao.GenreDAO;
 import com.epam.dto.GenreDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
@@ -16,12 +16,12 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private GenreDAOImpl genreDAO;
+    private GenreDAO genreDAO;
     private BookGenreMapper bookGenreMapper = Mappers.getMapper(BookGenreMapper.class);
     private GenreValidator genreValidator;
 
     @Autowired
-    public GenreServiceImpl(GenreDAOImpl genreDAO, GenreValidator genreValidator) {
+    public GenreServiceImpl(GenreDAO genreDAO, GenreValidator genreValidator) {
         this.genreDAO = genreDAO;
         this.genreValidator = genreValidator;
     }

@@ -1,6 +1,6 @@
 package com.epam.validator;
 
-import com.epam.dao.impl.BookDAOImpl;
+import com.epam.dao.BookDAO;
 import com.epam.dto.BookDTO;
 import com.epam.dto.GenreDTO;
 import com.epam.entity.Book;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookValidator {
     @Autowired
-    private BookDAOImpl bookDAO;
+    private BookDAO bookDAO;
 
     public boolean isExist(long bookId) {
         Book book = bookDAO.getBookByIdWithoutException(bookId);
@@ -30,8 +30,8 @@ public class BookValidator {
         int numberOfPage = bookDTO.getNumberOfPages();
         long bookId = bookDTO.getBookId();
         if (title.isEmpty() | description.isEmpty() | writingDate.isEmpty() | author.isEmpty() | title.isBlank()
-                | description.isBlank() | writingDate.isBlank() | author.isBlank() | price == 0 |
-                numberOfPage == 0 | bookId == 0) {
+                | description.isBlank() | writingDate.isBlank() | author.isBlank() | price <= 0 |
+                numberOfPage <= 0 | bookId <= 0) {
             return false;
         }
         return true;
@@ -50,7 +50,7 @@ public class BookValidator {
             }
         }
         if (title.isEmpty() | description.isEmpty() | writingDate.isEmpty() | author.isEmpty() | title.isBlank() |
-                description.isBlank() | writingDate.isBlank() | author.isBlank() | price == 0 | numberOfPage == 0) {
+                description.isBlank() | writingDate.isBlank() | author.isBlank() | price <= 0 | numberOfPage <= 0) {
             return false;
         }
         return true;
