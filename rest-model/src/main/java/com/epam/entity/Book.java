@@ -1,13 +1,12 @@
 package com.epam.entity;
 
-
 import java.util.List;
 
 public class Book {
     private String author;
-    private String description;
+     private String description;
     private float price;
-    private String writingDate;
+     private String writingDate;
     private int numberOfPages;
     private String title;
     private long bookId;

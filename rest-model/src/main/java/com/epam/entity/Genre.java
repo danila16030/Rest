@@ -1,6 +1,7 @@
 package com.epam.entity;
 
 public class Genre {
+
     private String genreName;
     private long genreId;
 

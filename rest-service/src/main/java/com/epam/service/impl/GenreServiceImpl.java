@@ -4,9 +4,10 @@ import com.epam.dao.impl.GenreDAOImpl;
 import com.epam.dto.GenreDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.GenreMapper;
+import com.epam.mapper.BookGenreMapper;
 import com.epam.service.GenreService;
 import com.epam.validator.GenreValidator;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class GenreServiceImpl implements GenreService {
     private GenreDAOImpl genreDAO;
 
     private GenreValidator genreValidator;
+    private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
 
     @Autowired
     public GenreServiceImpl(GenreDAOImpl genreDAO, GenreValidator genreValidator) {
@@ -28,21 +30,22 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public List<GenreDTO> getAllGenres() {
         List<Genre> genreList = genreDAO.getGenreList().get();
-        return  GenreMapper.GENRE_MAPPER.genreListToGenreDTOList(genreList);
+        return genreMapper.genreListToGenreDTOList(genreList);
     }
 
     @Override
     public GenreDTO getGenre(String genreName) {
         Genre genre = genreDAO.getGenreByName(genreName);
-        return GenreMapper.GENRE_MAPPER.genreToGenreDTO(genre);
+        return genreMapper.genreToGenreDTO(genre);
     }
 
 
     @Override
-    public Genre createGenre(GenreDTO genreDTO)  {
+    public GenreDTO createGenre(GenreDTO genreDTO) {
         if (genreDTO != null && genreValidator.isValid(genreDTO) &&
                 !genreValidator.isExistByName(genreDTO.getGenreName())) {
-            return genreDAO.createGenre(genreDTO.getGenreName());
+            Genre genre = genreDAO.createGenre(genreDTO.getGenreName());
+            return genreMapper.genreToGenreDTO(genre);
         }
         throw new InvalidDataException();
     }
