@@ -1,14 +1,12 @@
 package com.epam.dao.impl;
 
 import com.epam.exception.NoSuchElementException;
-import com.epam.rowMapper.BookMapper;
-import com.epam.rowMapper.GenreMapper;
+import com.epam.mapper.ResultSetBookMapper;
+import com.epam.mapper.ResultSetGenreMapper;
 import com.epam.dao.BookGenreDAO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -36,7 +34,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public Optional<List<Book>> getAllBooksByGenre(long genreId) {
         try {
-            return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new ResultSetBookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -45,7 +43,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public Optional<List<Genre>> getAllGenresOnBook(long bookId) {
         try {
-            return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper()));
+            return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new ResultSetGenreMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }

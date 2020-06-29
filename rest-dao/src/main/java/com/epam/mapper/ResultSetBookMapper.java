@@ -1,9 +1,7 @@
-package com.epam.rowMapper;
+package com.epam.mapper;
 
 import com.epam.dao.impl.fields.BookFields;
 import com.epam.entity.Book;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +10,7 @@ import java.sql.SQLException;
 
 
 @Component
-public class BookMapper implements RowMapper<Book> {
+public class ResultSetBookMapper implements RowMapper<Book> {
 
     @Override
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {

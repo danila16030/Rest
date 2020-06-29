@@ -4,7 +4,7 @@ import com.epam.dao.GenreDAO;
 import com.epam.dao.impl.fields.GenreFields;
 import com.epam.entity.Genre;
 import com.epam.exception.NoSuchElementException;
-import com.epam.rowMapper.GenreMapper;
+import com.epam.mapper.ResultSetGenreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -63,7 +63,7 @@ public class GenreDAOImpl implements GenreDAO {
     @Override
     public Optional<List<Genre>> getGenreList() {
         try {
-            return Optional.of(jdbcTemplate.query(getGenreList, new GenreMapper()));
+            return Optional.of(jdbcTemplate.query(getGenreList, new ResultSetGenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
@@ -74,7 +74,7 @@ public class GenreDAOImpl implements GenreDAO {
     @Override
     public Genre getGenreByName(String genreName) {
         try {
-            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
+            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new ResultSetGenreMapper());
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException("Genre with this name does not exist");
         }
@@ -89,7 +89,7 @@ public class GenreDAOImpl implements GenreDAO {
     @Override
     public Genre getGenreByNameWithoutException(String genreName) {
         try {
-            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
+            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new ResultSetGenreMapper());
         } catch (EmptyResultDataAccessException e) {
             return new Genre();
         }
@@ -98,7 +98,7 @@ public class GenreDAOImpl implements GenreDAO {
     @Override
     public Genre getGenreByIdWithoutException(long genreId) {
         try {
-            return jdbcTemplate.queryForObject(findGenreById, new Object[]{genreId}, new GenreMapper());
+            return jdbcTemplate.queryForObject(findGenreById, new Object[]{genreId}, new ResultSetGenreMapper());
         } catch (EmptyResultDataAccessException e) {
             return new Genre();
         }

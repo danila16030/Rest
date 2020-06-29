@@ -5,7 +5,7 @@ import com.epam.dao.impl.fields.BookFields;
 import com.epam.dto.ParametersDTO;
 import com.epam.entity.Book;
 import com.epam.exception.NoSuchElementException;
-import com.epam.rowMapper.BookMapper;
+import com.epam.mapper.ResultSetBookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -72,7 +72,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Optional<List<Book>> getAllBooks() {
         try {
-            return Optional.of(jdbcTemplate.query(getBookList, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(getBookList, new ResultSetBookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -93,7 +93,7 @@ public class BookDAOImpl implements BookDAO {
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " LIKE '%" + v + "%'");
         String search = newFilter[0];
         try {
-            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(search, new ResultSetBookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -105,7 +105,7 @@ public class BookDAOImpl implements BookDAO {
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'");
         String search = newFilter[0];
         try {
-            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(search, new ResultSetBookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -123,7 +123,7 @@ public class BookDAOImpl implements BookDAO {
         String newFilterString = newFilter[0];
         newFilterString = replace(newFilterString, 4);
         try {
-            return Optional.of(jdbcTemplate.query(newFilterString, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(newFilterString, new ResultSetBookMapper()));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -132,7 +132,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Book getBookById(long bookId) {
         try {
-            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
+            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new ResultSetBookMapper());
         } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
             throw new NoSuchElementException();
         }
@@ -141,7 +141,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Book getBookByIdWithoutException(long bookId) {
         try {
-            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
+            return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new ResultSetBookMapper());
         } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
             return new Book();
         }
