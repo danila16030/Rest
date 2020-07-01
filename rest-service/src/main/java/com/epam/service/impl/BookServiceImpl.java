@@ -2,12 +2,15 @@ package com.epam.service.impl;
 
 import com.epam.comparator.BookDateComparator;
 import com.epam.comparator.BookTitleComparator;
-import com.epam.dao.impl.BookDAOImpl;
-import com.epam.dao.impl.BookGenreDAOImpl;
-import com.epam.dao.impl.GenreDAOImpl;
-import com.epam.dto.BookDTO;
-import com.epam.dto.GenreDTO;
-import com.epam.dto.ParametersDTO;
+import com.epam.dao.BookDAO;
+import com.epam.dao.BookGenreDAO;
+import com.epam.dao.GenreDAO;
+import com.epam.dto.request.CreateBookRequestDTO;
+import com.epam.dto.request.CreateGenreRequestDTO;
+import com.epam.dto.request.UpdateBookRequestDTO;
+import com.epam.dto.request.ParametersRequestDTO;
+import com.epam.dto.responce.BookResponseDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Book;
 import com.epam.exception.InvalidDataException;
 import com.epam.mapper.BookGenreMapper;
@@ -24,20 +27,20 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private BookDAOImpl bookDAO;
+    private BookDAO bookDAO;
     private BookTitleComparator bookTitleComparator;
     private BookDateComparator bookDateComparator;
     private BookValidator bookValidator;
-    private GenreDAOImpl genreDAO;
-    private BookGenreDAOImpl bookGenreDAO;
+    private GenreDAO genreDAO;
+    private BookGenreDAO bookGenreDAO;
     private ParametersValidator parametersValidator;
 
     private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
 
     @Autowired
-    public BookServiceImpl(BookDAOImpl bookDAO, BookDateComparator bookDateComparator,
+    public BookServiceImpl(BookDAO bookDAO, BookDateComparator bookDateComparator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAOImpl genreDAO, BookGenreDAOImpl bookGenreDAO, ParametersValidator parametersValidator) {
+                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, ParametersValidator parametersValidator) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
@@ -48,26 +51,26 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO getBook(long bookId) {
+    public BookResponseDTO getBook(long bookId) {
         Book book = bookDAO.getBookById(bookId);
-        BookDTO bookDTO = genreMapper.bookToBookDTO(book);
+        BookResponseDTO bookDTO = genreMapper.bookToBookDTO(book);
         bookDTO.setGenres(getGenre(bookId));
         return bookDTO;
     }
 
     @Override
-    public List<BookDTO> getAllBooks() {
+    public List<BookResponseDTO> getAllBooks() {
         List<Book> bookList = bookDAO.getAllBooks().get();
-        List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+        List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
         setGenreForAllBooks(bookDTOList);
         return bookDTOList;
     }
 
     @Override
-    public List<BookDTO> getBookByPartialCoincidence(ParametersDTO parameters) {
+    public List<BookResponseDTO> getBookByPartialCoincidence(ParametersRequestDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.searchByPartialCoincidence(parameters).get();
-            List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+            List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;
         }
@@ -75,10 +78,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getBookByFullCoincidence(ParametersDTO parameters) {
+    public List<BookResponseDTO> getBookByFullCoincidence(ParametersRequestDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.searchByFullCoincidence(parameters).get();
-            List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+            List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;
         }
@@ -86,19 +89,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean removeBook(BookDTO book) {
-        if (book != null && bookValidator.isExist(book.getBookId())) {
-            return bookDAO.removeBook(book.getBookId());
+    public boolean removeBook(long bookId) {
+        if (bookValidator.isExist(bookId)) {
+            return bookDAO.removeBook(bookId);
         }
         throw new InvalidDataException();
     }
 
     @Override
-    public BookDTO createBook(BookDTO bookDTO) {
+    public BookResponseDTO createBook(CreateBookRequestDTO bookDTO) {
         if (bookDTO != null && bookValidator.isValidForCreate(bookDTO)) {
             long bookId = bookDAO.createNewBook(bookDTO.getAuthor(), bookDTO.getDescription(), bookDTO.getPrice(),
                     bookDTO.getWritingDate(), bookDTO.getNumberOfPages(), bookDTO.getTitle());
-            for (GenreDTO genre : bookDTO.getGenres()) {
+            for (CreateGenreRequestDTO genre : bookDTO.getGenres()) {
                 String genreName = genre.getGenreName();
                 long genreId = genreDAO.getGenreByNameWithoutException(genreName).getGenreId();
                 if (genreId == 0) {
@@ -110,7 +113,7 @@ public class BookServiceImpl implements BookService {
             }
             Book book = new Book(bookDTO.getAuthor(), bookDTO.getDescription(), bookDTO.getPrice(), bookDTO.getWritingDate(),
                     bookDTO.getNumberOfPages(), bookDTO.getTitle(), bookId);
-            BookDTO resultBook = genreMapper.bookToBookDTO(book);
+            BookResponseDTO resultBook = genreMapper.bookToBookDTO(book);
             resultBook.setGenres(getGenre(bookId));
             return resultBook;
         }
@@ -118,11 +121,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO updateBook(BookDTO bookDTO) {
+    public BookResponseDTO updateBook(UpdateBookRequestDTO bookDTO) {
         if (bookDTO != null && bookValidator.isValidForUpdate(bookDTO)) {
             Book book = bookDAO.updateBook(bookDTO.getTitle(), bookDTO.getAuthor(), bookDTO.getWritingDate(),
                     bookDTO.getDescription(), bookDTO.getNumberOfPages(), bookDTO.getPrice(), bookDTO.getBookId());
-            BookDTO resultBook = genreMapper.bookToBookDTO(book);
+            BookResponseDTO resultBook = genreMapper.bookToBookDTO(book);
             resultBook.setGenres(getGenre(resultBook.getBookId()));
             return resultBook;
         }
@@ -130,10 +133,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> filter(ParametersDTO parameters) {
+    public List<BookResponseDTO> filter(ParametersRequestDTO parameters) {
         if (parametersValidator.isValid(parameters.getParameters())) {
             List<Book> bookList = bookDAO.filter(parameters).get();
-            List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+            List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;
         }
@@ -141,30 +144,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getBooksSortedByName() {
+    public List<BookResponseDTO> getBooksSortedByName() {
         List<Book> bookList = bookDAO.getAllBooks().get();
         bookList = bookList.stream().sorted(bookTitleComparator).collect(Collectors.toList());
-        List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+        List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
         setGenreForAllBooks(bookDTOList);
         return bookDTOList;
     }
 
     @Override
-    public List<BookDTO> getBooksSortedByDate() {
+    public List<BookResponseDTO> getBooksSortedByDate() {
         List<Book> bookList = bookDAO.getAllBooks().get();
         bookList = bookList.stream().sorted(bookDateComparator).collect(Collectors.toList());
-        List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+        List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
         setGenreForAllBooks(bookDTOList);
         return bookDTOList;
     }
 
-    private void setGenreForAllBooks(List<BookDTO> books) {
-        for (BookDTO book : books) {
+    private void setGenreForAllBooks(List<BookResponseDTO> books) {
+        for (BookResponseDTO book : books) {
             book.setGenres(getGenre(book.getBookId()));
         }
     }
 
-    private List<GenreDTO> getGenre(long id) {
+    private List<GenreResponseDTO> getGenre(long id) {
         return genreMapper.genreListToGenreDTOList(bookGenreDAO.getAllGenresOnBook(id).get());
     }
 

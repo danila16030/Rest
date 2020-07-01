@@ -1,8 +1,9 @@
 package com.epam.validator;
 
-import com.epam.dao.impl.BookDAOImpl;
-import com.epam.dto.BookDTO;
-import com.epam.dto.GenreDTO;
+import com.epam.dao.BookDAO;
+import com.epam.dto.request.CreateBookRequestDTO;
+import com.epam.dto.request.CreateGenreRequestDTO;
+import com.epam.dto.request.UpdateBookRequestDTO;
 import com.epam.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookValidator {
     @Autowired
-    private BookDAOImpl bookDAO;
+    private BookDAO bookDAO;
 
     public boolean isExist(long bookId) {
         Book book = bookDAO.getBookByIdWithoutException(bookId);
@@ -21,7 +22,7 @@ public class BookValidator {
         }
     }
 
-    public boolean isValidForUpdate(BookDTO bookDTO) {
+    public boolean isValidForUpdate(UpdateBookRequestDTO bookDTO) {
         String title = bookDTO.getTitle();
         String description = bookDTO.getDescription();
         String writingDate = bookDTO.getWritingDate();
@@ -37,14 +38,14 @@ public class BookValidator {
         return true;
     }
 
-    public boolean isValidForCreate(BookDTO bookDTO) {
+    public boolean isValidForCreate(CreateBookRequestDTO bookDTO) {
         String title = bookDTO.getTitle();
         String description = bookDTO.getDescription();
         String writingDate = bookDTO.getWritingDate();
         String author = bookDTO.getAuthor();
         float price = bookDTO.getPrice();
         int numberOfPage = bookDTO.getNumberOfPages();
-        for (GenreDTO genre : bookDTO.getGenres()) {
+        for (CreateGenreRequestDTO genre : bookDTO.getGenres()) {
             if (genre.getGenreName().isEmpty() | genre.getGenreName().isBlank()) {
                 return false;
             }

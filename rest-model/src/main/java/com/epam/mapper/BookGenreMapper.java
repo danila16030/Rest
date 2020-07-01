@@ -1,7 +1,7 @@
 package com.epam.mapper;
 
-import com.epam.dto.BookDTO;
-import com.epam.dto.GenreDTO;
+import com.epam.dto.responce.BookResponseDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import org.mapstruct.Mapper;
@@ -10,13 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BookGenreMapper {
-    GenreDTO genreToGenreDTO(Genre genre);
+    GenreResponseDTO genreToGenreDTO(Genre genre);
 
-    List<GenreDTO> genreListToGenreDTOList(List<Genre> genres);
+    List<GenreResponseDTO> genreListToGenreDTOList(List<Genre> genres);
 
-    Genre genreDTOToGenre(GenreDTO genreDTO);
+    BookResponseDTO bookToBookDTO(Book book);
 
-    BookDTO bookToBookDTO(Book book);
-
-    List<BookDTO> bookListToBookDTOList(List<Book> genres);
+    List<BookResponseDTO> bookListToBookDTOList(List<Book> genres);
 }

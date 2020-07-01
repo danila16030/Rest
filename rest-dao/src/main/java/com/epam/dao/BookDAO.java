@@ -1,6 +1,6 @@
 package com.epam.dao;
 
-import com.epam.dto.ParametersDTO;
+import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 
 import java.util.List;
@@ -16,11 +16,11 @@ public interface BookDAO extends SetData {
 
     Book updateBook(String title, String author, String writingDate, String description, int numberOfPages, float price, long bookId);
 
-    Optional<List<Book>> searchByPartialCoincidence(ParametersDTO parameters);
+    Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters);
 
-    Optional<List<Book>> searchByFullCoincidence(ParametersDTO parameters);
+    Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters);
 
-    Optional<List<Book>> filter(ParametersDTO parameters);
+    Optional<List<Book>> filter(ParametersRequestDTO parameters);
 
     Book getBookById(long bookId);
 

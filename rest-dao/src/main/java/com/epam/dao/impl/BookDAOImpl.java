@@ -2,12 +2,11 @@ package com.epam.dao.impl;
 
 import com.epam.dao.BookDAO;
 import com.epam.dao.impl.fields.BookFields;
-import com.epam.dto.ParametersDTO;
+import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 import com.epam.exception.NoSuchElementException;
 import com.epam.rowMapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,23 +43,19 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Long createNewBook(String author, String description, float price, String writingDate, int numberOfPages,
                               String title) {
-        try {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement statement = connection.prepareStatement(createNewBook, Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, author);
-                statement.setString(2, description);
-                statement.setFloat(3, price);
-                statement.setString(4, writingDate);
-                statement.setInt(5, numberOfPages);
-                statement.setString(6, title);
-                return statement;
-            }, keyHolder);
-            Map<String, Object> keys = keyHolder.getKeys();
-            return Long.parseLong(String.valueOf(keys.get(BookFields.ID)));
-        } catch (DuplicateKeyException e) {
-            return 0l;
-        }
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(createNewBook, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, author);
+            statement.setString(2, description);
+            statement.setFloat(3, price);
+            statement.setString(4, writingDate);
+            statement.setInt(5, numberOfPages);
+            statement.setString(6, title);
+            return statement;
+        }, keyHolder);
+        Map<String, Object> keys = keyHolder.getKeys();
+        return Long.parseLong(String.valueOf(keys.get(BookFields.ID)));
     }
 
     @Override
@@ -88,7 +83,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> searchByPartialCoincidence(ParametersDTO parameters) {
+    public Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " LIKE '%" + v + "%'");
         String search = newFilter[0];
@@ -100,7 +95,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> searchByFullCoincidence(ParametersDTO parameters) {
+    public Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'");
         String search = newFilter[0];
@@ -117,7 +112,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> filter(ParametersDTO parameters) {
+    public Optional<List<Book>> filter(ParametersRequestDTO parameters) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'" + " AND");
         String newFilterString = newFilter[0];

@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>Rest</groupId>
+            <groupId>com.epam</groupId>
             <artifactId>rest-service</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

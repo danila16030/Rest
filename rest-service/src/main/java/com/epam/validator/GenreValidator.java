@@ -1,7 +1,7 @@
 package com.epam.validator;
 
-import com.epam.dao.impl.GenreDAOImpl;
-import com.epam.dto.GenreDTO;
+import com.epam.dao.GenreDAO;
+import com.epam.dto.request.CreateGenreRequestDTO;
 import com.epam.entity.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GenreValidator {
     @Autowired
-    private GenreDAOImpl genreDAO;
+    private GenreDAO genreDAO;
 
     public boolean isExistById(long genreId) {
         Genre genre = genreDAO.getGenreByIdWithoutException(genreId);
@@ -29,7 +29,7 @@ public class GenreValidator {
         }
     }
 
-    public boolean isValid(GenreDTO genreDTO) {
+    public boolean isValid(CreateGenreRequestDTO genreDTO) {
         String genreName = genreDTO.getGenreName();
         if (genreName.isBlank() | genreName.isEmpty()) {
             return false;

@@ -1,8 +1,8 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.BookGenreDAOImpl;
-import com.epam.dto.BookDTO;
-import com.epam.dto.GenreDTO;
+import com.epam.dao.BookGenreDAO;
+import com.epam.dto.responce.BookResponseDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
@@ -19,12 +19,12 @@ import java.util.List;
 @Service
 public class BookGenreServiceImpl implements BookGenreService {
 
-    private BookGenreDAOImpl bookGenreDAO;
+    private BookGenreDAO bookGenreDAO;
     private GenreValidator genreValidator;
     private BookValidator bookValidator;
     private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
     @Autowired
-    public BookGenreServiceImpl(BookGenreDAOImpl bookGenreDAO, GenreValidator genreValidator,
+    public BookGenreServiceImpl(BookGenreDAO bookGenreDAO, GenreValidator genreValidator,
                                 BookValidator bookValidator) {
         this.bookGenreDAO = bookGenreDAO;
         this.genreValidator = genreValidator;
@@ -33,7 +33,7 @@ public class BookGenreServiceImpl implements BookGenreService {
 
 
     @Override
-    public List<GenreDTO> getGenresByBook(long bookId) {
+    public List<GenreResponseDTO> getGenresByBook(long bookId) {
         if (bookValidator.isExist(bookId)) {
             List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId).get();
             return genreMapper.genreListToGenreDTOList(genres);
@@ -42,10 +42,10 @@ public class BookGenreServiceImpl implements BookGenreService {
     }
 
     @Override
-    public List<BookDTO> getBooksByGenre(long genreId) {
+    public List<BookResponseDTO> getBooksByGenre(long genreId) {
         if (genreValidator.isExistById(genreId)) {
             List<Book> bookList = bookGenreDAO.getAllBooksByGenre(genreId).get();
-            List<BookDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
+            List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;
         }
@@ -57,13 +57,13 @@ public class BookGenreServiceImpl implements BookGenreService {
         bookGenreDAO.createConnection(bookId, genreId);
     }
 
-    private void setGenreForAllBooks(List<BookDTO> books) {
-        for (BookDTO book : books) {
+    private void setGenreForAllBooks(List<BookResponseDTO> books) {
+        for (BookResponseDTO book : books) {
             book.setGenres(getGenre(book.getBookId()));
         }
     }
 
-    private List<GenreDTO> getGenre(long id) {
+    private List<GenreResponseDTO> getGenre(long id) {
         return genreMapper.genreListToGenreDTOList(bookGenreDAO.getAllGenresOnBook(id).get());
     }
 

@@ -1,10 +1,10 @@
-package com.epam.dto;
+package com.epam.dto.request;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class ParametersDTO {
+public class ParametersRequestDTO {
     Map<String, String> parameters = new HashMap<String, String>();
 
     public Map<String, String> getParameters() {

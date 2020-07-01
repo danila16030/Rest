@@ -1,12 +1,17 @@
 package com.epam.controller;
 
-import com.epam.dto.BookDTO;
-import com.epam.dto.ParametersDTO;
-import com.epam.service.impl.BookServiceImpl;
+import com.epam.dto.request.CreateBookRequestDTO;
+import com.epam.dto.request.ParametersRequestDTO;
+import com.epam.dto.request.UpdateBookRequestDTO;
+import com.epam.dto.responce.BookResponseDTO;
+import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 
@@ -15,51 +20,60 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    private BookServiceImpl bookService;
+    private BookService bookService;
 
-
-    @PostMapping(value = "/remove", headers = {"Accept=application/json"})
-    public boolean removeBook(Model model, @RequestBody BookDTO bookDTO) {
-        return  bookService.removeBook(bookDTO);
+    @PostMapping(value = "/remove/{bookId}")
+    public ResponseEntity<BookResponseDTO> removeBook(@PathVariable long bookId) {
+        bookService.removeBook(bookId);
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/update", headers = {"Accept=application/json"})
-    public BookDTO updateBook(Model model, @RequestBody BookDTO bookDTO) {
-        return bookService.updateBook(bookDTO);
+    @PostMapping(value = "/get/book/{bookId}")
+    public ResponseEntity<BookResponseDTO> getBook(@PathVariable long bookId) {
+        return ResponseEntity.ok(bookService.getBook(bookId));
+    }
+
+    @PutMapping(value = "/update", headers = {"Accept=application/json"})
+    public ResponseEntity<BookResponseDTO> updateBook(@RequestBody @Valid UpdateBookRequestDTO bookDTO) {
+        BookResponseDTO response = bookService.updateBook(bookDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getBookId()).build().toUri();
+        return ResponseEntity.ok().location(location).body(response);
     }
 
     @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public BookDTO creteNewBook(Model model, @RequestBody BookDTO bookDTO){
-        return bookService.createBook(bookDTO);
+    public ResponseEntity<BookResponseDTO> creteNewBook(@RequestBody @Valid CreateBookRequestDTO bookDTO) {
+        BookResponseDTO response = bookService.createBook(bookDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getBookId()).build().toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @GetMapping(value = "/get/all")
-    public List<BookDTO> getAllBooks(Model model) {
-          return bookService.getAllBooks();
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @GetMapping(value = "/get/sorted/by-name")
-    public List<BookDTO> getBooksSortedByName(Model model) {
-        return  bookService.getBooksSortedByName();
+    public ResponseEntity<List<BookResponseDTO>> getBooksSortedByName() {
+        return ResponseEntity.ok(bookService.getBooksSortedByName());
     }
 
     @GetMapping(value = "/get/sorted/by-date")
-    public List<BookDTO> getBooksSortedByDate(Model model) {
-        return bookService.getBooksSortedByDate();
+    public ResponseEntity<List<BookResponseDTO>> getBooksSortedByDate() {
+        return ResponseEntity.ok(bookService.getBooksSortedByDate());
     }
 
     @GetMapping(value = "/search/by-partial-coincidence", headers = {"Accept=application/json"})
-    public List<BookDTO> searchByPartialCoincidence(Model model, @RequestBody  ParametersDTO parametersDTO){
-        return bookService.getBookByPartialCoincidence(parametersDTO);
+    public ResponseEntity<List<BookResponseDTO>> searchByPartialCoincidence(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
+        return ResponseEntity.ok(bookService.getBookByPartialCoincidence(parametersDTO));
     }
 
     @GetMapping(value = "/search/by-full-coincidence", headers = {"Accept=application/json"})
-    public List<BookDTO> searchByFullCoincidence(Model model, @RequestBody ParametersDTO parametersDTO) {
-        return bookService.getBookByFullCoincidence(parametersDTO);
+    public ResponseEntity<List<BookResponseDTO>> searchByFullCoincidence(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
+        return ResponseEntity.ok(bookService.getBookByFullCoincidence(parametersDTO));
     }
 
     @GetMapping(value = "/filter", headers = {"Accept=application/json"})
-    public List<BookDTO> filterByDate(Model model, @RequestBody ParametersDTO parametersDTO)  {
-        return  bookService.filter(parametersDTO);
+    public ResponseEntity<List<BookResponseDTO>> filterByDate(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
+        return ResponseEntity.ok(bookService.filter(parametersDTO));
     }
 }

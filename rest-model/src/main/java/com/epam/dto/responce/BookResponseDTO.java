@@ -1,39 +1,16 @@
-package com.epam.dto;
+package com.epam.dto.responce;
 
-
-import javax.validation.constraints.*;
 import java.util.List;
 
-public class BookDTO {
-    @Size(min = 2, max = 30)
-    @Pattern(regexp = "[a-zA-Z]+")
-    @NotBlank
-    @NotEmpty
+public class BookResponseDTO {
     private String author;
-    @Size(min = 2, max = 30)
-    @Pattern(regexp = "[a-zA-Z 0-9]+")
-    @NotBlank
-    @NotEmpty
     private String description;
-    @NotNull
-    @Min(1)
     private float price;
-    @Size(min = 2, max = 30)
-    @Pattern(regexp = "[0-9.]+")
-    @NotBlank
-    @NotEmpty
     private String writingDate;
-    @Min(1)
     private int numberOfPages;
-    @Size(min = 2, max = 30)
-    @Pattern(regexp = "[a-zA-Z 0-9]+")
-    @NotBlank
-    @NotEmpty
     private String title;
-    @Min(1)
     private long bookId;
-    @NotNull
-    private List<GenreDTO> genres;
+    private List<GenreResponseDTO> genres;
 
     public String getAuthor() {
         return author;
@@ -91,11 +68,11 @@ public class BookDTO {
         this.bookId = bookId;
     }
 
-    public List<GenreDTO> getGenres() {
+    public List<GenreResponseDTO> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<GenreDTO> genres) {
+    public void setGenres(List<GenreResponseDTO> genres) {
         this.genres = genres;
     }
 }

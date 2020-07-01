@@ -1,19 +1,22 @@
 package com.epam.service;
 
-import com.epam.dto.GenreDTO;
+import com.epam.dto.request.CreateGenreRequestDTO;
+import com.epam.dto.request.UpdateGenreRequestDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.exception.InvalidDataException;
 
 import java.util.List;
 
 public interface GenreService {
-    public List<GenreDTO> getAllGenres();
+    List<GenreResponseDTO> getAllGenres();
 
-    public GenreDTO getGenre(String genreName);
+    GenreResponseDTO getGenre(String genreName);
 
+    GenreResponseDTO updateGenre(UpdateGenreRequestDTO genreDTO);
 
-    GenreDTO createGenre(GenreDTO genreDTO) throws InvalidDataException;
+    GenreResponseDTO createGenre(CreateGenreRequestDTO genreDTO) throws InvalidDataException;
 
-    boolean removeGenre(GenreDTO genreDTO) throws InvalidDataException;
+    boolean removeGenre(long genreId) throws InvalidDataException;
 
 
 }

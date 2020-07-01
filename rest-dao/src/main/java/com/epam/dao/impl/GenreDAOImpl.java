@@ -3,6 +3,7 @@ package com.epam.dao.impl;
 import com.epam.dao.GenreDAO;
 import com.epam.dao.impl.fields.GenreFields;
 import com.epam.entity.Genre;
+import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
 import com.epam.rowMapper.GenreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class GenreDAOImpl implements GenreDAO {
     private static final String removeGenre = "DELETE FROM genre WHERE genre_id = ?";
     private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
     private static final String findGenreById = "SELECT * FROM genre WHERE genre_id = ?";
+    private static final String updateGenre = "UPDATE genre SET genre_name = ? WHERE genre_id = ?";
 
     @Override
     @Autowired
@@ -82,8 +84,12 @@ public class GenreDAOImpl implements GenreDAO {
 
     @Override
     public Genre createGenre(String genreName) {
-        jdbcTemplate.update(createNewGenre, genreName);
-        return new Genre(genreName);
+        try {
+            jdbcTemplate.update(createNewGenre, genreName);
+            return new Genre(genreName);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicatedException();
+        }
     }
 
     @Override
@@ -92,6 +98,16 @@ public class GenreDAOImpl implements GenreDAO {
             return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
             return new Genre();
+        }
+    }
+
+    @Override
+    public Genre updateGenre(String genreName, long genreId) {
+        try {
+            jdbcTemplate.update(updateGenre, genreName, genreId);
+            return new Genre(genreName, genreId);
+        } catch (DuplicateKeyException e) {
+            throw new DuplicatedException();
         }
     }
 

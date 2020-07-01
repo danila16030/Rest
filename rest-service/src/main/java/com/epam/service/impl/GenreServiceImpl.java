@@ -1,7 +1,9 @@
 package com.epam.service.impl;
 
-import com.epam.dao.impl.GenreDAOImpl;
-import com.epam.dto.GenreDTO;
+import com.epam.dao.GenreDAO;
+import com.epam.dto.request.CreateGenreRequestDTO;
+import com.epam.dto.request.UpdateGenreRequestDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
 import com.epam.mapper.BookGenreMapper;
@@ -16,32 +18,41 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private GenreDAOImpl genreDAO;
+    private GenreDAO genreDAO;
 
     private GenreValidator genreValidator;
     private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
 
     @Autowired
-    public GenreServiceImpl(GenreDAOImpl genreDAO, GenreValidator genreValidator) {
+    public GenreServiceImpl(GenreDAO genreDAO, GenreValidator genreValidator) {
         this.genreDAO = genreDAO;
         this.genreValidator = genreValidator;
     }
 
     @Override
-    public List<GenreDTO> getAllGenres() {
+    public List<GenreResponseDTO> getAllGenres() {
         List<Genre> genreList = genreDAO.getGenreList().get();
         return genreMapper.genreListToGenreDTOList(genreList);
     }
 
     @Override
-    public GenreDTO getGenre(String genreName) {
+    public GenreResponseDTO getGenre(String genreName) {
         Genre genre = genreDAO.getGenreByName(genreName);
         return genreMapper.genreToGenreDTO(genre);
     }
 
+    @Override
+    public GenreResponseDTO updateGenre(UpdateGenreRequestDTO genreDTO) {
+        if (genreDTO != null && genreValidator.isExistByName(genreDTO.getGenreName())) {
+            Genre genre = genreDAO.updateGenre(genreDTO.getGenreName(), genreDTO.getGenreId());
+            return genreMapper.genreToGenreDTO(genre);
+        }
+        throw new InvalidDataException();
+    }
+
 
     @Override
-    public GenreDTO createGenre(GenreDTO genreDTO) {
+    public GenreResponseDTO createGenre(CreateGenreRequestDTO genreDTO) {
         if (genreDTO != null && genreValidator.isValid(genreDTO) &&
                 !genreValidator.isExistByName(genreDTO.getGenreName())) {
             Genre genre = genreDAO.createGenre(genreDTO.getGenreName());
@@ -51,9 +62,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public boolean removeGenre(GenreDTO genreDTO) {
-        if (genreDTO != null && genreValidator.isExistById(genreDTO.getGenreId())) {
-            return genreDAO.removeGenre(genreDTO.getGenreId());
+    public boolean removeGenre(long genreId) {
+        if (genreValidator.isExistById(genreId)) {
+            return genreDAO.removeGenre(genreId);
         }
         throw new InvalidDataException();
     }

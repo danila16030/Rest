@@ -1,14 +1,14 @@
 package com.epam.service;
 
-import com.epam.dto.BookDTO;
-import com.epam.dto.GenreDTO;
+import com.epam.dto.responce.BookResponseDTO;
+import com.epam.dto.responce.GenreResponseDTO;
 
 import java.util.List;
 
 public interface BookGenreService {
-    public List<GenreDTO> getGenresByBook(long bookId);
+    List<GenreResponseDTO> getGenresByBook(long bookId);
 
-    public List<BookDTO> getBooksByGenre(long genreId);
+    List<BookResponseDTO> getBooksByGenre(long genreId);
 
-    public void createConnection(long bookId, long genreId);
+    void createConnection(long bookId, long genreId);
 }

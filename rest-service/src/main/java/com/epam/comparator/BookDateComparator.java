@@ -14,10 +14,11 @@ import java.util.Date;
 
 public class BookDateComparator implements Comparator<Book> {
     private static final Logger logger = LogManager.getLogger(BookDateComparator.class);
+
     @Override
     public int compare(Book o1, Book o2) {
         try {
-            SimpleDateFormat sdformat = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat sdformat = new SimpleDateFormat("yyyy.dd.MM");
             Date date1 = sdformat.parse(o1.getWritingDate());
             Date date2 = sdformat.parse(o2.getWritingDate());
             return date1.compareTo(date2);

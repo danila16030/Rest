@@ -19,5 +19,7 @@ public interface GenreDAO extends SetData {
 
     Genre getGenreByNameWithoutException(String genreName);
 
+    Genre updateGenre(String genreName,long genreId);
+
     Genre getGenreByIdWithoutException(long genreId);
 }
