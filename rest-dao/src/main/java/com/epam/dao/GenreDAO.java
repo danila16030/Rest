@@ -11,7 +11,7 @@ public interface GenreDAO extends SetData {
 
     boolean removeGenre(long genreId);
 
-    Optional<List<Genre>> getGenreList();
+    Optional<List<Genre>> getGenreList(int limit,int offset);
 
     Genre getGenreByName(String genreName);
 

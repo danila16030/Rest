@@ -6,7 +6,7 @@ import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.BookGenreMapper;
+import com.epam.mapper.Mapper;
 import com.epam.service.BookGenreService;
 import com.epam.validator.BookValidator;
 import com.epam.validator.GenreValidator;
@@ -22,7 +22,7 @@ public class BookGenreServiceImpl implements BookGenreService {
     private BookGenreDAO bookGenreDAO;
     private GenreValidator genreValidator;
     private BookValidator bookValidator;
-    private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
+    private final Mapper genreMapper = Mappers.getMapper(Mapper.class);
     @Autowired
     public BookGenreServiceImpl(BookGenreDAO bookGenreDAO, GenreValidator genreValidator,
                                 BookValidator bookValidator) {
@@ -33,18 +33,18 @@ public class BookGenreServiceImpl implements BookGenreService {
 
 
     @Override
-    public List<GenreResponseDTO> getGenresByBook(long bookId) {
+    public List<GenreResponseDTO> getGenresByBook(long bookId,int limit,int offset) {
         if (bookValidator.isExist(bookId)) {
-            List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId).get();
+            List<Genre> genres = bookGenreDAO.getAllGenresOnBook(bookId,limit,offset).get();
             return genreMapper.genreListToGenreDTOList(genres);
         }
         throw new InvalidDataException();
     }
 
     @Override
-    public List<BookResponseDTO> getBooksByGenre(long genreId) {
+    public List<BookResponseDTO> getBooksByGenre(long genreId,int limit,int offset) {
         if (genreValidator.isExistById(genreId)) {
-            List<Book> bookList = bookGenreDAO.getAllBooksByGenre(genreId).get();
+            List<Book> bookList = bookGenreDAO.getAllBooksByGenre(genreId,limit,offset).get();
             List<BookResponseDTO> bookDTOList = genreMapper.bookListToBookDTOList(bookList);
             setGenreForAllBooks(bookDTOList);
             return bookDTOList;

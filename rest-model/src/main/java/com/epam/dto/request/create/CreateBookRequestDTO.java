@@ -1,11 +1,11 @@
-package com.epam.dto.request;
-
+package com.epam.dto.request.create;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
-public class UpdateBookRequestDTO {
+public class CreateBookRequestDTO {
+
     @Size(min = 2, max = 30, message = "Incorrect author name(Should have size 2-30)")
     @Pattern(regexp = "[a-zA-Z]+", message = "Incorrect author name(Should only contain Latin letters")
     @NotBlank(message = "Incorrect author name(Should contain not only spaces)")
@@ -19,7 +19,6 @@ public class UpdateBookRequestDTO {
     private String description;
     @Min(value = 1, message = "Incorrect price value(Value must be more then 0)")
     private float price;
-    @Size(min = 2, max = 30, message = "Incorrect writingDate (Should have size 2-30)")
     @Pattern(regexp = "(?:19|20)[0-9]{2}.(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:30))" +
             "|(?:(?:0[13578]|1[02])-31))", message = "Incorrect writingDate " +
             "(Date must follow pattern yyyy.mm.dd and be correct)")
@@ -34,8 +33,6 @@ public class UpdateBookRequestDTO {
     @NotBlank(message = "Incorrect title (Should contain not only spaces)")
     @NotEmpty(message = "Incorrect title (Should contain some information)")
     private String title;
-    @Min(value = 1, message = "Incorrect numberOfPages bookId(Value must be more then 0)")
-    private long bookId;
     @NotEmpty(message = "Incorrect genres (Should contain some information)")
     @Valid
     private List<CreateGenreRequestDTO> genres;
@@ -88,14 +85,6 @@ public class UpdateBookRequestDTO {
         this.title = title;
     }
 
-    public long getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
-    }
-
     public List<CreateGenreRequestDTO> getGenres() {
         return genres;
     }
@@ -104,3 +93,4 @@ public class UpdateBookRequestDTO {
         this.genres = genres;
     }
 }
+

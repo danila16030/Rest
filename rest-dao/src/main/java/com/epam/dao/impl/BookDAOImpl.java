@@ -30,9 +30,11 @@ public class BookDAOImpl implements BookDAO {
     private static final String blank = "SELECT * FROM book WHERE";
     private static final String findBookById = "SELECT * FROM book WHERE book_id = ?";
     private static final String removeBook = "DELETE FROM book WHERE book_id = ?";
-    private static final String getBookList = "SELECT * FROM book";
+    private static final String getBookList = "SELECT * FROM book LIMIT ? OFFSET ?";
+    private static final String changePrice = "UPDATE book SET price = ? WHERE book_id=?";
     private static final String updateBook = "UPDATE book SET title = ?, author = ?, writing_date = ? ,description=? " +
             ",page_number=? ,price=? WHERE book_id = ?";
+    private static final String pagination = "LIMIT ? OFFSET ?";
 
     @Override
     @Autowired
@@ -65,9 +67,9 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> getAllBooks() {
+    public Optional<List<Book>> getAllBooks(int limit, int offset) {
         try {
-            return Optional.of(jdbcTemplate.query(getBookList, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(getBookList, new Object[]{limit, offset}, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -83,24 +85,24 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters) {
+    public Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters, int limit, int offset) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " LIKE '%" + v + "%'");
-        String search = newFilter[0];
+        String search = newFilter[0] + pagination;
         try {
-            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(search, new Object[]{limit, offset}, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
     }
 
     @Override
-    public Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters) {
+    public Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters, int limit, int offset) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'");
-        String search = newFilter[0];
+        String search = newFilter[0] + pagination;
         try {
-            return Optional.of(jdbcTemplate.query(search, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(search, new Object[]{limit, offset}, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -112,13 +114,13 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> filter(ParametersRequestDTO parameters) {
+    public Optional<List<Book>> filter(ParametersRequestDTO parameters, int limit, int offset) {
         final String[] newFilter = {blank};
         parameters.getParameters().forEach((k, v) -> newFilter[0] += " " + k + " = " + "'" + v + "'" + " AND");
-        String newFilterString = newFilter[0];
+        String newFilterString = newFilter[0] + pagination;
         newFilterString = replace(newFilterString, 4);
         try {
-            return Optional.of(jdbcTemplate.query(newFilterString, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(newFilterString, new Object[]{limit, offset}, new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -128,6 +130,16 @@ public class BookDAOImpl implements BookDAO {
     public Book getBookById(long bookId) {
         try {
             return jdbcTemplate.queryForObject(findBookById, new Object[]{bookId}, new BookMapper());
+        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public Book changeBookPrice(float price, long bookId) {
+        try {
+            jdbcTemplate.update(changePrice, price, bookId);
+            return getBookById(bookId);
         } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
             throw new NoSuchElementException();
         }

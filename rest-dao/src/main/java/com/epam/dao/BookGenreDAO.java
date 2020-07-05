@@ -8,9 +8,11 @@ import java.util.Optional;
 
 public interface BookGenreDAO extends SetData {
 
-     Optional<List<Book>> getAllBooksByGenre(long genreId);
+    Optional<List<Book>> getAllBooksByGenre(long genreId, int limit, int offset);
 
-     Optional<List<Genre>> getAllGenresOnBook(long bookId);
+    Optional<List<Genre>> getAllGenresOnBook(long bookId, int limit, int offset);
 
-     void createConnection(long bookId, long genreId);
+    Optional<List<Genre>> getAllGenresOnBook(long bookId);
+
+    void createConnection(long bookId, long genreId);
 }

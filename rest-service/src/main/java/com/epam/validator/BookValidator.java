@@ -1,9 +1,9 @@
 package com.epam.validator;
 
 import com.epam.dao.BookDAO;
-import com.epam.dto.request.CreateBookRequestDTO;
-import com.epam.dto.request.CreateGenreRequestDTO;
-import com.epam.dto.request.UpdateBookRequestDTO;
+import com.epam.dto.request.create.CreateBookRequestDTO;
+import com.epam.dto.request.create.CreateGenreRequestDTO;
+import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

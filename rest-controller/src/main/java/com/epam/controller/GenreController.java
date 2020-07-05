@@ -1,7 +1,7 @@
 package com.epam.controller;
 
-import com.epam.dto.request.CreateGenreRequestDTO;
-import com.epam.dto.request.UpdateGenreRequestDTO;
+import com.epam.dto.request.create.CreateGenreRequestDTO;
+import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +14,14 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/genre")
+@RequestMapping(value = "/genres")
 public class GenreController {
 
     @Autowired
     private GenreService genreService;
 
 
-    @PostMapping(value = "/remove/{genreId}")
+    @DeleteMapping(value = "{genreId:[0-9]+}")
     public ResponseEntity<GenreResponseDTO> removeGenre(@PathVariable long genreId) {
         genreService.removeGenre(genreId);
         return ResponseEntity.noContent().build();
@@ -41,12 +41,12 @@ public class GenreController {
         return ResponseEntity.ok().location(location).body(response);
     }
 
-    @GetMapping(value = "/get/all")
-    public ResponseEntity<List<GenreResponseDTO>> getAllGenres() {
-        return ResponseEntity.ok(genreService.getAllGenres());
+    @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<List<GenreResponseDTO>> getAllGenres(@PathVariable int limit, @PathVariable int offset) {
+        return ResponseEntity.ok(genreService.getAllGenres(limit,offset));
     }
 
-    @GetMapping(value = "/get/by-name/{genreName}")
+    @GetMapping(value = "{genreName}")
     public ResponseEntity<GenreResponseDTO> getGenreByName(@PathVariable String genreName) {
         return ResponseEntity.ok(genreService.getGenre(genreName));
     }

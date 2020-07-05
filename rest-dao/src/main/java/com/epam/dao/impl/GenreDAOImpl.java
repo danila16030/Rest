@@ -25,7 +25,7 @@ import java.util.Optional;
 public class GenreDAOImpl implements GenreDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String createNewGenre = "INSERT INTO genre (genre_name) VALUES (?)";
-    private static final String getGenreList = "SELECT * FROM genre";
+    private static final String getGenreList = "SELECT * FROM genre LIMIT ? OFFSET ?";
     private static final String removeGenre = "DELETE FROM genre WHERE genre_id = ?";
     private static final String findGenreByName = "SELECT * FROM genre WHERE genre_name = ?";
     private static final String findGenreById = "SELECT * FROM genre WHERE genre_id = ?";
@@ -63,9 +63,9 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public Optional<List<Genre>> getGenreList() {
+    public Optional<List<Genre>> getGenreList(int limit,int offset) {
         try {
-            return Optional.of(jdbcTemplate.query(getGenreList, new GenreMapper()));
+            return Optional.of(jdbcTemplate.query(getGenreList, new Object[]{limit,offset}, new GenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
@@ -88,7 +88,7 @@ public class GenreDAOImpl implements GenreDAO {
             jdbcTemplate.update(createNewGenre, genreName);
             return new Genre(genreName);
         } catch (DuplicateKeyException e) {
-            throw new DuplicatedException();
+            throw new DuplicatedException("Genre with this name is already exist");
         }
     }
 
@@ -107,7 +107,7 @@ public class GenreDAOImpl implements GenreDAO {
             jdbcTemplate.update(updateGenre, genreName, genreId);
             return new Genre(genreName, genreId);
         } catch (DuplicateKeyException e) {
-            throw new DuplicatedException();
+            throw new DuplicatedException("Genre with this name is already exist");
         }
     }
 

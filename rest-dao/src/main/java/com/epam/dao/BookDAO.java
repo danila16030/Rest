@@ -12,17 +12,19 @@ public interface BookDAO extends SetData {
 
     boolean removeBook(long bookId);
 
-    Optional<List<Book>> getAllBooks();
+    Optional<List<Book>> getAllBooks(int limit,int offset);
 
     Book updateBook(String title, String author, String writingDate, String description, int numberOfPages, float price, long bookId);
 
-    Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters);
+    Optional<List<Book>> searchByPartialCoincidence(ParametersRequestDTO parameters,int limit,int offset);
 
-    Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters);
+    Optional<List<Book>> searchByFullCoincidence(ParametersRequestDTO parameters,int limit,int offset);
 
-    Optional<List<Book>> filter(ParametersRequestDTO parameters);
+    Optional<List<Book>> filter(ParametersRequestDTO parameters,int limit,int offset);
 
     Book getBookById(long bookId);
+
+    Book changeBookPrice(float price, long bookId);
 
     Book getBookByIdWithoutException(long bookId);
 

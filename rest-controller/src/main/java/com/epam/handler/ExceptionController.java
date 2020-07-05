@@ -1,10 +1,7 @@
 package com.epam.handler;
 
 import com.epam.dto.responce.ExceptionResponseDTO;
-import com.epam.exception.ArgumentsNotValidException;
-import com.epam.exception.DuplicatedException;
-import com.epam.exception.InvalidDataException;
-import com.epam.exception.NoSuchElementException;
+import com.epam.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +14,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionController {
 
-    @ExceptionHandler({InvalidDataException.class, ArgumentsNotValidException.class, DuplicatedException.class})
+    @ExceptionHandler({InvalidDataException.class, ArgumentsNotValidException.class, DuplicatedException.class,
+            CantBeRemovedException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleInvalidData(final Exception exception) {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
         return ResponseEntity.badRequest().body(responseDTO);
@@ -28,7 +26,7 @@ public class ExceptionController {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ExceptionResponseDTO> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
         List<String> errorMessages = exception.getBindingResult().getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)

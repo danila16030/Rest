@@ -1,12 +1,12 @@
 package com.epam.service.impl;
 
 import com.epam.dao.GenreDAO;
-import com.epam.dto.request.CreateGenreRequestDTO;
-import com.epam.dto.request.UpdateGenreRequestDTO;
+import com.epam.dto.request.create.CreateGenreRequestDTO;
+import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.BookGenreMapper;
+import com.epam.mapper.Mapper;
 import com.epam.service.GenreService;
 import com.epam.validator.GenreValidator;
 import org.mapstruct.factory.Mappers;
@@ -21,7 +21,7 @@ public class GenreServiceImpl implements GenreService {
     private GenreDAO genreDAO;
 
     private GenreValidator genreValidator;
-    private final BookGenreMapper genreMapper = Mappers.getMapper(BookGenreMapper.class);
+    private final Mapper genreMapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     public GenreServiceImpl(GenreDAO genreDAO, GenreValidator genreValidator) {
@@ -30,8 +30,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GenreResponseDTO> getAllGenres() {
-        List<Genre> genreList = genreDAO.getGenreList().get();
+    public List<GenreResponseDTO> getAllGenres(int limit,int offset) {
+        List<Genre> genreList = genreDAO.getGenreList(limit,offset).get();
         return genreMapper.genreListToGenreDTOList(genreList);
     }
 
@@ -53,8 +53,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public GenreResponseDTO createGenre(CreateGenreRequestDTO genreDTO) {
-        if (genreDTO != null && genreValidator.isValid(genreDTO) &&
-                !genreValidator.isExistByName(genreDTO.getGenreName())) {
+        if (genreDTO != null && genreValidator.isValid(genreDTO)) {
             Genre genre = genreDAO.createGenre(genreDTO.getGenreName());
             return genreMapper.genreToGenreDTO(genre);
         }

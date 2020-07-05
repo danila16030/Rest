@@ -1,7 +1,7 @@
 package com.epam.service;
 
-import com.epam.dto.request.CreateBookRequestDTO;
-import com.epam.dto.request.UpdateBookRequestDTO;
+import com.epam.dto.request.create.CreateBookRequestDTO;
+import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.responce.BookResponseDTO;
 import com.epam.exception.InvalidDataException;
@@ -12,11 +12,16 @@ public interface BookService {
 
     BookResponseDTO getBook(long bookId);
 
-    List<BookResponseDTO> getAllBooks();
 
-    List<BookResponseDTO> getBookByPartialCoincidence(ParametersRequestDTO parameters) throws InvalidDataException;
+    BookResponseDTO changeBookPrice(ParametersRequestDTO parameters);
 
-    List<BookResponseDTO> getBookByFullCoincidence(ParametersRequestDTO parameters) throws InvalidDataException;
+    List<BookResponseDTO> getAllBooks(int limit, int offset);
+
+    List<BookResponseDTO> getBookByPartialCoincidence(ParametersRequestDTO parameters, int limit, int offset)
+            throws InvalidDataException;
+
+    List<BookResponseDTO> getBookByFullCoincidence(ParametersRequestDTO parameters, int limit, int offset)
+            throws InvalidDataException;
 
     boolean removeBook(long bookId) throws InvalidDataException;
 
@@ -24,10 +29,10 @@ public interface BookService {
 
     BookResponseDTO updateBook(UpdateBookRequestDTO book) throws InvalidDataException;
 
-    List<BookResponseDTO> filter(ParametersRequestDTO parameters) throws InvalidDataException;
+    List<BookResponseDTO> filter(ParametersRequestDTO parameters, int limit, int offset) throws InvalidDataException;
 
-    List<BookResponseDTO> getBooksSortedByName();
+    List<BookResponseDTO> getBooksSortedByName(int limit, int offset);
 
-    List<BookResponseDTO> getBooksSortedByDate();
+    List<BookResponseDTO> getBooksSortedByDate(int limit, int offset);
 
 }

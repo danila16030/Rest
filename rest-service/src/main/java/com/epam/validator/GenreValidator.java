@@ -1,7 +1,7 @@
 package com.epam.validator;
 
 import com.epam.dao.GenreDAO;
-import com.epam.dto.request.CreateGenreRequestDTO;
+import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.entity.Genre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

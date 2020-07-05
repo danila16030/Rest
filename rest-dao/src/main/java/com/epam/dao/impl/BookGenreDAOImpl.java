@@ -20,8 +20,10 @@ public class BookGenreDAOImpl implements BookGenreDAO {
 
     private JdbcTemplate jdbcTemplate;
     private static final String getAllBooksByGenre = "SELECT * FROM book_genre sc INNER JOIN book c ON  +" +
-            "c.book_id=sc.book_id WHERE sc.genre_id=?";
+            "c.book_id=sc.book_id WHERE sc.genre_id=? LIMIT ? OFSSET ?";
     private static final String getAllGenresOnBook = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
+            "c.genre_id=sc.genre_id WHERE sc.book_id=? LIMIT ? OFSSET ?";
+    private static final String getAllGenresOnBookWithoutLimit = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
             "c.genre_id=sc.genre_id WHERE sc.book_id=?";
     private static final String createConnection = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
 
@@ -32,9 +34,18 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     }
 
     @Override
-    public Optional<List<Book>> getAllBooksByGenre(long genreId) {
+    public Optional<List<Book>> getAllBooksByGenre(long genreId, int limit, int offset) {
         try {
-            return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId}, new BookMapper()));
+            return Optional.of(jdbcTemplate.query(getAllBooksByGenre, new Object[]{genreId, limit, offset}, new BookMapper()));
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public Optional<List<Genre>> getAllGenresOnBook(long bookId, int limit, int offset) {
+        try {
+            return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId, limit, offset}, new GenreMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
@@ -43,7 +54,7 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public Optional<List<Genre>> getAllGenresOnBook(long bookId) {
         try {
-            return Optional.of(jdbcTemplate.query(getAllGenresOnBook, new Object[]{bookId}, new GenreMapper()));
+            return Optional.of(jdbcTemplate.query(getAllGenresOnBookWithoutLimit, new Object[]{bookId}, new GenreMapper()));
         } catch (EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }

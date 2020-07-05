@@ -20,13 +20,15 @@ public class BookGenreController {
     private BookGenreService bookGenreService;
 
 
-    @GetMapping(value = "/get/book-by-genre/{genreId}")
-    public ResponseEntity<List<BookResponseDTO>> getBookByGenre(@PathVariable long genreId) {
-        return ResponseEntity.ok(bookGenreService.getBooksByGenre(genreId));
+    @GetMapping(value = "book-by-genre/{genreId:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<List<BookResponseDTO>> getBookByGenre(@PathVariable long genreId, @PathVariable int limit,
+                                                                @PathVariable int offset) {
+        return ResponseEntity.ok(bookGenreService.getBooksByGenre(genreId,limit,offset));
     }
 
-    @GetMapping(value = "/get/genre-by-book/{bookId}")
-    public ResponseEntity<List<GenreResponseDTO>> getGenreByBook(@PathVariable long bookId) {
-        return ResponseEntity.ok(bookGenreService.getGenresByBook(bookId));
+    @GetMapping(value = "genre-by-book/{bookId:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<List<GenreResponseDTO>> getGenreByBook(@PathVariable long bookId, @PathVariable int limit,
+                                                                 @PathVariable int offset) {
+        return ResponseEntity.ok(bookGenreService.getGenresByBook(bookId,limit,offset));
     }
 }
