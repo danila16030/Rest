@@ -1,8 +1,10 @@
-package com.epam.dto.responce;
+package com.epam.model;
+
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
-public class BookResponseDTO {
+public class BookModel extends RepresentationModel<BookModel> {
     private String author;
     private String description;
     private float price;
@@ -10,7 +12,7 @@ public class BookResponseDTO {
     private int numberOfPages;
     private String title;
     private long bookId;
-    private List<GenreResponseDTO> genres;
+    private List<GenreModel> genres;
 
     public String getAuthor() {
         return author;
@@ -68,11 +70,11 @@ public class BookResponseDTO {
         this.bookId = bookId;
     }
 
-    public List<GenreResponseDTO> getGenres() {
+    public List<GenreModel> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<GenreResponseDTO> genres) {
+    public void setGenres(List<GenreModel> genres) {
         this.genres = genres;
     }
 }

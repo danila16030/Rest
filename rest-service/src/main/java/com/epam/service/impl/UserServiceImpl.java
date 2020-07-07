@@ -3,9 +3,9 @@ package com.epam.service.impl;
 import com.epam.dao.OrderUserDAO;
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserDTO;
-import com.epam.dto.responce.CustomerResponseDTO;
-import com.epam.dto.responce.OrderResponseDTO;
-import com.epam.dto.responce.UserResponseDTO;
+import com.epam.dto.request.update.UpdateUserDTO;
+import com.epam.entity.Order;
+import com.epam.entity.User;
 import com.epam.exception.CantBeRemovedException;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
@@ -34,23 +34,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO getUser(long userId) {
-        UserResponseDTO response = mapper.userToUserDTO(userDAO.getUser(userId));
+    public User getUser(long userId) {
+        User response = userDAO.getUser(userId);
         response.setOrders(getOrder(response.getUserId()));
         return response;
     }
 
     @Override
-    public UserResponseDTO createUser(CreateUserDTO user) {
+    public User createUser(CreateUserDTO user) {
         if (!userValidator.isExistByName(user.getUsername())) {
-            return mapper.userToUserDTO(userDAO.createUser(user.getUsername()));
+            return userDAO.createUser(user.getUsername());
         }
         throw new DuplicatedException("User with this name is already exist");
     }
 
     @Override
-    public List<UserResponseDTO> getAll(int limit, int offset) {
-        List<UserResponseDTO> response = mapper.userListToUserDTOList(userDAO.getAll(limit, offset));
+    public List<User> getAll(int limit, int offset) {
+        List<User> response = userDAO.getAll(limit, offset);
         setOrder(response);
         return response;
     }
@@ -68,21 +68,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CustomerResponseDTO getTopUser() {
-        List<CustomerResponseDTO> response = mapper.userListToCustomerDTOList(orderUserDAO.getTopUser());
+    public User updateUser(UpdateUserDTO updateUserDTO) {
+        if (userValidator.isExistById(updateUserDTO.getUserId())) {
+            return userDAO.updateUser(updateUserDTO.getUsername(), updateUserDTO.getUserId());
+        }
+        throw new NoSuchElementException("User does not exist");
+    }
+
+    @Override
+    public User getTopUser() {
+        List<User> response = orderUserDAO.getTopUser();
         return getTopCustomer(response);
     }
 
-    private void setOrder(List<UserResponseDTO> users) {
-        for (UserResponseDTO user : users) {
+    private void setOrder(List<User> users) {
+        for (User user : users) {
             user.setOrders(getOrder(user.getUserId()));
         }
     }
 
-    private CustomerResponseDTO getTopCustomer(List<CustomerResponseDTO> customers) {
-        CustomerResponseDTO topCustomer = new CustomerResponseDTO();
+    private User getTopCustomer(List<User> customers) {
+        User topCustomer = new User();
         float highestAmount = 0;
-        for (CustomerResponseDTO customer : customers) {
+        for (User customer : customers) {
             if (highestAmount < customer.getTotalPrice()) {
                 highestAmount = customer.getTotalPrice();
                 topCustomer = customer;
@@ -91,7 +99,7 @@ public class UserServiceImpl implements UserService {
         return topCustomer;
     }
 
-    private List<OrderResponseDTO> getOrder(long userId) {
-        return mapper.orderListToOrderDTOList(orderUserDAO.getOrders(userId).get());
+    private List<Order> getOrder(long userId) {
+        return orderUserDAO.getOrders(userId).get();
     }
 }

@@ -1,6 +1,8 @@
-package com.epam.dto.responce;
+package com.epam.model;
 
-public class OrderResponseDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class OrderModel extends RepresentationModel<OrderModel> {
     private String orderTime;
     private float price;
     private long bookId;

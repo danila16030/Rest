@@ -1,18 +1,20 @@
 package com.epam.controller;
 
-import com.epam.dto.request.create.CreateBookRequestDTO;
+import com.epam.assembler.BookAssembler;
 import com.epam.dto.request.ParametersRequestDTO;
+import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
-import com.epam.dto.responce.BookResponseDTO;
+import com.epam.entity.Book;
+import com.epam.model.BookModel;
 import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 
 @RestController
@@ -22,71 +24,76 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private BookAssembler bookAssembler;
+
     @DeleteMapping(value = "{bookId:[0-9]+}")
-    public ResponseEntity<BookResponseDTO> removeBook(@PathVariable long bookId) {
+    public ResponseEntity<BookModel> removeBook(@PathVariable long bookId) {
         bookService.removeBook(bookId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "{bookId:[0-9]+}")
-    public ResponseEntity<BookResponseDTO> getBook(@PathVariable long bookId) {
-        return ResponseEntity.ok(bookService.getBook(bookId));
+    public ResponseEntity<BookModel> getBook(@PathVariable long bookId) {
+        return ResponseEntity.ok(bookAssembler.toModel(bookService.getBook(bookId)));
     }
 
-    @PutMapping(value = "/update", headers = {"Accept=application/json"})
-    public ResponseEntity<BookResponseDTO> updateBook(@RequestBody @Valid UpdateBookRequestDTO bookDTO) {
-        BookResponseDTO response = bookService.updateBook(bookDTO);
+    @PutMapping(headers = {"Accept=application/json"})
+    public ResponseEntity<BookModel> updateBook(@RequestBody @Valid UpdateBookRequestDTO bookDTO) {
+        Book response = bookService.updateBook(bookDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getBookId()).build().toUri();
-        return ResponseEntity.ok().location(location).body(response);
+        return ResponseEntity.ok().location(location).body(bookAssembler.toModel(response));
     }
 
     @PutMapping(value = "/price", headers = {"Accept=application/json"})
-    public ResponseEntity<BookResponseDTO> changePrice(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
-        return ResponseEntity.ok(bookService.changeBookPrice(parametersDTO));
+    public ResponseEntity<BookModel> changePrice(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
+        return ResponseEntity.ok(bookAssembler.toModel(bookService.changeBookPrice(parametersDTO)));
     }
 
 
-    @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public ResponseEntity<BookResponseDTO> creteNewBook(@RequestBody @Valid CreateBookRequestDTO bookDTO) {
-        BookResponseDTO response = bookService.createBook(bookDTO);
+    @PostMapping( headers = {"Accept=application/json"})
+    public ResponseEntity<BookModel> creteNewBook(@RequestBody @Valid CreateBookRequestDTO bookDTO) {
+        Book response = bookService.createBook(bookDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getBookId()).build().toUri();
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.created(location).body(bookAssembler.toModel(response));
     }
 
     @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<List<BookResponseDTO>> getAllBooks(@PathVariable int limit, @PathVariable int offset) {
-        return ResponseEntity.ok(bookService.getAllBooks(limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> getAllBooks(@PathVariable int limit, @PathVariable int offset) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getAllBooks(limit, offset)));
     }
 
     @GetMapping(value = "/sorted/by-name/{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<List<BookResponseDTO>> getBooksSortedByName(@PathVariable int limit, @PathVariable int offset) {
-        return ResponseEntity.ok(bookService.getBooksSortedByName(limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByName(@PathVariable int limit, @PathVariable int offset) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByName(limit, offset)));
     }
 
     @GetMapping(value = "/sorted/by-date/{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<List<BookResponseDTO>> getBooksSortedByDate(@PathVariable int offset, @PathVariable int limit) {
-        return ResponseEntity.ok(bookService.getBooksSortedByDate(limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByDate(@PathVariable int offset, @PathVariable int limit) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByDate(limit, offset)));
     }
 
     @GetMapping(value = "/search/by-partial-coincidence/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<List<BookResponseDTO>> searchByPartialCoincidence(@RequestBody
-                                                                            @Valid ParametersRequestDTO parametersDTO,
-                                                                            @PathVariable int limit,
-                                                                            @PathVariable int offset) {
-        return ResponseEntity.ok(bookService.getBookByPartialCoincidence(parametersDTO, limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> searchByPartialCoincidence(@RequestBody
+                                                                                 @Valid ParametersRequestDTO parametersDTO,
+                                                                                 @PathVariable int limit,
+                                                                                 @PathVariable int offset) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByPartialCoincidence(parametersDTO,
+                limit, offset)));
     }
 
     @GetMapping(value = "/search/by-full-coincidence/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<List<BookResponseDTO>> searchByFullCoincidence(@RequestBody
-                                                                         @Valid ParametersRequestDTO parametersDTO,
-                                                                         @PathVariable int offset,
-                                                                         @PathVariable int limit) {
-        return ResponseEntity.ok(bookService.getBookByFullCoincidence(parametersDTO, limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> searchByFullCoincidence(@RequestBody
+                                                                              @Valid ParametersRequestDTO parametersDTO,
+                                                                              @PathVariable int offset,
+                                                                              @PathVariable int limit) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByFullCoincidence(parametersDTO,
+                limit, offset)));
     }
 
     @GetMapping(value = "/filter/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<List<BookResponseDTO>> filter(@RequestBody @Valid ParametersRequestDTO parametersDTO,
-                                                        @PathVariable int offset, @PathVariable int limit) {
-        return ResponseEntity.ok(bookService.filter(parametersDTO, limit, offset));
+    public ResponseEntity<CollectionModel<BookModel>> filter(@RequestBody @Valid ParametersRequestDTO parametersDTO,
+                                                             @PathVariable int offset, @PathVariable int limit) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.filter(parametersDTO, limit, offset)));
     }
 }

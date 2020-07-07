@@ -1,11 +1,11 @@
-package com.epam.dto.request;
+package com.epam.dto.request.update;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class MakeAnOrderRequestDTO {
+public class UpdateOrderDTO {
     @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Incorrect orderTime " +
             "(Date must follow pattern hh.mm and be correct)")
     @NotBlank(message = "Incorrect orderTime (Should contain not only spaces)")
@@ -17,6 +17,8 @@ public class MakeAnOrderRequestDTO {
     private long bookId;
     @Min(value = 1, message = "Incorrect userId value(Value must be more then 0)")
     private long userId;
+    @Min(value = 1, message = "Incorrect orderId value(Value must be more then 0)")
+    private long orderId;
 
     public String getOrderTime() {
         return orderTime;
@@ -48,5 +50,13 @@ public class MakeAnOrderRequestDTO {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 }

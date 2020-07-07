@@ -5,8 +5,17 @@ public class Order {
     private float price;
     private long bookId;
     private long orderId;
+    private long userId;
 
     public Order() {
+    }
+
+    public Order(String orderTime, float price, long bookId, long orderId, long userId) {
+        this.orderTime = orderTime;
+        this.price = price;
+        this.bookId = bookId;
+        this.orderId = orderId;
+        this.userId = userId;
     }
 
     public Order(String orderTime, float price, long bookId, long orderId) {
@@ -14,6 +23,14 @@ public class Order {
         this.price = price;
         this.bookId = bookId;
         this.orderId = orderId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getOrderTime() {

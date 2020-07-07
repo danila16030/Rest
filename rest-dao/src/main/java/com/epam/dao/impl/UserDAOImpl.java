@@ -27,6 +27,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String getAll = "SELECT * FROM public.user LIMIT ? OFFSET ?";
     private static final String create = "INSERT INTO public.user (username) VALUES(?)";
     private static final String removeUser = "DELETE FROM public.user WHERE user_id = ?";
+    private static final String updateOrder = "UPDATE public.user SET username = ? WHERE user_id = ?";
 
     @Override
     @Autowired
@@ -87,5 +88,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void removeUser(long userId) {
         jdbcTemplate.update(removeUser, userId);
+    }
+
+    @Override
+    public User updateUser(String username, long userId) {
+        try {
+            jdbcTemplate.update(updateOrder, username, userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoSuchElementException();
+        }
+        return new User(username, userId);
     }
 }

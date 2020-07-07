@@ -1,6 +1,8 @@
-package com.epam.dto.responce;
+package com.epam.model;
 
-public class GenreResponseDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class GenreModel extends RepresentationModel<GenreModel> {
     private String genreName;
     private long genreId;
 

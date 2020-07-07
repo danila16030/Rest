@@ -1,6 +1,8 @@
-package com.epam.dto.responce;
+package com.epam.model;
 
-public class CustomerResponseDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class CustomerModel extends RepresentationModel<CustomerModel> {
     private float totalPrice;
     private String username;
     private long userId;

@@ -1,6 +1,6 @@
 package com.epam.dto.responce;
 
-public class ExceptionResponseDTO {
+public class ExceptionResponseDTO{
     private String message;
 
     public ExceptionResponseDTO(String message) {

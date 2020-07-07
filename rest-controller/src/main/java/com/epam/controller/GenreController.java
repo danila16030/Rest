@@ -1,17 +1,19 @@
 package com.epam.controller;
 
+import com.epam.assembler.GenreAssembler;
 import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
-import com.epam.dto.responce.GenreResponseDTO;
+import com.epam.entity.Genre;
+import com.epam.model.GenreModel;
 import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/genres")
@@ -20,34 +22,36 @@ public class GenreController {
     @Autowired
     private GenreService genreService;
 
+    @Autowired
+    private GenreAssembler genreAssembler;
 
     @DeleteMapping(value = "{genreId:[0-9]+}")
-    public ResponseEntity<GenreResponseDTO> removeGenre(@PathVariable long genreId) {
+    public ResponseEntity<GenreModel> removeGenre(@PathVariable long genreId) {
         genreService.removeGenre(genreId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/create", headers = {"Accept=application/json"})
-    public ResponseEntity<GenreResponseDTO> creteNewGenre(@RequestBody @Valid CreateGenreRequestDTO genreDTO) {
-        GenreResponseDTO response = genreService.createGenre(genreDTO);
+    @PostMapping(headers = {"Accept=application/json"})
+    public ResponseEntity<GenreModel> creteNewGenre(@RequestBody @Valid CreateGenreRequestDTO genreDTO) {
+        Genre response = genreService.createGenre(genreDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getGenreId()).build().toUri();
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.created(location).body(genreAssembler.toModel(response));
     }
 
-    @PutMapping(value = "/update", headers = {"Accept=application/json"})
-    public ResponseEntity<GenreResponseDTO> updateGenre(@RequestBody @Valid UpdateGenreRequestDTO genreDTO) {
-        GenreResponseDTO response = genreService.updateGenre(genreDTO);
+    @PutMapping(headers = {"Accept=application/json"})
+    public ResponseEntity<GenreModel> updateGenre(@RequestBody @Valid UpdateGenreRequestDTO genreDTO) {
+        Genre response = genreService.updateGenre(genreDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getGenreId()).build().toUri();
-        return ResponseEntity.ok().location(location).body(response);
+        return ResponseEntity.ok().location(location).body(genreAssembler.toModel(response));
     }
 
     @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<List<GenreResponseDTO>> getAllGenres(@PathVariable int limit, @PathVariable int offset) {
-        return ResponseEntity.ok(genreService.getAllGenres(limit,offset));
+    public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@PathVariable int limit, @PathVariable int offset) {
+        return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit,offset)));
     }
 
-    @GetMapping(value = "{genreName}")
-    public ResponseEntity<GenreResponseDTO> getGenreByName(@PathVariable String genreName) {
-        return ResponseEntity.ok(genreService.getGenre(genreName));
+    @GetMapping(value = "{genreId:[0-9]+}")
+    public ResponseEntity<GenreModel> getGenre(@PathVariable long genreId) {
+        return ResponseEntity.ok(genreAssembler.toModel(genreService.getGenre(genreId)));
     }
 }

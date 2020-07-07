@@ -1,46 +1,62 @@
 package com.epam.controller;
 
-import com.epam.dto.request.MakeAnOrderRequestDTO;
-import com.epam.dto.responce.OrderResponseDTO;
+import com.epam.assembler.OrderAssembler;
+import com.epam.dto.request.create.MakeAnOrderRequestDTO;
+import com.epam.dto.request.update.UpdateOrderDTO;
+import com.epam.entity.Order;
+import com.epam.model.OrderModel;
 import com.epam.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
-@RequestMapping(value = "/order")
+@RequestMapping(value = "/orders")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderAssembler orderAssembler;
+
+
     @PostMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<OrderResponseDTO> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO) {
-        OrderResponseDTO response = orderService.makeAnOrder(makeAnOrderRequestDTO);
+    public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO) {
+        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
-        return ResponseEntity.created(location).body(response);
+        response.setUserId(makeAnOrderRequestDTO.getUserId());
+        return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 
-    @GetMapping("{id:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@PathVariable long id,
-                                                               @PathVariable("limit") int limit,
-                                                               @PathVariable int offset) {
-        return ResponseEntity.ok(orderService.getOrders(id,limit,offset));
+    @GetMapping("{userId:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<CollectionModel<OrderModel>> getAllOrders(@PathVariable long userId,
+                                                                    @PathVariable int limit,
+                                                                    @PathVariable int offset) {
+        return ResponseEntity.ok(orderAssembler.toCollectionModel(orderService.getOrders(userId, limit, offset), userId));
     }
 
     @GetMapping("{userId:[0-9]+},{orderId:[0-9]+}")
-    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable long userId, @PathVariable long orderId) {
-        return ResponseEntity.ok(orderService.getOrder(userId, orderId));
+    public ResponseEntity<OrderModel> getOrder(@PathVariable long userId, @PathVariable long orderId) {
+        return ResponseEntity.ok(orderAssembler.toModel(orderService.getOrder(userId, orderId)));
     }
 
     @DeleteMapping("{userId:[0-9]+},{orderId:[0-9]+}")
     public ResponseEntity removeOrder(@PathVariable long userId, @PathVariable long orderId) {
         orderService.removeOrder(userId, orderId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(headers = {"Accept=application/json"})
+    public ResponseEntity<OrderModel> update(@RequestBody @Valid UpdateOrderDTO updateOrderDTO){
+        Order response = orderService.updateOrder(updateOrderDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
+        response.setUserId(updateOrderDTO.getUserId());
+        return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 }

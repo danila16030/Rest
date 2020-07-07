@@ -26,6 +26,8 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String makeAnOrder = "INSERT INTO public.order (order_price, order_time, book_id) VALUES(?,?,?)";
     private static final String getOrder = "SELECT * FROM public.order WHERE order_id = ?";
     private static final String removeOrder = "DELETE FROM public.order WHERE order_id = ?";
+    private static final String updateOrder = "UPDATE public.order SET order_time = ?, order_price = ?,  book_id = ?" +
+            " WHERE order_id = ?";
 
     @Override
     @Autowired
@@ -67,6 +69,16 @@ public class OrderDAOImpl implements OrderDAO {
         } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
             return new Order();
         }
+    }
+
+    @Override
+    public Order updateOrder(String time, float price, long bookId, long orderId) {
+        try {
+            jdbcTemplate.update(updateOrder, time, price, bookId, orderId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoSuchElementException();
+        }
+        return new Order(time, price, bookId, orderId);
     }
 
     @Override

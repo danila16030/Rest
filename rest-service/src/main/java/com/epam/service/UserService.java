@@ -1,21 +1,23 @@
 package com.epam.service;
 
 import com.epam.dto.request.create.CreateUserDTO;
-import com.epam.dto.responce.CustomerResponseDTO;
-import com.epam.dto.responce.UserResponseDTO;
+import com.epam.dto.request.update.UpdateUserDTO;
+import com.epam.entity.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserResponseDTO getUser(long userId);
+    User getUser(long userId);
 
-    UserResponseDTO createUser(CreateUserDTO user);
+    User createUser(CreateUserDTO user);
 
-    List<UserResponseDTO> getAll(int limit, int offset);
+    List<User> getAll(int limit, int offset);
 
     void removeUser(long userId);
 
-    CustomerResponseDTO getTopUser();
+    User updateUser(UpdateUserDTO updateUserDTO);
+
+    User getTopUser();
 
 }

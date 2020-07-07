@@ -1,5 +1,6 @@
 package com.epam.dao;
 
+import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 
@@ -15,4 +16,8 @@ public interface BookGenreDAO extends SetData {
     Optional<List<Genre>> getAllGenresOnBook(long bookId);
 
     void createConnection(long bookId, long genreId);
+
+    boolean checkConnection(long bookId, long genreId);
+
+    Book getBookByGenres(ParametersRequestDTO parametersRequestDTO);
 }

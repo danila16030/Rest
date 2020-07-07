@@ -3,7 +3,6 @@ package com.epam.service.impl;
 import com.epam.dao.GenreDAO;
 import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
-import com.epam.dto.responce.GenreResponseDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
 import com.epam.mapper.Mapper;
@@ -30,32 +29,28 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GenreResponseDTO> getAllGenres(int limit,int offset) {
-        List<Genre> genreList = genreDAO.getGenreList(limit,offset).get();
-        return genreMapper.genreListToGenreDTOList(genreList);
+    public List<Genre> getAllGenres(int limit, int offset) {
+        return genreDAO.getGenreList(limit, offset).get();
     }
 
     @Override
-    public GenreResponseDTO getGenre(String genreName) {
-        Genre genre = genreDAO.getGenreByName(genreName);
-        return genreMapper.genreToGenreDTO(genre);
+    public Genre getGenre(long genreId) {
+        return genreDAO.getGenreByIdWithoutException(genreId);
     }
 
     @Override
-    public GenreResponseDTO updateGenre(UpdateGenreRequestDTO genreDTO) {
+    public Genre updateGenre(UpdateGenreRequestDTO genreDTO) {
         if (genreDTO != null && genreValidator.isExistByName(genreDTO.getGenreName())) {
-            Genre genre = genreDAO.updateGenre(genreDTO.getGenreName(), genreDTO.getGenreId());
-            return genreMapper.genreToGenreDTO(genre);
+            return genreDAO.updateGenre(genreDTO.getGenreName(), genreDTO.getGenreId());
         }
         throw new InvalidDataException();
     }
 
 
     @Override
-    public GenreResponseDTO createGenre(CreateGenreRequestDTO genreDTO) {
+    public Genre createGenre(CreateGenreRequestDTO genreDTO) {
         if (genreDTO != null && genreValidator.isValid(genreDTO)) {
-            Genre genre = genreDAO.createGenre(genreDTO.getGenreName());
-            return genreMapper.genreToGenreDTO(genre);
+            return genreDAO.createGenre(genreDTO.getGenreName());
         }
         throw new InvalidDataException();
     }

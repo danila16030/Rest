@@ -13,7 +13,7 @@ public interface GenreDAO extends SetData {
 
     Optional<List<Genre>> getGenreList(int limit,int offset);
 
-    Genre getGenreByName(String genreName);
+    Genre getGenreById(long genreId);
 
     Genre createGenre(String genreName);
 

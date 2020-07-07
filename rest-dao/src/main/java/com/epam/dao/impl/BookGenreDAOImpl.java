@@ -1,6 +1,7 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.BookGenreDAO;
+import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.NoSuchElementException;
@@ -20,12 +21,15 @@ public class BookGenreDAOImpl implements BookGenreDAO {
 
     private JdbcTemplate jdbcTemplate;
     private static final String getAllBooksByGenre = "SELECT * FROM book_genre sc INNER JOIN book c ON  +" +
-            "c.book_id=sc.book_id WHERE sc.genre_id=? LIMIT ? OFSSET ?";
+            "c.book_id=sc.book_id WHERE sc.genre_id=? LIMIT ? OFFSET ?";
     private static final String getAllGenresOnBook = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
-            "c.genre_id=sc.genre_id WHERE sc.book_id=? LIMIT ? OFSSET ?";
+            "c.genre_id=sc.genre_id WHERE sc.book_id=? LIMIT ? OFFSET ?";
     private static final String getAllGenresOnBookWithoutLimit = "SELECT * FROM book_genre sc INNER JOIN genre c ON " +
             "c.genre_id=sc.genre_id WHERE sc.book_id=?";
     private static final String createConnection = "INSERT INTO book_genre(book_id, genre_id) VALUES (?,?)";
+    private static final String checkConnection = "SELECT count(*) FROM  book_genre WHERE book_id=? AND genre_id=?";
+    private static final String getBookByGenres = "SELECT * FROM book_genre WHERE genre_id=? GROUP BY book_id";
+
 
     @Override
     @Autowired
@@ -63,6 +67,21 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     @Override
     public void createConnection(long bookId, long genreId) {
         jdbcTemplate.update(createConnection, bookId, genreId);
+    }
+
+    @Override
+    public boolean checkConnection(long bookId, long genreId) {
+        return jdbcTemplate.queryForObject(checkConnection, new Object[]{bookId, genreId}, Integer.class) > 0;
+    }
+
+    @Override
+    public Book getBookByGenres(ParametersRequestDTO parametersRequestDTO) {
+        try {
+ //           return jdbcTemplate.queryForObject(getBookByGenres, new BookMapper());
+            return null;
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoSuchElementException();
+        }
     }
 
 }

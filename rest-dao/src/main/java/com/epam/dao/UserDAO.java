@@ -11,4 +11,5 @@ public interface UserDAO extends SetData {
     List<User> getAll(int limit,int offset);
     User createUser(String username);
     void removeUser(long userId);
+    User updateUser(String username,long userId);
 }

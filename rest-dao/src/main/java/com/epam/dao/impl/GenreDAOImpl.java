@@ -63,24 +63,24 @@ public class GenreDAOImpl implements GenreDAO {
     }
 
     @Override
-    public Optional<List<Genre>> getGenreList(int limit,int offset) {
+    public Optional<List<Genre>> getGenreList(int limit, int offset) {
         try {
-            return Optional.of(jdbcTemplate.query(getGenreList, new Object[]{limit,offset}, new GenreMapper()));
+            return Optional.of(jdbcTemplate.query(getGenreList, new Object[]{limit, offset}, new GenreMapper()));
         } catch (
                 EmptyResultDataAccessException e) {
             throw new NoSuchElementException();
         }
     }
 
-
     @Override
-    public Genre getGenreByName(String genreName) {
+    public Genre getGenreById(long genreId) {
         try {
-            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreName}, new GenreMapper());
+            return jdbcTemplate.queryForObject(findGenreByName, new Object[]{genreId}, new GenreMapper());
         } catch (EmptyResultDataAccessException e) {
-            throw new NoSuchElementException("Genre with this name does not exist");
+            throw new NoSuchElementException();
         }
     }
+
 
     @Override
     public Genre createGenre(String genreName) {

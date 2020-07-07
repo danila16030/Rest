@@ -9,6 +9,8 @@ public interface OrderDAO extends SetData {
 
     Order getOrderWithoutException(long orderId);
 
+    Order updateOrder(String time, float price, long bookId,long orderId);
+
     void removeOrder(long orderId);
 
 }

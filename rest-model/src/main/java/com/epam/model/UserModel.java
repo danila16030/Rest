@@ -1,10 +1,13 @@
-package com.epam.dto.responce;
+package com.epam.model;
+
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
-public class UserResponseDTO {
+public class UserModel extends RepresentationModel<UserModel> {
+
     private String username;
-    private List<OrderResponseDTO> orders;
+    private List<OrderModel> orders;
     private long userId;
 
     public long getUserId() {
@@ -23,11 +26,11 @@ public class UserResponseDTO {
         this.username = username;
     }
 
-    public List<OrderResponseDTO> getOrders() {
+    public List<OrderModel> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderResponseDTO> orders) {
+    public void setOrders(List<OrderModel> orders) {
         this.orders = orders;
     }
 }
