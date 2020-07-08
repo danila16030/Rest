@@ -7,6 +7,9 @@ public class User {
     private List<Order> orders;
     private long userId;
     private float totalPrice;
+    private Genre favoriteGenre;
+
+
     public User() {
     }
 
@@ -45,6 +48,15 @@ public class User {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+
+    public Genre getFavoriteGenre() {
+        return favoriteGenre;
+    }
+
+    public void setFavoriteGenre(Genre favoriteGenre) {
+        this.favoriteGenre = favoriteGenre;
     }
 
     @Override

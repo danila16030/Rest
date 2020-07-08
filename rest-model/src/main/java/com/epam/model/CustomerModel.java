@@ -6,6 +6,15 @@ public class CustomerModel extends RepresentationModel<CustomerModel> {
     private float totalPrice;
     private String username;
     private long userId;
+    private GenreModel favoriteGenre;
+
+    public GenreModel getFavoriteGenre() {
+        return favoriteGenre;
+    }
+
+    public void setFavoriteGenre(GenreModel favoriteGenre) {
+        this.favoriteGenre = favoriteGenre;
+    }
 
     public float getTotalPrice() {
         return totalPrice;

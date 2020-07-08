@@ -1,22 +1,26 @@
 package com.epam.service.impl;
 
+import com.epam.dao.BookDAO;
+import com.epam.dao.BookGenreDAO;
 import com.epam.dao.OrderUserDAO;
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.dto.request.update.UpdateUserDTO;
+import com.epam.entity.Book;
+import com.epam.entity.Genre;
 import com.epam.entity.Order;
 import com.epam.entity.User;
 import com.epam.exception.CantBeRemovedException;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
-import com.epam.mapper.Mapper;
 import com.epam.service.UserService;
 import com.epam.validator.UserValidator;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,13 +28,17 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private OrderUserDAO orderUserDAO;
     private UserValidator userValidator;
-    private final Mapper mapper = Mappers.getMapper(Mapper.class);
+    private BookDAO bookDAO;
+    private BookGenreDAO bookGenreDAO;
 
     @Autowired
-    UserServiceImpl(UserDAO userDAO, OrderUserDAO orderUserDAO, UserValidator userValidator) {
+    UserServiceImpl(UserDAO userDAO, OrderUserDAO orderUserDAO, UserValidator userValidator, BookDAO bookDAO,
+                    BookGenreDAO bookGenreDAO) {
         this.userDAO = userDAO;
         this.orderUserDAO = orderUserDAO;
         this.userValidator = userValidator;
+        this.bookDAO = bookDAO;
+        this.bookGenreDAO = bookGenreDAO;
     }
 
     @Override
@@ -78,7 +86,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getTopUser() {
         List<User> response = orderUserDAO.getTopUser();
-        return getTopCustomer(response);
+        User topUser = getTopCustomer(response);
+        User user = getUser(topUser.getUserId());
+        Map<Genre, Integer> counter = getGenreCount(user);
+        Genre topGenre = getTopGenre(counter);
+        topUser.setFavoriteGenre(topGenre);
+        return topUser;
     }
 
     private void setOrder(List<User> users) {
@@ -97,6 +110,33 @@ public class UserServiceImpl implements UserService {
             }
         }
         return topCustomer;
+    }
+
+    private Map<Genre, Integer> getGenreCount(User user) {
+        Map<Genre, Integer> counter = new HashMap<>();
+        for (Order order : user.getOrders()) {
+            Book book = bookDAO.getBookById(order.getBookId());
+            book.setGenres(bookGenreDAO.getAllGenresOnBook(book.getBookId()).get());
+            for (Genre genre : book.getGenres()) {
+                if (counter.get(genre) != null) {
+                    counter.put(genre, counter.get(genre) + 1);
+                } else {
+                    counter.put(genre, 1);
+                }
+            }
+        }
+        return counter;
+    }
+
+    private Genre getTopGenre(Map<Genre, Integer> count) {
+        int maxCount = 0;
+        final Genre[] topGenre = new Genre[1];
+        count.forEach((k, v) -> {
+            if (maxCount < v) {
+                topGenre[0] = k;
+            }
+        });
+        return topGenre[0];
     }
 
     private List<Order> getOrder(long userId) {
