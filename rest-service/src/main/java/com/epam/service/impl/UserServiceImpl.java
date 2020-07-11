@@ -6,10 +6,7 @@ import com.epam.dao.OrderUserDAO;
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.dto.request.update.UpdateUserDTO;
-import com.epam.entity.Book;
-import com.epam.entity.Genre;
-import com.epam.entity.Order;
-import com.epam.entity.User;
+import com.epam.entity.*;
 import com.epam.exception.CantBeRemovedException;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
@@ -58,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll(int limit, int offset) {
-        List<User> response = userDAO.getAll(limit, offset);
+        List<User> response = userDAO.getAll(limit, offset).get();
         setOrder(response);
         return response;
     }
@@ -85,13 +82,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getTopUser() {
-        List<User> response = orderUserDAO.getTopUser();
-        User topUser = getTopCustomer(response);
-        User user = getUser(topUser.getUserId());
+        List<Customer> response = orderUserDAO.getTopUser();
+        Customer topCustomer = getTopCustomer(response);
+        User user = getUser(topCustomer.getUserId());
         Map<Genre, Integer> counter = getGenreCount(user);
         Genre topGenre = getTopGenre(counter);
-        topUser.setFavoriteGenre(topGenre);
-        return topUser;
+        user.setFavoriteGenre(topGenre);
+        user.setTotalPrice(topCustomer.getTotalPrice());
+        return user;
     }
 
     private void setOrder(List<User> users) {
@@ -100,10 +98,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private User getTopCustomer(List<User> customers) {
-        User topCustomer = new User();
+    private Customer getTopCustomer(List<Customer> customers) {
+        Customer topCustomer = new Customer();
         float highestAmount = 0;
-        for (User customer : customers) {
+        for (Customer customer : customers) {
             if (highestAmount < customer.getTotalPrice()) {
                 highestAmount = customer.getTotalPrice();
                 topCustomer = customer;

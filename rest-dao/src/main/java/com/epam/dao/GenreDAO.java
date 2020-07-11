@@ -5,11 +5,11 @@ import com.epam.entity.Genre;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenreDAO extends SetData {
+public interface GenreDAO {
 
     Long createGenreAndReturnId(String genreName);
 
-    boolean removeGenre(long genreId);
+    void removeGenre(long genreId);
 
     Optional<List<Genre>> getGenreList(int limit,int offset);
 

@@ -16,19 +16,15 @@ public interface BookService {
 
     List<Book> getAllBooks(int limit, int offset);
 
-    List<Book> getBookByPartialCoincidence(ParametersRequestDTO parameters, int limit, int offset)
-            throws InvalidDataException;
+    List<Book> getBookByPartialCoincidence(String title, int limit, int offset);
 
-    List<Book> getBookByFullCoincidence(ParametersRequestDTO parameters, int limit, int offset)
-            throws InvalidDataException;
+    List<Book> getBookByFullCoincidence(String title, int limit, int offset);
 
-    boolean removeBook(long bookId) throws InvalidDataException;
+    void removeBook(long bookId) throws InvalidDataException;
 
     Book createBook(CreateBookRequestDTO book) throws InvalidDataException;
 
     Book updateBook(UpdateBookRequestDTO book) throws InvalidDataException;
-
-    List<Book> filter(ParametersRequestDTO parameters, int limit, int offset) throws InvalidDataException;
 
     List<Book> getBooksSortedByName(int limit, int offset);
 

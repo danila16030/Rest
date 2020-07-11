@@ -1,12 +1,21 @@
 package com.epam.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "genre")
 public class Genre {
 
+    @Column(name = "genre_name", nullable = false, unique = true)
     private String genreName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "genre_id", nullable = false)
     private long genreId;
 
     public Genre() {
     }
+
     public Genre(String genreName) {
         this.genreName = genreName;
     }

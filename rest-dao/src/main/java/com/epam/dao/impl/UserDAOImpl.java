@@ -1,102 +1,119 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.UserDAO;
-import com.epam.dao.impl.fields.UserFields;
 import com.epam.entity.User;
 import com.epam.exception.NoSuchElementException;
-import com.epam.rowMapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
+@Transactional
 public class UserDAOImpl implements UserDAO {
-    private JdbcTemplate jdbcTemplate;
-    private static final String getUser = "SELECT * FROM public.user WHERE user_id=?";
-    private static final String getUserWithoutException = "SELECT * FROM public.user WHERE user_name=? ";
-    private static final String getAll = "SELECT * FROM public.user LIMIT ? OFFSET ?";
-    private static final String create = "INSERT INTO public.user (username) VALUES(?)";
-    private static final String removeUser = "DELETE FROM public.user WHERE user_id = ?";
-    private static final String updateOrder = "UPDATE public.user SET username = ? WHERE user_id = ?";
 
-    @Override
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+    EntityManager entityManager;
+
 
     @Override
     public User getUser(long userId) {
+        entityManager.getTransaction().begin();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("userId"), userId));
         try {
-            return jdbcTemplate.queryForObject(getUser, new Object[]{userId}, new UserMapper());
-        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
+            User user = entityManager.createQuery(criteria).getSingleResult();
+            entityManager.getTransaction().commit();
+            return user;
+        } catch (NoResultException e) {
+            entityManager.getTransaction().commit();
             throw new NoSuchElementException();
         }
     }
 
     @Override
     public User getUserByNameWithoutException(String username) {
+        entityManager.getTransaction().begin();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("username"), username));
         try {
-            return jdbcTemplate.queryForObject(getUserWithoutException, new Object[]{username}, new UserMapper());
-        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
+            User user = entityManager.createQuery(criteria).getSingleResult();
+            entityManager.getTransaction().commit();
+            return user;
+        } catch (NoResultException e) {
+            entityManager.getTransaction().commit();
             return new User();
         }
     }
 
     @Override
     public User getUserByIdWithoutException(long userId) {
-        try {
-            return jdbcTemplate.queryForObject(getUser, new Object[]{userId}, new UserMapper());
-        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
-            return new User();
-        }
+        entityManager.getTransaction().begin();
+        User book = entityManager.find(User.class, userId);
+        entityManager.getTransaction().commit();
+        return book;
     }
 
 
     @Override
-    public List<User> getAll(int limit, int offset) {
+    public Optional<List<User>> getAll(int limit, int offset) {
+        entityManager.getTransaction().begin();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
         try {
-            return jdbcTemplate.query(getAll, new Object[]{limit, offset}, new UserMapper());
-        } catch (EmptyResultDataAccessException | BadSqlGrammarException e) {
+            Optional<List<User>> users = Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
+                    setMaxResults(limit).getResultList());
+            entityManager.getTransaction().commit();
+            return users;
+        } catch (NoResultException e) {
+            entityManager.getTransaction().commit();
             throw new NoSuchElementException();
         }
     }
 
     @Override
     public User createUser(String username) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement statement = connection.prepareStatement(create, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, username);
-            return statement;
-        }, keyHolder);
-        Map<String, Object> keys = keyHolder.getKeys();
-        long id = Long.parseLong(String.valueOf(keys.get(UserFields.ID)));
-        return new User(username, id);
+        User user = new User();
+        user.setUsername(username);
+        entityManager.getTransaction().begin();
+        entityManager.persist(user);
+        entityManager.getTransaction().commit();
+        return user;
     }
 
     @Override
     public void removeUser(long userId) {
-        jdbcTemplate.update(removeUser, userId);
+        entityManager.getTransaction().begin();
+        User user = entityManager.find(User.class, userId);
+        if (user == null) {
+            entityManager.getTransaction().commit();
+            throw new NoSuchElementException();
+        }
+        entityManager.remove(user);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public User updateUser(String username, long userId) {
-        try {
-            jdbcTemplate.update(updateOrder, username, userId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NoSuchElementException();
-        }
-        return new User(username, userId);
+        User user = new User(username, userId);
+        entityManager.getTransaction().begin();
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
+        return user;
     }
 }

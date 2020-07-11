@@ -1,15 +1,28 @@
 package com.epam.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "book")
 public class Book {
+    @Column(name = "author", nullable = false)
     private String author;
+    @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "price", nullable = false)
     private float price;
+    @Column(name = "writing_date", nullable = false)
     private String writingDate;
+    @Column(name = "page_number", nullable = false)
     private int numberOfPages;
+    @Column(name = "title", nullable = false)
     private String title;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id", nullable = false)
     private long bookId;
+    @Transient
     private List<Genre> genres;
 
     public Book() {

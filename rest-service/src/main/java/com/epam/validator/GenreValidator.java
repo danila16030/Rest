@@ -13,7 +13,7 @@ public class GenreValidator {
 
     public boolean isExistById(long genreId) {
         Genre genre = genreDAO.getGenreByIdWithoutException(genreId);
-        if (genre.getGenreName() == null) {
+        if (genre == null) {
             return false;
         } else {
             return true;

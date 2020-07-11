@@ -17,7 +17,7 @@ public class OrderValidator {
     }
 
     public boolean isExist(long orderId) {
-        if (orderDAO.getOrderWithoutException(orderId).getBookId() == 0) {
+        if (orderDAO.getOrderWithoutException(orderId) == null) {
             return false;
         } else {
             return true;

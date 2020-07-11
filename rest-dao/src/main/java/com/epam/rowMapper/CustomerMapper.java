@@ -13,7 +13,6 @@ public class CustomerMapper implements RowMapper<User> {
         User user = new User();
         user.setUsername(rs.getString(UserFields.NAME));
         user.setUserId(rs.getLong(UserFields.ID));
-        user.setTotalPrice(rs.getFloat(UserFields.AMOUNT));
         return user;
     }
 }

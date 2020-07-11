@@ -1,10 +1,21 @@
 package com.epam.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "public.order")
 public class Order {
+    @Column(name = "order_time", nullable = false)
     private String orderTime;
+    @Column(name = "order_price", nullable = false)
     private float price;
+    @Column(name = "book_id", nullable = false)
     private long bookId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id", nullable = false)
     private long orderId;
+    @Transient
     private long userId;
 
     public Order() {

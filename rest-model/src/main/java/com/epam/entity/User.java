@@ -1,13 +1,23 @@
 package com.epam.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "public.user")
 public class User {
+    @Column(name = "username", nullable = false)
     private String username;
-    private List<Order> orders;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
     private long userId;
+    @Transient
     private float totalPrice;
+    @Transient
     private Genre favoriteGenre;
+    @Transient
+    private List<Order> orders;
 
 
     public User() {

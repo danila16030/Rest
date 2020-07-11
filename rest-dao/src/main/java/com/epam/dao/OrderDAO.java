@@ -2,7 +2,7 @@ package com.epam.dao;
 
 import com.epam.entity.Order;
 
-public interface OrderDAO extends SetData {
+public interface OrderDAO{
     Long makeAnOrder(String time, float price, long bookId);
 
     Order getOrder(long orderId);

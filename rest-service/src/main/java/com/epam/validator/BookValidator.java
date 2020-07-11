@@ -15,7 +15,7 @@ public class BookValidator {
 
     public boolean isExist(long bookId) {
         Book book = bookDAO.getBookByIdWithoutException(bookId);
-        if (book.getTitle() == null) {
+        if (book == null) {
             return false;
         } else {
             return true;

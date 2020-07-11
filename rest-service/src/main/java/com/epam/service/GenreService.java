@@ -16,7 +16,7 @@ public interface GenreService {
 
     Genre createGenre(CreateGenreRequestDTO genreDTO) throws InvalidDataException;
 
-    boolean removeGenre(long genreId) throws InvalidDataException;
+    void removeGenre(long genreId) throws InvalidDataException;
 
 
 }

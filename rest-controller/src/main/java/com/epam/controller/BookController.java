@@ -27,6 +27,7 @@ public class BookController {
     @Autowired
     private BookAssembler bookAssembler;
 
+
     @DeleteMapping(value = "{bookId:[0-9]+}")
     public ResponseEntity<BookModel> removeBook(@PathVariable long bookId) {
         bookService.removeBook(bookId);
@@ -51,7 +52,7 @@ public class BookController {
     }
 
 
-    @PostMapping( headers = {"Accept=application/json"})
+    @PostMapping(headers = {"Accept=application/json"})
     public ResponseEntity<BookModel> creteNewBook(@RequestBody @Valid CreateBookRequestDTO bookDTO) {
         Book response = bookService.createBook(bookDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getBookId()).build().toUri();
@@ -63,37 +64,31 @@ public class BookController {
         return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getAllBooks(limit, offset)));
     }
 
-    @GetMapping(value = "/sorted/by-name/{limit:[0-9]+},{offset:[0-9]+}")
+    @GetMapping(value = "/by-name/{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByName(@PathVariable int limit, @PathVariable int offset) {
         return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByName(limit, offset)));
     }
 
-    @GetMapping(value = "/sorted/by-date/{limit:[0-9]+},{offset:[0-9]+}")
+    @GetMapping(value = "/by-date/{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByDate(@PathVariable int offset, @PathVariable int limit) {
         return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByDate(limit, offset)));
     }
 
-    @GetMapping(value = "/search/by-partial-coincidence/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<CollectionModel<BookModel>> searchByPartialCoincidence(@RequestBody
-                                                                                 @Valid ParametersRequestDTO parametersDTO,
+    @GetMapping(value = "/by-partial-coincidence/{title},{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<CollectionModel<BookModel>> searchByPartialCoincidence(@PathVariable String title,
                                                                                  @PathVariable int limit,
                                                                                  @PathVariable int offset) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByPartialCoincidence(parametersDTO,
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByPartialCoincidence(title,
                 limit, offset)));
     }
 
-    @GetMapping(value = "/search/by-full-coincidence/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<CollectionModel<BookModel>> searchByFullCoincidence(@RequestBody
-                                                                              @Valid ParametersRequestDTO parametersDTO,
+    @GetMapping(value = "/by-full-coincidence/{title},{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<CollectionModel<BookModel>> searchByFullCoincidence(@PathVariable String title,
                                                                               @PathVariable int offset,
                                                                               @PathVariable int limit) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByFullCoincidence(parametersDTO,
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByFullCoincidence(title,
                 limit, offset)));
     }
 
-    @GetMapping(value = "/filter/{limit:[0-9]+},{offset:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<CollectionModel<BookModel>> filter(@RequestBody @Valid ParametersRequestDTO parametersDTO,
-                                                             @PathVariable int offset, @PathVariable int limit) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.filter(parametersDTO, limit, offset)));
-    }
+
 }

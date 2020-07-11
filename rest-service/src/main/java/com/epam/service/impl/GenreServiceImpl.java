@@ -4,6 +4,7 @@ import com.epam.dao.GenreDAO;
 import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.entity.Genre;
+import com.epam.exception.DuplicatedException;
 import com.epam.exception.InvalidDataException;
 import com.epam.mapper.Mapper;
 import com.epam.service.GenreService;
@@ -35,15 +36,15 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getGenre(long genreId) {
-        return genreDAO.getGenreByIdWithoutException(genreId);
+        return genreDAO.getGenreById(genreId);
     }
 
     @Override
     public Genre updateGenre(UpdateGenreRequestDTO genreDTO) {
-        if (genreDTO != null && genreValidator.isExistByName(genreDTO.getGenreName())) {
+        if (!genreValidator.isExistByName(genreDTO.getGenreName())) {
             return genreDAO.updateGenre(genreDTO.getGenreName(), genreDTO.getGenreId());
         }
-        throw new InvalidDataException();
+        throw new DuplicatedException("Genre with this name is already exist");
     }
 
 
@@ -56,9 +57,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public boolean removeGenre(long genreId) {
+    public void removeGenre(long genreId) {
         if (genreValidator.isExistById(genreId)) {
-            return genreDAO.removeGenre(genreId);
+            genreDAO.removeGenre(genreId);
         }
         throw new InvalidDataException();
     }

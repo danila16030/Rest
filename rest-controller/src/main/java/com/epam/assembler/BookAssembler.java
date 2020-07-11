@@ -2,7 +2,6 @@ package com.epam.assembler;
 
 import com.epam.controller.BookController;
 import com.epam.controller.GenreController;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
@@ -56,9 +55,8 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         actorModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0)).withSelfRel());
         actorModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0)).withSelfRel());
         actorModels.add(linkTo(methodOn(BookController.class).creteNewBook(new CreateBookRequestDTO())).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).filter(new ParametersRequestDTO(), 10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence(new ParametersRequestDTO(), 10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence(new ParametersRequestDTO(), 10, 0)).withSelfRel());
+        actorModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0)).withSelfRel());
+        actorModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0)).withSelfRel());
         return actorModels;
     }
 

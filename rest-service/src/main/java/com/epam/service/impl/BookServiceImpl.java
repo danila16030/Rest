@@ -77,29 +77,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBookByPartialCoincidence(ParametersRequestDTO parameters, int limit, int offset) {
-        if (parametersValidator.isValid(parameters.getParameters())) {
-            List<Book> bookList = bookDAO.searchByPartialCoincidence(parameters, limit, offset).get();
+    public List<Book> getBookByPartialCoincidence(String title, int limit, int offset) {
+            List<Book> bookList = bookDAO.searchByPartialCoincidence(title, limit, offset).get();
             setGenreForAllBooks(bookList);
             return bookList;
-        }
-        throw new InvalidDataException();
     }
 
     @Override
-    public List<Book> getBookByFullCoincidence(ParametersRequestDTO parameters, int limit, int offset) {
-        if (parametersValidator.isValid(parameters.getParameters())) {
-            List<Book> bookList = bookDAO.searchByFullCoincidence(parameters, limit, offset).get();
+    public List<Book> getBookByFullCoincidence(String title, int limit, int offset) {
+            List<Book> bookList = bookDAO.searchByFullCoincidence(title, limit, offset).get();
             setGenreForAllBooks(bookList);
             return bookList;
-        }
-        throw new InvalidDataException();
+
     }
 
     @Override
-    public boolean removeBook(long bookId) {
+    public void removeBook(long bookId) {
         if (bookValidator.isExist(bookId)) {
-            return bookDAO.removeBook(bookId);
+             bookDAO.removeBook(bookId);
         }
         throw new NoSuchElementException();
     }
@@ -142,15 +137,7 @@ public class BookServiceImpl implements BookService {
         throw new InvalidDataException();
     }
 
-    @Override
-    public List<Book> filter(ParametersRequestDTO parameters, int limit, int offset) {
-        if (parametersValidator.isValid(parameters.getParameters())) {
-            List<Book> bookList = bookDAO.filter(parameters, limit, offset).get();
-            setGenreForAllBooks(bookList);
-            return bookList;
-        }
-        throw new InvalidDataException();
-    }
+
 
     @Override
     public List<Book> getBooksSortedByName(int limit, int offset) {
