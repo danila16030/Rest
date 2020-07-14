@@ -17,11 +17,14 @@ import com.epam.exception.NoSuchElementException;
 import com.epam.service.BookService;
 import com.epam.validator.BookGenreValidator;
 import com.epam.validator.BookValidator;
-import com.epam.validator.ParametersValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -33,20 +36,18 @@ public class BookServiceImpl implements BookService {
     private BookValidator bookValidator;
     private GenreDAO genreDAO;
     private BookGenreDAO bookGenreDAO;
-    private ParametersValidator parametersValidator;
     private BookGenreValidator bookGenreValidator;
 
     @Autowired
     public BookServiceImpl(BookDAO bookDAO, BookDateComparator bookDateComparator, BookGenreValidator bookGenreValidator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, ParametersValidator parametersValidator) {
+                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
         this.bookGenreDAO = bookGenreDAO;
-        this.parametersValidator = parametersValidator;
         this.bookGenreValidator = bookGenreValidator;
     }
 
@@ -78,23 +79,23 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBookByPartialCoincidence(String title, int limit, int offset) {
-            List<Book> bookList = bookDAO.searchByPartialCoincidence(title, limit, offset).get();
-            setGenreForAllBooks(bookList);
-            return bookList;
+        List<Book> bookList = bookDAO.searchByPartialCoincidence(title, limit, offset).get();
+        setGenreForAllBooks(bookList);
+        return bookList;
     }
 
     @Override
     public List<Book> getBookByFullCoincidence(String title, int limit, int offset) {
-            List<Book> bookList = bookDAO.searchByFullCoincidence(title, limit, offset).get();
-            setGenreForAllBooks(bookList);
-            return bookList;
+        List<Book> bookList = bookDAO.searchByFullCoincidence(title, limit, offset).get();
+        setGenreForAllBooks(bookList);
+        return bookList;
 
     }
 
     @Override
     public void removeBook(long bookId) {
         if (bookValidator.isExist(bookId)) {
-             bookDAO.removeBook(bookId);
+            bookDAO.removeBook(bookId);
         }
         throw new NoSuchElementException();
     }
@@ -137,6 +138,15 @@ public class BookServiceImpl implements BookService {
         throw new InvalidDataException();
     }
 
+    @Override
+    public Genre getTopGenre(long fist, long second, long third) {
+        List<Book> books = new ArrayList<>();
+        books.add(bookDAO.getBookById(fist));
+        books.add(bookDAO.getBookById(second));
+        books.add(bookDAO.getBookById(third));
+        Map<Genre, Integer> counter = getGenreCount(books);
+        return topGenre(counter);
+    }
 
 
     @Override
@@ -165,4 +175,30 @@ public class BookServiceImpl implements BookService {
         return bookGenreDAO.getAllGenresOnBook(id).get();
     }
 
+    private Map<Genre, Integer> getGenreCount(List<Book> books) {
+        Map<Genre, Integer> counter = new HashMap<>();
+        for (Book book : books) {
+            book.setGenres(bookGenreDAO.getAllGenresOnBook(book.getBookId()).get());
+            for (Genre genre : book.getGenres()) {
+                if (counter.get(genre) != null) {
+                    counter.put(genre, counter.get(genre) + 1);
+                } else {
+                    counter.put(genre, 1);
+                }
+            }
+        }
+        return counter;
+    }
+
+    private Genre topGenre(Map<Genre, Integer> count) {
+        AtomicInteger maxCount = new AtomicInteger();
+        final Genre[] topGenre = new Genre[1];
+        count.forEach((k, v) -> {
+            if (maxCount.get() < v) {
+                topGenre[0] = k;
+                maxCount.set(v);
+            }
+        });
+        return topGenre[0];
+    }
 }

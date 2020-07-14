@@ -4,6 +4,7 @@ import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
+import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface BookService {
     Book createBook(CreateBookRequestDTO book) throws InvalidDataException;
 
     Book updateBook(UpdateBookRequestDTO book) throws InvalidDataException;
+
+    Genre getTopGenre(long fist,long second,long third);
 
     List<Book> getBooksSortedByName(int limit, int offset);
 

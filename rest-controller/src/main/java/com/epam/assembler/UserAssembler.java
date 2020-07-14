@@ -42,12 +42,12 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
     }
 
     public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
-        CollectionModel<UserModel> actorModels = super.toCollectionModel(entities);
+        CollectionModel<UserModel> userModels = super.toCollectionModel(entities);
 
-        actorModels.add(linkTo(methodOn(UserController.class).getAllUsers(10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(UserController.class).getTopUser()).withSelfRel());
-        actorModels.add(linkTo(methodOn(UserController.class).createUser(new CreateUserDTO())).withSelfRel());
-        return actorModels;
+        userModels.add(linkTo(methodOn(UserController.class).getAllUsers(10, 0)).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).getTopUser()).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).createUser(new CreateUserDTO())).withSelfRel());
+        return userModels;
     }
 
     private void setOrderLinks(List<OrderModel> orders, long userId) {

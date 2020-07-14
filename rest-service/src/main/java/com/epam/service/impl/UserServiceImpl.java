@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -127,11 +128,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private Genre getTopGenre(Map<Genre, Integer> count) {
-        int maxCount = 0;
+        AtomicInteger maxCount = new AtomicInteger();
         final Genre[] topGenre = new Genre[1];
         count.forEach((k, v) -> {
-            if (maxCount < v) {
+            if (maxCount.get() < v) {
                 topGenre[0] = k;
+                maxCount.set(v);
             }
         });
         return topGenre[0];
@@ -140,4 +142,6 @@ public class UserServiceImpl implements UserService {
     private List<Order> getOrder(long userId) {
         return orderUserDAO.getOrders(userId).get();
     }
+
+
 }

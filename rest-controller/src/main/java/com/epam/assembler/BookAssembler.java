@@ -49,15 +49,16 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
 
 
     public CollectionModel<BookModel> toCollectionModel(Iterable<? extends Book> entities) {
-        CollectionModel<BookModel> actorModels = super.toCollectionModel(entities);
+        CollectionModel<BookModel> bookModels = super.toCollectionModel(entities);
 
-        actorModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).creteNewBook(new CreateBookRequestDTO())).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0)).withSelfRel());
-        actorModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0)).withSelfRel());
-        return actorModels;
+        bookModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).creteNewBook(new CreateBookRequestDTO())).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getTopGenre(0, 0, 0)).withSelfRel());
+        return bookModels;
     }
 
 

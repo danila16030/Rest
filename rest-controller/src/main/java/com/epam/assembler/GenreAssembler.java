@@ -43,9 +43,9 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
     }
 
     public CollectionModel<GenreModel> toCollectionModel(Iterable<? extends Genre> entities) {
-        CollectionModel<GenreModel> actorModels = super.toCollectionModel(entities);
-        actorModels.add(linkTo(methodOn(GenreController.class).creteNewGenre(new CreateGenreRequestDTO())).withSelfRel());
-        actorModels.add(linkTo(methodOn(GenreController.class).getAllGenres(10, 0)).withSelfRel());
-        return actorModels;
+        CollectionModel<GenreModel> genreModels = super.toCollectionModel(entities);
+        genreModels.add(linkTo(methodOn(GenreController.class).creteNewGenre(new CreateGenreRequestDTO())).withSelfRel());
+        genreModels.add(linkTo(methodOn(GenreController.class).getAllGenres(10, 0)).withSelfRel());
+        return genreModels;
     }
 }

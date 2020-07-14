@@ -43,10 +43,10 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
     }
 
     public CollectionModel<OrderModel> toCollectionModel(Iterable<? extends Order> entities, long userId) {
-        CollectionModel<OrderModel> actorModels = super.toCollectionModel(entities);
+        CollectionModel<OrderModel> orderModels = super.toCollectionModel(entities);
 
-        actorModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO())).withSelfRel());
-        actorModels.add(linkTo(methodOn(OrderController.class).getAllOrders(userId, 10, 0)).withSelfRel());
-        return actorModels;
+        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO())).withSelfRel());
+        orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(userId, 10, 0)).withSelfRel());
+        return orderModels;
     }
 }

@@ -1,11 +1,14 @@
 package com.epam.controller;
 
 import com.epam.assembler.BookAssembler;
+import com.epam.assembler.GenreAssembler;
 import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
+import com.epam.entity.Genre;
 import com.epam.model.BookModel;
+import com.epam.model.GenreModel;
 import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -26,6 +29,9 @@ public class BookController {
 
     @Autowired
     private BookAssembler bookAssembler;
+
+    @Autowired
+    private GenreAssembler genreAssembler;
 
 
     @DeleteMapping(value = "{bookId:[0-9]+}")
@@ -62,6 +68,14 @@ public class BookController {
     @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<BookModel>> getAllBooks(@PathVariable int limit, @PathVariable int offset) {
         return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getAllBooks(limit, offset)));
+    }
+
+    @GetMapping(value = "{fistId:[0-9]+},{secondId:[0-9]+},{thirdId:[0-9]+}")
+    public ResponseEntity<GenreModel> getTopGenre(@PathVariable long fistId, @PathVariable long secondId,
+                                                  @PathVariable long thirdId) {
+        Genre genre = bookService.getTopGenre(fistId, secondId, thirdId);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + genre.getGenreId()).build().toUri();
+        return ResponseEntity.created(location).body(genreAssembler.toModel(genre));
     }
 
     @GetMapping(value = "/by-name/{limit:[0-9]+},{offset:[0-9]+}")
