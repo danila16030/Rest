@@ -14,9 +14,9 @@ public interface UserDAO {
 
     Optional<List<User>> getAll(int limit, int offset);
 
-    User createUser(String username);
+    User createUser(String username, String password);
 
     void removeUser(long userId);
 
-    User updateUser(String username, long userId);
+    User updateUser(String username, long userId, String password);
 }

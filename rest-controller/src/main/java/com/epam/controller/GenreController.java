@@ -9,6 +9,7 @@ import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,12 +26,14 @@ public class GenreController {
     @Autowired
     private GenreAssembler genreAssembler;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(value = "{genreId:[0-9]+}")
     public ResponseEntity<GenreModel> removeGenre(@PathVariable long genreId) {
         genreService.removeGenre(genreId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})
     public ResponseEntity<GenreModel> creteNewGenre(@RequestBody @Valid CreateGenreRequestDTO genreDTO) {
         Genre response = genreService.createGenre(genreDTO);
@@ -38,6 +41,7 @@ public class GenreController {
         return ResponseEntity.created(location).body(genreAssembler.toModel(response));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
     public ResponseEntity<GenreModel> updateGenre(@RequestBody @Valid UpdateGenreRequestDTO genreDTO) {
         Genre response = genreService.updateGenre(genreDTO);

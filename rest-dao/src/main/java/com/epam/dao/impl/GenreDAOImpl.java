@@ -93,16 +93,12 @@ public class GenreDAOImpl implements GenreDAO {
     @Transactional
     public Genre createGenre(String genreName) {
         Genre genre = new Genre();
-        try {
-            entityManager.getTransaction().begin();
-            genre.setGenreName(genreName);
-            entityManager.persist(genre);
-            entityManager.getTransaction().commit();
-            return genre;
-        } catch (PersistenceException e) {
-            entityManager.getTransaction().commit();
-            throw new DuplicatedException("Genre with this name is already exist");
-        }
+        entityManager.getTransaction().begin();
+        genre.setGenreName(genreName);
+        entityManager.persist(genre);
+        entityManager.getTransaction().commit();
+        return genre;
+
     }
 
     @Override

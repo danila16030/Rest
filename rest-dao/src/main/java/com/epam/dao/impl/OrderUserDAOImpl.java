@@ -6,7 +6,6 @@ import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,12 +19,11 @@ import java.util.Optional;
 
 @Repository
 public class OrderUserDAOImpl implements OrderUserDAO {
-    private JdbcTemplate jdbcTemplate;
-    private static final String getTopUser = "SELECT r.user_id,r.username,r.totalamount " +
-            "FROM (SELECT us.user_id,us.username, SUM(o.order_price) AS totalamount " +
+    private static final String getTopUser = "SELECT r.user_id,r.username,r.totalPrice " +
+            "FROM (SELECT us.user_id,us.username, SUM(o.order_price) AS totalPrice " +
             "FROM public.order o INNER JOIN order_user ou ON " +
             "o.order_id=ou.order_id INNER JOIN public.user us ON ou.user_id = us.user_id " +
-            "GROUP BY us.user_id) r GROUP BY r.user_id, r.username,r.totalamount";
+            "GROUP BY us.user_id) r GROUP BY r.user_id, r.username,r.totalPrice";
 
     @Autowired
     EntityManager entityManager;
@@ -91,11 +89,7 @@ public class OrderUserDAOImpl implements OrderUserDAO {
     @Override
     public List<Customer> getTopUser() {
         entityManager.getTransaction().begin();
-        Query query = entityManager.createNativeQuery("SELECT r.user_id,r.username,r.totalPrice " +
-                "FROM (SELECT us.user_id,us.username, SUM(o.order_price) AS totalPrice " +
-                "FROM public.order o INNER JOIN order_user ou ON " +
-                "o.order_id=ou.order_id INNER JOIN public.user us ON ou.user_id = us.user_id " +
-                "GROUP BY us.user_id) r GROUP BY r.user_id, r.username,r.totalPrice", Customer.class);
+        Query query = entityManager.createNativeQuery(getTopUser, Customer.class);
         try {
             List<Customer> customers = query.getResultList();
             entityManager.getTransaction().commit();
@@ -104,10 +98,5 @@ public class OrderUserDAOImpl implements OrderUserDAO {
             entityManager.getTransaction().commit();
             throw new NoSuchElementException();
         }
-          /* Query query = entityManager.createQuery("SELECT r.userId,r.username,r.totalPrice " +
-                "FROM User r WHERE r IN (SELECT us.userId,us.username, SUM(o.price) AS totalPrice " +
-                "FROM Order o INNER JOIN order_user ou ON " +
-                "o.orderId=ou.orderId INNER JOIN User us ON ou.userId = us.userId " +
-                "GROUP BY us.userId) GROUP BY r.userId, r.username,r.totalamount", User.class);*/
     }
 }

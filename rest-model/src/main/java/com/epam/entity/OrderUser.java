@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "order_user")
+@Table(name = "order_user",schema = "public")
 public class OrderUser {
     @Column(name = "user_id", nullable = false)
     private long userId;

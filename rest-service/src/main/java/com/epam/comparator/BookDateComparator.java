@@ -11,10 +11,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 @Component
-
 public class BookDateComparator implements Comparator<Book> {
-    private static final Logger logger = LogManager.getLogger(BookDateComparator.class);
-
     @Override
     public int compare(Book o1, Book o2) {
         try {
@@ -23,7 +20,6 @@ public class BookDateComparator implements Comparator<Book> {
             Date date2 = sdformat.parse(o2.getWritingDate());
             return date1.compareTo(date2);
         } catch (ParseException e) {
-            logger.error(e);
         }
         return 0;
     }

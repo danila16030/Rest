@@ -1,9 +1,6 @@
 package com.epam.mapper;
 
-import com.epam.entity.Book;
-import com.epam.entity.Genre;
-import com.epam.entity.Order;
-import com.epam.entity.User;
+import com.epam.entity.*;
 import com.epam.model.*;
 
 import java.util.List;
@@ -20,5 +17,7 @@ public interface Mapper {
 
     List<OrderModel> orderToOrderModel(List<Order> orders);
 
-    CustomerModel userToCustomerModel(User user);
+    CustomerModel customerToCustomerModel(Customer customer);
+
+    Customer userToCustomer(User user);
 }

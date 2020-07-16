@@ -23,7 +23,7 @@ import java.util.Optional;
 @Repository
 @Transactional
 public class BookGenreDAOImpl implements BookGenreDAO {
-
+    private static final String removeConnection = "DELETE FROM book_genre WHERE genre_id = ? AND book_id=?";
     @Autowired
     EntityManager entityManager;
 
@@ -83,13 +83,23 @@ public class BookGenreDAOImpl implements BookGenreDAO {
     }
 
     @Override
+    public void removeConnection(long bookId, long genreId) {
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createNativeQuery(removeConnection);
+        query.setParameter(1, genreId);
+        query.setParameter(2, bookId);
+        query.executeUpdate();
+        entityManager.getTransaction().commit();
+    }
+
+    @Override
     public boolean checkConnection(long bookId, long genreId) {
         entityManager.getTransaction().begin();
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<BookGenre> criteria = builder.createQuery(BookGenre.class);
         Root<BookGenre> root = criteria.from(BookGenre.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("bookId"), bookId)).where(builder.equal(root.get("genreId"), genreId));
+        criteria.where(builder.equal(root.get("bookId"), bookId), builder.equal(root.get("genreId"), genreId));
         try {
             BookGenre result = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();

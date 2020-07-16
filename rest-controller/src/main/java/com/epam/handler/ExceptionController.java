@@ -4,6 +4,7 @@ import com.epam.dto.responce.ExceptionResponseDTO;
 import com.epam.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +22,7 @@ public class ExceptionController {
         return ResponseEntity.badRequest().body(responseDTO);
     }
 
-    @ExceptionHandler({NoSuchElementException.class})
+    @ExceptionHandler({NoSuchElementException.class, AccessDeniedException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleNoSuchElement() {
         return ResponseEntity.notFound().build();
     }

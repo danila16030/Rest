@@ -6,10 +6,8 @@ import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.Mapper;
 import com.epam.service.GenreService;
 import com.epam.validator.GenreValidator;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,6 @@ public class GenreServiceImpl implements GenreService {
     private GenreDAO genreDAO;
 
     private GenreValidator genreValidator;
-    private final Mapper genreMapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     public GenreServiceImpl(GenreDAO genreDAO, GenreValidator genreValidator) {

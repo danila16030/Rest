@@ -17,6 +17,7 @@ import com.epam.exception.NoSuchElementException;
 import com.epam.service.BookService;
 import com.epam.validator.BookGenreValidator;
 import com.epam.validator.BookValidator;
+import com.epam.validator.GenreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +38,12 @@ public class BookServiceImpl implements BookService {
     private GenreDAO genreDAO;
     private BookGenreDAO bookGenreDAO;
     private BookGenreValidator bookGenreValidator;
+    private GenreValidator genreValidator;
 
     @Autowired
     public BookServiceImpl(BookDAO bookDAO, BookDateComparator bookDateComparator, BookGenreValidator bookGenreValidator,
                            BookTitleComparator bookTitleComparator, BookValidator bookValidator,
-                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO) {
+                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, GenreValidator genreValidator) {
         this.bookDateComparator = bookDateComparator;
         this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
@@ -49,6 +51,7 @@ public class BookServiceImpl implements BookService {
         this.genreDAO = genreDAO;
         this.bookGenreDAO = bookGenreDAO;
         this.bookGenreValidator = bookGenreValidator;
+        this.genreValidator = genreValidator;
     }
 
     @Override
@@ -129,13 +132,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book updateBook(UpdateBookRequestDTO bookDTO) {
-        if (bookDTO != null && bookValidator.isValidForUpdate(bookDTO)) {
+        if (bookDTO != null && bookValidator.isExist(bookDTO.getBookId())) {
             Book book = bookDAO.updateBook(bookDTO.getTitle(), bookDTO.getAuthor(), bookDTO.getWritingDate(),
                     bookDTO.getDescription(), bookDTO.getNumberOfPages(), bookDTO.getPrice(), bookDTO.getBookId());
+            List<CreateGenreRequestDTO> newGenres = bookDTO.getGenres();
+            List<Genre> oldGenres = getGenre(book.getBookId());
+            connectNew(newGenres, oldGenres, book.getBookId());
+            removeOld(newGenres, oldGenres, book.getBookId());
             book.setGenres(getGenre(book.getBookId()));
             return book;
         }
-        throw new InvalidDataException();
+        throw new NoSuchElementException();
     }
 
     @Override
@@ -200,5 +207,39 @@ public class BookServiceImpl implements BookService {
             }
         });
         return topGenre[0];
+    }
+
+    private void connectNew(List<CreateGenreRequestDTO> newGenres, List<Genre> oldGenres, long bookId) {
+        for (CreateGenreRequestDTO genre : newGenres) {
+            boolean connect = false;
+            for (Genre old : oldGenres) {
+                if (genre.getGenreName().equals(old.getGenreName())) {
+                    connect = true;
+                }
+            }
+            if (!connect) {
+                if (!genreValidator.isExistByName(genre.getGenreName())) {
+                    long genreId = genreDAO.createGenreAndReturnId(genre.getGenreName());
+                    bookGenreDAO.createConnection(bookId, genreId);
+                } else {
+                    Genre createdGenre = genreDAO.getGenreByNameWithoutException(genre.getGenreName());
+                    bookGenreDAO.createConnection(bookId, createdGenre.getGenreId());
+                }
+            }
+        }
+    }
+
+    private void removeOld(List<CreateGenreRequestDTO> newGenres, List<Genre> oldGenres, long bookId) {
+        for (Genre genre : oldGenres) {
+            boolean connected = false;
+            for (CreateGenreRequestDTO newGenre : newGenres) {
+                if (genre.getGenreName().equals(newGenre.getGenreName())) {
+                    connected = true;
+                }
+            }
+            if (!connected) {
+                bookGenreDAO.removeConnection(bookId, genre.getGenreId());
+            }
+        }
     }
 }

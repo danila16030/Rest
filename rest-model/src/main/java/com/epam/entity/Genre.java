@@ -3,7 +3,7 @@ package com.epam.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "genre")
+@Table(name = "genre",schema = "public")
 public class Genre {
 
     @Column(name = "genre_name", nullable = false, unique = true)

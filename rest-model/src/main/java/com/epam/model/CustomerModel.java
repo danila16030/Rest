@@ -2,11 +2,22 @@ package com.epam.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import java.util.List;
+
 public class CustomerModel extends RepresentationModel<CustomerModel> {
     private float totalPrice;
     private String username;
     private long userId;
     private GenreModel favoriteGenre;
+    private List<OrderModel> orders;
+
+    public List<OrderModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderModel> orders) {
+        this.orders = orders;
+    }
 
     public GenreModel getFavoriteGenre() {
         return favoriteGenre;

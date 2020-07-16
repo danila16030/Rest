@@ -13,6 +13,7 @@ import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,7 +34,7 @@ public class BookController {
     @Autowired
     private GenreAssembler genreAssembler;
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(value = "{bookId:[0-9]+}")
     public ResponseEntity<BookModel> removeBook(@PathVariable long bookId) {
         bookService.removeBook(bookId);
@@ -45,6 +46,7 @@ public class BookController {
         return ResponseEntity.ok(bookAssembler.toModel(bookService.getBook(bookId)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
     public ResponseEntity<BookModel> updateBook(@RequestBody @Valid UpdateBookRequestDTO bookDTO) {
         Book response = bookService.updateBook(bookDTO);
@@ -52,12 +54,13 @@ public class BookController {
         return ResponseEntity.ok().location(location).body(bookAssembler.toModel(response));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value = "/price", headers = {"Accept=application/json"})
     public ResponseEntity<BookModel> changePrice(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
         return ResponseEntity.ok(bookAssembler.toModel(bookService.changeBookPrice(parametersDTO)));
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})
     public ResponseEntity<BookModel> creteNewBook(@RequestBody @Valid CreateBookRequestDTO bookDTO) {
         Book response = bookService.createBook(bookDTO);
@@ -103,6 +106,4 @@ public class BookController {
         return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByFullCoincidence(title,
                 limit, offset)));
     }
-
-
 }

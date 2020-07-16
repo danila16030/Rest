@@ -1,10 +1,9 @@
 package com.epam.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "public.user")
+@Table(name = "user", schema = "public")
 public class User {
     @Column(name = "username", nullable = false)
     private String username;
@@ -12,28 +11,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private long userId;
+    @Column(name = "user_password", nullable = false)
+    private String password;
     @Transient
-    private float totalPrice;
-    @Transient
-    private Genre favoriteGenre;
-    @Transient
-    private List<Order> orders;
-
+    private int active = 1;
+    @Column(name = "role", nullable = false)
+    private String role;
 
     public User() {
     }
 
-    public User(String username, long userId) {
+    public User(String username, long userId, String password) {
         this.username = username;
         this.userId = userId;
+        this.password = password;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
+    public String getPassword() {
+        return password;
     }
 
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUsername() {
@@ -44,13 +43,6 @@ public class User {
         this.username = username;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
 
     public long getUserId() {
         return userId;
@@ -60,13 +52,20 @@ public class User {
         this.userId = userId;
     }
 
-
-    public Genre getFavoriteGenre() {
-        return favoriteGenre;
+    public String getRole() {
+        return role;
     }
 
-    public void setFavoriteGenre(Genre favoriteGenre) {
-        this.favoriteGenre = favoriteGenre;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
     @Override
@@ -77,24 +76,30 @@ public class User {
         User user = (User) o;
 
         if (userId != user.userId) return false;
+        if (active != user.active) return false;
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        return orders != null ? orders.equals(user.orders) : user.orders == null;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        return role != null ? role.equals(user.role) : user.role == null;
     }
 
     @Override
     public int hashCode() {
         int result = username != null ? username.hashCode() : 0;
-        result = 31 * result + (orders != null ? orders.hashCode() : 0);
         result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + active;
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + username + '\'' +
-                ", orders=" + orders +
-                ", id=" + userId +
+                "username='" + username + '\'' +
+                ", userId=" + userId +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

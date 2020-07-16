@@ -1,12 +1,9 @@
 package com.epam.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "book_genre")
+@Table(name = "book_genre",schema = "public")
 public class BookGenre {
     @Column(name = "book_id", nullable = false)
     private long bookId;

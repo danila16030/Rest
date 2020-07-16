@@ -4,6 +4,7 @@ import com.epam.dao.UserDAO;
 import com.epam.entity.User;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Autowired
     EntityManager entityManager;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User getUser(long userId) {
@@ -87,9 +89,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User createUser(String username) {
+    public User createUser(String username, String password) {
         User user = new User();
         user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
         entityManager.getTransaction().begin();
         entityManager.persist(user);
         entityManager.getTransaction().commit();
@@ -109,8 +112,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User updateUser(String username, long userId) {
-        User user = new User(username, userId);
+    public User updateUser(String username, long userId, String password) {
+        User user = new User(username, userId, password);
         entityManager.getTransaction().begin();
         entityManager.merge(user);
         entityManager.getTransaction().commit();

@@ -2,12 +2,10 @@ package com.epam.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
-
 public class UserModel extends RepresentationModel<UserModel> {
 
     private String username;
-    private List<OrderModel> orders;
+    private String password;
     private long userId;
 
     public long getUserId() {
@@ -26,11 +24,11 @@ public class UserModel extends RepresentationModel<UserModel> {
         this.username = username;
     }
 
-    public List<OrderModel> getOrders() {
-        return orders;
+    public String getPassword() {
+        return password;
     }
 
-    public void setOrders(List<OrderModel> orders) {
-        this.orders = orders;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

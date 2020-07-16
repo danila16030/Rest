@@ -18,6 +18,5 @@ public interface UserService {
 
     User updateUser(UpdateUserDTO updateUserDTO);
 
-    User getTopUser();
 
 }

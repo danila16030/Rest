@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "book")
+@Table(name = "book",schema = "public")
 public class Book {
     @Column(name = "author", nullable = false)
     private String author;

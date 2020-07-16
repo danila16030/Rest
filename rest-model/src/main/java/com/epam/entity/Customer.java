@@ -1,23 +1,41 @@
 package com.epam.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Customer {
-
-    private float totalPrice;
-    @Column(name = "username")
-    private String username;
     @Id
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
     private long userId;
+    @Column(name = "username", nullable = false)
+    private String username;
+    @Column(name = "totalPrice", nullable = false)
+    private float totalPrice;
+    @Transient
+    private Genre favoriteGenre;
+    @Transient
+    private List<Order> orders;
 
-    public String getUsername() {
-        return username;
+    public Genre getFavoriteGenre() {
+        return favoriteGenre;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFavoriteGenre(Genre favoriteGenre) {
+        this.favoriteGenre = favoriteGenre;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
     }
 
     public long getUserId() {
@@ -28,11 +46,13 @@ public class Customer {
         this.userId = userId;
     }
 
-
-    public float getTotalPrice() {
-        return totalPrice;
+    public String getUsername() {
+        return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;

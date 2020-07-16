@@ -17,6 +17,8 @@ public interface BookGenreDAO {
 
     void createConnection(long bookId, long genreId);
 
+    void removeConnection(long bookId, long genreId);
+
     boolean checkConnection(long bookId, long genreId);
 
     Book getBookByGenres(ParametersRequestDTO parametersRequestDTO);

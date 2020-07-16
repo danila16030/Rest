@@ -26,6 +26,7 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
     @Override
     public GenreModel toModel(Genre entity) {
         GenreModel userModel = mapper.genreToGenreModel(entity);
+
         userModel.add(linkTo(
                 methodOn(GenreController.class)
                         .removeGenre(entity.getGenreId()))
