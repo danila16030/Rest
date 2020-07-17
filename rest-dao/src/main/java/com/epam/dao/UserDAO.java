@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface UserDAO {
     User getUser(long userId);
 
+    User getUser(String username);
+
     User getUserByNameWithoutException(String username);
 
     User getUserByIdWithoutException(long userId);

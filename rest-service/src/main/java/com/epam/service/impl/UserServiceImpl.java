@@ -37,6 +37,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(String username) {
+        User response = userDAO.getUser(username);
+        return response;
+    }
+
+    @Override
     public User createUser(CreateUserDTO user) {
         if (!userValidator.isExistByName(user.getUsername())) {
             return userDAO.createUser(user.getUsername(), user.getPassword());

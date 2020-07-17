@@ -44,6 +44,24 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public User getUser(String username) {
+        entityManager.getTransaction().begin();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("username"), username));
+        try {
+            User user = entityManager.createQuery(criteria).getSingleResult();
+            entityManager.getTransaction().commit();
+            return user;
+        } catch (NoResultException e) {
+            entityManager.getTransaction().commit();
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
     public User getUserByNameWithoutException(String username) {
         entityManager.getTransaction().begin();
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();

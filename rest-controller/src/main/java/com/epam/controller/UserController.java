@@ -1,7 +1,6 @@
 package com.epam.controller;
 
 import com.epam.assembler.UserAssembler;
-import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.dto.request.update.UpdateUserDTO;
 import com.epam.entity.User;
 import com.epam.model.UserModel;
@@ -41,13 +40,6 @@ public class UserController {
     public ResponseEntity<CollectionModel<UserModel>> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
         List<User> responce = userService.getAll(limit, offset);
         return ResponseEntity.ok(userAssembler.toCollectionModel(responce));
-    }
-
-    @PostMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<UserModel> createUser(@RequestBody @Valid CreateUserDTO userDTO) {
-        User response = userService.createUser(userDTO);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
-        return ResponseEntity.created(location).body(userAssembler.toModel(response));
     }
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")

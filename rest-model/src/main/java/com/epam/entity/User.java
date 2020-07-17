@@ -16,7 +16,7 @@ public class User {
     @Transient
     private int active = 1;
     @Column(name = "role", nullable = false)
-    private String role;
+    private String role = "USER";
 
     public User() {
     }
