@@ -7,6 +7,7 @@ import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.entity.User;
 import com.epam.mapper.Mapper;
 import com.epam.model.UserModel;
+import com.epam.principal.UserPrincipal;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -29,7 +30,7 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
         UserModel userModel = mapper.userToUserModel(entity);
         userModel.add(linkTo(
                 methodOn(UserController.class)
-                        .removeUser(entity.getUserId()))
+                        .removeUser(new UserPrincipal()))
                 .withSelfRel());
         return userModel;
     }

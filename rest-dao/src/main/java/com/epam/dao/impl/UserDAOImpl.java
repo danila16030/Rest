@@ -2,6 +2,7 @@ package com.epam.dao.impl;
 
 import com.epam.dao.UserDAO;
 import com.epam.entity.User;
+import com.epam.entity.User_;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +33,7 @@ public class UserDAOImpl implements UserDAO {
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("userId"), userId));
+        criteria.where(builder.equal(root.get(User_.USER_ID), userId));
         try {
             User user = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();
@@ -50,7 +51,7 @@ public class UserDAOImpl implements UserDAO {
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("username"), username));
+        criteria.where(builder.equal(root.get(User_.USERNAME), username));
         try {
             User user = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();
@@ -68,7 +69,7 @@ public class UserDAOImpl implements UserDAO {
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("username"), username));
+        criteria.where(builder.equal(root.get(User_.USERNAME), username));
         try {
             User user = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();

@@ -21,7 +21,6 @@ public interface BookDAO {
 
     Book getBookById(long bookId);
 
-    Book changeBookPrice(float price, long bookId);
 
     Book getBookByIdWithoutException(long bookId);
 

@@ -6,6 +6,7 @@ import com.epam.dto.request.create.MakeAnOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.mapper.Mapper;
 import com.epam.model.OrderModel;
+import com.epam.principal.UserPrincipal;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -28,11 +29,11 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
         OrderModel orderModel = mapper.orderToOrderModel(entity);
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
-                        .removeOrder(entity.getUserId(), entity.getOrderId()))
+                        .removeOrder(new UserPrincipal(), entity.getOrderId()))
                 .withSelfRel());
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
-                        .getOrder(entity.getUserId(), entity.getOrderId()))
+                        .getOrder(new UserPrincipal(), entity.getOrderId()))
                 .withSelfRel());
         orderModel.add(linkTo(
                 methodOn(BookController.class)
@@ -46,7 +47,7 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
         CollectionModel<OrderModel> orderModels = super.toCollectionModel(entities);
 
         orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO())).withSelfRel());
-        orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(userId, 10, 0)).withSelfRel());
+        orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(new UserPrincipal(), 10, 0)).withSelfRel());
         return orderModels;
     }
 }

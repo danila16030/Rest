@@ -2,16 +2,16 @@ package com.epam.controller;
 
 import com.epam.assembler.BookAssembler;
 import com.epam.assembler.GenreAssembler;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.model.BookModel;
 import com.epam.model.GenreModel;
 import com.epam.service.BookGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/book_genre")
@@ -35,12 +35,6 @@ public class BookGenreController {
     public ResponseEntity<CollectionModel<GenreModel>> getGenreByBook(@PathVariable long bookId, @PathVariable int limit,
                                                                       @PathVariable int offset) {
         return ResponseEntity.ok(genreAssembler.toCollectionModel(bookGenreService.getGenresByBook(bookId, limit, offset)));
-    }
-
-    @GetMapping(value = "/book-by-genre", headers = {"Accept=application/json"})
-    public ResponseEntity<BookModel> getBookBySeveralGenres(@RequestBody
-                                                            @Valid ParametersRequestDTO parameters) {
-        return ResponseEntity.ok(bookAssembler.toModel(bookGenreService.getBookBySeveralGenres(parameters)));
     }
 
 }

@@ -2,6 +2,7 @@ package com.epam.dao.impl;
 
 import com.epam.dao.OrderDAO;
 import com.epam.entity.Order;
+import com.epam.entity.Order_;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,7 +40,7 @@ public class OrderDAOImpl implements OrderDAO {
         CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
         Root<Order> root = criteria.from(Order.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("orderId"), orderId));
+        criteria.where(builder.equal(root.get(Order_.ORDER_ID), orderId));
         try {
             Order order = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();

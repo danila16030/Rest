@@ -2,6 +2,7 @@ package com.epam.dao.impl;
 
 import com.epam.dao.BookDAO;
 import com.epam.entity.Book;
+import com.epam.entity.Book_;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -80,7 +81,7 @@ public class BookDAOImpl implements BookDAO {
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("bookId"), bookId));
+        criteria.where(builder.equal(root.get(Book_.BOOK_ID), bookId));
         try {
             Book book = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();
@@ -91,15 +92,6 @@ public class BookDAOImpl implements BookDAO {
         }
     }
 
-    @Override
-    public Book changeBookPrice(float price, long bookId) {
-        entityManager.getTransaction().begin();
-        Book book = entityManager.find(Book.class, bookId);
-        book.setPrice(price);
-        entityManager.merge(book);
-        entityManager.getTransaction().commit();
-        return book;
-    }
 
     @Override
     public Book getBookByIdWithoutException(long bookId) {
@@ -117,7 +109,7 @@ public class BookDAOImpl implements BookDAO {
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
         criteria.select(root);
-        criteria.where(builder.like(root.get("title"), title));
+        criteria.where(builder.like(root.get(Book_.TITLE), title));
         try {
             Optional<List<Book>> books = Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
                     setMaxResults(limit).getResultList());
@@ -136,7 +128,7 @@ public class BookDAOImpl implements BookDAO {
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("title"), title));
+        criteria.where(builder.equal(root.get(Book_.TITLE), title));
         try {
             Optional<List<Book>> books = Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
                     setMaxResults(limit).getResultList());

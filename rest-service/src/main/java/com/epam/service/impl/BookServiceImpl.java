@@ -5,8 +5,6 @@ import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.BookDAO;
 import com.epam.dao.BookGenreDAO;
 import com.epam.dao.GenreDAO;
-import com.epam.dao.impl.fields.BookFields;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
@@ -61,17 +59,7 @@ public class BookServiceImpl implements BookService {
         return book;
     }
 
-    @Override
-    public Book changeBookPrice(ParametersRequestDTO parameters) {
-        long bookId = Long.parseLong(parameters.getParameters().get(BookFields.ID));
-        if (bookValidator.isExist(bookId)) {
-            float price = Float.parseFloat(parameters.getParameters().get(BookFields.PRICE));
-            Book book = bookDAO.changeBookPrice(price, bookId);
-            book.setGenres(getGenre(bookId));
-            return book;
-        }
-        throw new NoSuchElementException();
-    }
+
 
     @Override
     public List<Book> getAllBooks(int limit, int offset) {

@@ -5,11 +5,13 @@ import com.epam.dto.request.create.MakeAnOrderRequestDTO;
 import com.epam.dto.request.update.UpdateOrderDTO;
 import com.epam.entity.Order;
 import com.epam.model.OrderModel;
+import com.epam.principal.UserPrincipal;
 import com.epam.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,21 +37,28 @@ public class OrderController {
         return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 
-   @GetMapping("{userId:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<OrderModel>> getAllOrders(@PathVariable long userId,
+    @GetMapping("{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<CollectionModel<OrderModel>> getAllOrders(@AuthenticationPrincipal final UserPrincipal userPrincipal,
                                                                     @PathVariable int limit,
                                                                     @PathVariable int offset) {
+        long userId = userPrincipal.getUserId();
         return ResponseEntity.ok(orderAssembler.toCollectionModel(orderService.getOrders(userId, limit, offset), userId));
     }
-    @GetMapping("{userId:[0-9]+},{orderId:[0-9]+}")
-    public ResponseEntity<OrderModel> getOrder(@PathVariable long userId, @PathVariable long orderId) {
+
+    @GetMapping("{orderId:[0-9]+}")
+    public ResponseEntity<OrderModel> getOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal,
+                                               @PathVariable long orderId) {
+        long userId = userPrincipal.getUserId();
         return ResponseEntity.ok(orderAssembler.toModel(orderService.getOrder(userId, orderId)));
     }
-    @DeleteMapping("{userId:[0-9]+},{orderId:[0-9]+}")
-    public ResponseEntity removeOrder(@PathVariable long userId, @PathVariable long orderId) {
+
+    @DeleteMapping("{orderId:[0-9]+}")
+    public ResponseEntity removeOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal, @PathVariable long orderId) {
+        long userId = userPrincipal.getUserId();
         orderService.removeOrder(userId, orderId);
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping(headers = {"Accept=application/json"})
     public ResponseEntity<OrderModel> update(@RequestBody @Valid UpdateOrderDTO updateOrderDTO) {
         Order response = orderService.updateOrder(updateOrderDTO);

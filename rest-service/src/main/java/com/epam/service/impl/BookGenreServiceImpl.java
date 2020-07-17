@@ -1,7 +1,6 @@
 package com.epam.service.impl;
 
 import com.epam.dao.BookGenreDAO;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
@@ -53,18 +52,6 @@ public class BookGenreServiceImpl implements BookGenreService {
         throw new InvalidDataException();
     }
 
-    @Override
-    public void createConnection(long bookId, long genreId) {
-        if (bookGenreValidator.isConnected(bookId, genreId)) {
-            bookGenreDAO.createConnection(bookId, genreId);
-        }
-    }
-
-    @Override
-    public Book getBookBySeveralGenres(ParametersRequestDTO parametersRequestDTO) {
-        Book book = bookGenreDAO.getBookByGenres(parametersRequestDTO);
-        return null;
-    }
 
     private void setGenreForAllBooks(List<Book> books) {
         for (Book book : books) {

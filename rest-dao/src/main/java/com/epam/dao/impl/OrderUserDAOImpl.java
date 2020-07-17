@@ -1,9 +1,7 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.OrderUserDAO;
-import com.epam.entity.Customer;
-import com.epam.entity.Order;
-import com.epam.entity.OrderUser;
+import com.epam.entity.*;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -75,7 +73,8 @@ public class OrderUserDAOImpl implements OrderUserDAO {
         CriteriaQuery<OrderUser> criteria = builder.createQuery(OrderUser.class);
         Root<OrderUser> root = criteria.from(OrderUser.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("userId"), userId)).where(builder.equal(root.get("orderId"), orderId));
+        criteria.where(builder.equal(root.get(OrderUser_.USER_ID), userId)).where(builder.equal(
+                root.get(OrderUser_.ORDER_ID), orderId));
         try {
             OrderUser result = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();

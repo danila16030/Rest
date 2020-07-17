@@ -2,6 +2,7 @@ package com.epam.dao.impl;
 
 import com.epam.dao.GenreDAO;
 import com.epam.entity.Genre;
+import com.epam.entity.Genre_;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class GenreDAOImpl implements GenreDAO {
         CriteriaQuery<Genre> criteria = builder.createQuery(Genre.class);
         Root<Genre> root = criteria.from(Genre.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("genreId"), genreId));
+        criteria.where(builder.equal(root.get(Genre_.GENRE_ID), genreId));
         try {
             Genre genre = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();
@@ -108,7 +109,7 @@ public class GenreDAOImpl implements GenreDAO {
         CriteriaQuery<Genre> criteria = builder.createQuery(Genre.class);
         Root<Genre> root = criteria.from(Genre.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("genreName"), genreName));
+        criteria.where(builder.equal(root.get(Genre_.GENRE_NAME), genreName));
         try {
             Genre genre = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();

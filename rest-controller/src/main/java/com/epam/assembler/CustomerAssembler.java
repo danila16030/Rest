@@ -8,6 +8,7 @@ import com.epam.entity.Customer;
 import com.epam.mapper.Mapper;
 import com.epam.model.CustomerModel;
 import com.epam.model.OrderModel;
+import com.epam.principal.UserPrincipal;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -29,10 +30,10 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
     @Override
     public CustomerModel toModel(Customer entity) {
         CustomerModel customerModel = mapper.customerToCustomerModel(entity);
-        setOrderLinks(customerModel.getOrders(), customerModel.getUserId());
+        setOrderLinks(customerModel.getOrders());
         customerModel.add(linkTo(
                 methodOn(CustomerController.class)
-                        .getCustomer(entity.getUserId()))
+                        .getCustomer(new UserPrincipal()))
                 .withSelfRel());
         if (entity.getFavoriteGenre() != null) {
             customerModel.setFavoriteGenre(mapper.genreToGenreModel(entity.getFavoriteGenre()));
@@ -44,18 +45,18 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
         return customerModel;
     }
 
-    private void setOrderLinks(List<OrderModel> orders, long userId) {
+    private void setOrderLinks(List<OrderModel> orders) {
         if (orders == null || orders.isEmpty()) {
             return;
         }
         for (OrderModel order : orders) {
             order.add(linkTo(
                     methodOn(OrderController.class)
-                            .removeOrder(userId, order.getOrderId()))
+                            .removeOrder(new UserPrincipal(), order.getOrderId()))
                     .withSelfRel());
             order.add(linkTo(
                     methodOn(OrderController.class)
-                            .getOrder(userId, order.getOrderId()))
+                            .getOrder(new UserPrincipal(), order.getOrderId()))
                     .withSelfRel());
         }
     }

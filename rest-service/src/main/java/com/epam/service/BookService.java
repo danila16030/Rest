@@ -1,6 +1,5 @@
 package com.epam.service;
 
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
@@ -11,9 +10,6 @@ import java.util.List;
 
 public interface BookService {
     Book getBook(long bookId);
-
-
-    Book changeBookPrice(ParametersRequestDTO parameters);
 
     List<Book> getAllBooks(int limit, int offset);
 

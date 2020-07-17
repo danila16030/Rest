@@ -2,7 +2,6 @@ package com.epam.controller;
 
 import com.epam.assembler.BookAssembler;
 import com.epam.assembler.GenreAssembler;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
@@ -54,11 +53,6 @@ public class BookController {
         return ResponseEntity.ok().location(location).body(bookAssembler.toModel(response));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping(value = "/price", headers = {"Accept=application/json"})
-    public ResponseEntity<BookModel> changePrice(@RequestBody @Valid ParametersRequestDTO parametersDTO) {
-        return ResponseEntity.ok(bookAssembler.toModel(bookService.changeBookPrice(parametersDTO)));
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})

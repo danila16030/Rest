@@ -1,13 +1,12 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.BookGenreDAO;
-import com.epam.dto.request.ParametersRequestDTO;
 import com.epam.entity.Book;
 import com.epam.entity.BookGenre;
+import com.epam.entity.BookGenre_;
 import com.epam.entity.Genre;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,7 +98,8 @@ public class BookGenreDAOImpl implements BookGenreDAO {
         CriteriaQuery<BookGenre> criteria = builder.createQuery(BookGenre.class);
         Root<BookGenre> root = criteria.from(BookGenre.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("bookId"), bookId), builder.equal(root.get("genreId"), genreId));
+        criteria.where(builder.equal(root.get(BookGenre_.BOOK_ID), bookId), builder.equal(root.get(BookGenre_.genreId),
+                genreId));
         try {
             BookGenre result = entityManager.createQuery(criteria).getSingleResult();
             entityManager.getTransaction().commit();
@@ -110,14 +110,5 @@ public class BookGenreDAOImpl implements BookGenreDAO {
         }
     }
 
-    @Override
-    public Book getBookByGenres(ParametersRequestDTO parametersRequestDTO) {
-        try {
-            //           return jdbcTemplate.queryForObject(getBookByGenres, new BookMapper());
-            return null;
-        } catch (EmptyResultDataAccessException e) {
-            throw new NoSuchElementException();
-        }
-    }
 
 }

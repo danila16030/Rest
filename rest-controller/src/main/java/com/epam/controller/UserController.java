@@ -4,12 +4,14 @@ import com.epam.assembler.UserAssembler;
 import com.epam.dto.request.update.UpdateUserDTO;
 import com.epam.entity.User;
 import com.epam.model.UserModel;
+import com.epam.principal.UserPrincipal;
 import com.epam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,9 +30,10 @@ public class UserController {
     private UserAssembler userAssembler;
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    @GetMapping("{id:[0-9]+}")
-    public ResponseEntity<UserModel> getUser(@PathVariable long id) {
-        User response = userService.getUser(id);
+    @GetMapping()
+    public ResponseEntity<UserModel> getUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        String username = userPrincipal.getUsername();
+        User response = userService.getUser(username);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
         return ResponseEntity.ok().location(location).body(userAssembler.toModel(response));
     }
@@ -44,8 +47,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping("{id:[0-9]+}")
-    public ResponseEntity removeUser(@PathVariable long id) {
-        userService.removeUser(id);
+    public ResponseEntity removeUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        userService.removeUser(userPrincipal.getUserId());
         return ResponseEntity.noContent().build();
     }
 
