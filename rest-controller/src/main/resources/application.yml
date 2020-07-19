@@ -11,11 +11,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
-    properties:
-      hibernate:
-        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+  #    properties:
+  #      hibernate:
+  #        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
   security:
     jwt:
       token:

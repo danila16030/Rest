@@ -60,4 +60,5 @@ public class UserController {
         response.setUserId(updateUserDTO.getUserId());
         return ResponseEntity.created(location).body(userAssembler.toModel(response));
     }
+
 }

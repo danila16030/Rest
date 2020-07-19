@@ -51,7 +51,7 @@ public class GenreController {
 
     @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@PathVariable int limit, @PathVariable int offset) {
-        return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit,offset)));
+        return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit, offset)));
     }
 
     @GetMapping(value = "{genreId:[0-9]+}")

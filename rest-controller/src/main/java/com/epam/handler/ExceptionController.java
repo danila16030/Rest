@@ -5,6 +5,7 @@ import com.epam.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class ExceptionController {
 
     @ExceptionHandler({InvalidDataException.class, ArgumentsNotValidException.class, DuplicatedException.class,
-            CantBeRemovedException.class, TokenException.class})
+            CantBeRemovedException.class, TokenException.class, BadCredentialsException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleInvalidData(final Exception exception) {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
         return ResponseEntity.badRequest().body(responseDTO);

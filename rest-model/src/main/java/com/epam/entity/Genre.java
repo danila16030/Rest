@@ -1,10 +1,13 @@
 package com.epam.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "genre",schema = "public")
-public class Genre {
+@Table(name = "genre", schema = "public")
+@EntityListeners(AuditingEntityListener.class)
+public class Genre extends Auditable<String> {
 
     @Column(name = "genre_name", nullable = false, unique = true)
     private String genreName;

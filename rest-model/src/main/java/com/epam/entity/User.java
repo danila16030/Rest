@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user", schema = "public")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends Auditable<String> {
     @Column(name = "username", nullable = false)
     private String username;
     @Id
@@ -21,15 +21,6 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role = "USER";
 
-    /*    @CreatedDate
-        private long createDate;
-        @LastModifiedDate
-        private long lastModifiedDate;
-        @CreatedBy
-        private String createdBy;
-        @LastModifiedBy
-        private String modifiedBy;
-    */
     public User() {
     }
 
