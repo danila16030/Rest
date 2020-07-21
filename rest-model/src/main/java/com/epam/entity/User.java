@@ -71,6 +71,8 @@ public class User extends Auditable<String> {
         this.active = active;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -30,35 +30,36 @@ public class Auditable<U> {
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
 
-    protected U getCreatedBy() {
+    public U getCreatedBy() {
         return createdBy;
     }
 
-    protected void setCreatedBy(U createdBy) {
+    public void setCreatedBy(U createdBy) {
         this.createdBy = createdBy;
     }
 
-    protected Date getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    protected void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    protected U getLastModifiedBy() {
+    public U getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    protected void setLastModifiedBy(U lastModifiedBy) {
+    public void setLastModifiedBy(U lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    protected Date getLastModifiedDate() {
+    public Date getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    protected void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+
 }
