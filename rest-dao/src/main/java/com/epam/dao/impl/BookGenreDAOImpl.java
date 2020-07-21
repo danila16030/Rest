@@ -8,7 +8,6 @@ import com.epam.entity.Genre;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class BookGenreDAOImpl implements BookGenreDAO {
     private static final String removeConnection = "DELETE FROM book_genre WHERE genre_id = ? AND book_id=?";
     @Autowired

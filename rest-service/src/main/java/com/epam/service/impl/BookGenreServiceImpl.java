@@ -4,33 +4,29 @@ import com.epam.dao.BookGenreDAO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-import com.epam.mapper.Mapper;
 import com.epam.service.BookGenreService;
-import com.epam.validator.BookGenreValidator;
 import com.epam.validator.BookValidator;
 import com.epam.validator.GenreValidator;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class BookGenreServiceImpl implements BookGenreService {
 
     private BookGenreDAO bookGenreDAO;
     private GenreValidator genreValidator;
     private BookValidator bookValidator;
-    private BookGenreValidator bookGenreValidator;
-    private final Mapper genreMapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     public BookGenreServiceImpl(BookGenreDAO bookGenreDAO, GenreValidator genreValidator,
-                                BookValidator bookValidator, BookGenreValidator bookGenreValidator) {
+                                BookValidator bookValidator) {
         this.bookGenreDAO = bookGenreDAO;
         this.genreValidator = genreValidator;
         this.bookValidator = bookValidator;
-        this.bookGenreValidator = bookGenreValidator;
     }
 
 

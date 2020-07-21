@@ -10,10 +10,12 @@ import com.epam.service.OrderService;
 import com.epam.validator.OrderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private OrderUserDAO orderUserDAO;
     private OrderDAO orderDAO;

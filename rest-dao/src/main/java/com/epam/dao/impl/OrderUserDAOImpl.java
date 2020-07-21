@@ -1,7 +1,10 @@
 package com.epam.dao.impl;
 
 import com.epam.dao.OrderUserDAO;
-import com.epam.entity.*;
+import com.epam.entity.Customer;
+import com.epam.entity.Order;
+import com.epam.entity.OrderUser;
+import com.epam.entity.OrderUser_;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

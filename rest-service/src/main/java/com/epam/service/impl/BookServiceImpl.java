@@ -18,6 +18,7 @@ import com.epam.validator.BookValidator;
 import com.epam.validator.GenreValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class BookServiceImpl implements BookService {
     private BookDAO bookDAO;
     private BookTitleComparator bookTitleComparator;

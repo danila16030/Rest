@@ -1,8 +1,5 @@
 package com.epam.service.impl;
 
-import com.epam.dao.BookDAO;
-import com.epam.dao.BookGenreDAO;
-import com.epam.dao.OrderUserDAO;
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.dto.request.update.UpdateUserDTO;
@@ -24,8 +21,7 @@ public class UserServiceImpl implements UserService {
     private UserValidator userValidator;
 
     @Autowired
-    UserServiceImpl(UserDAO userDAO, OrderUserDAO orderUserDAO, UserValidator userValidator, BookDAO bookDAO,
-                    BookGenreDAO bookGenreDAO) {
+    UserServiceImpl(UserDAO userDAO, UserValidator userValidator) {
         this.userDAO = userDAO;
         this.userValidator = userValidator;
     }

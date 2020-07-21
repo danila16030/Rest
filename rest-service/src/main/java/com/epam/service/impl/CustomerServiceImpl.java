@@ -10,6 +10,7 @@ import com.epam.service.CustomerService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
     private final Mapper mapper = Mappers.getMapper(Mapper.class);
 
