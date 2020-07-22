@@ -4,11 +4,13 @@ import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserDTO;
 import com.epam.dto.request.update.UpdateUserDTO;
 import com.epam.entity.User;
-import com.epam.exception.CantBeRemovedException;
+import com.epam.exception.ForbitenToDelete;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.NoSuchElementException;
+import com.epam.mapper.Mapper;
 import com.epam.service.UserService;
 import com.epam.validator.UserValidator;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
     private UserValidator userValidator;
+    private final Mapper mapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     UserServiceImpl(UserDAO userDAO, UserValidator userValidator) {
@@ -28,28 +31,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(long userId) {
-        User response = userDAO.getUser(userId);
-        return response;
+        return userDAO.getUser(userId);
     }
 
     @Override
     public User getUser(String username) {
-        User response = userDAO.getUser(username);
-        return response;
+        return userDAO.getUser(username);
     }
 
     @Override
     public User createUser(CreateUserDTO user) {
         if (!userValidator.isExistByName(user.getUsername())) {
-            return userDAO.createUser(user.getUsername(), user.getPassword());
+            return userDAO.createUser(mapper.userDTOtUser(user));
         }
         throw new DuplicatedException("User with this name is already exist");
     }
 
     @Override
     public List<User> getAll(int limit, int offset) {
-        List<User> response = userDAO.getAll(limit, offset).get();
-        return response;
+        return userDAO.getAll(limit, offset).get();
     }
 
     @Override
@@ -59,15 +59,15 @@ public class UserServiceImpl implements UserService {
                 userDAO.removeUser(userId);
                 return;
             }
-            throw new CantBeRemovedException("User still has orders");
+            throw new ForbitenToDelete("User still has orders");
         }
         throw new NoSuchElementException("User does not exist");
     }
 
     @Override
-    public User updateUser(UpdateUserDTO updateUserDTO) {
-        if (userValidator.isExistById(updateUserDTO.getUserId())) {
-            return userDAO.updateUser(updateUserDTO.getUsername(), updateUserDTO.getUserId(), updateUserDTO.getPassword());
+    public User updateUser(UpdateUserDTO userDTO) {
+        if (userValidator.isExistById(userDTO.getUserId())) {
+            return userDAO.updateUser(mapper.userDTOtUser(userDTO));
         }
         throw new NoSuchElementException("User does not exist");
     }

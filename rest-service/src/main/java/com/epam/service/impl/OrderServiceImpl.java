@@ -5,9 +5,12 @@ import com.epam.dao.OrderUserDAO;
 import com.epam.dto.request.create.MakeAnOrderRequestDTO;
 import com.epam.dto.request.update.UpdateOrderDTO;
 import com.epam.entity.Order;
+import com.epam.entity.OrderUser;
 import com.epam.exception.NoSuchElementException;
+import com.epam.mapper.Mapper;
 import com.epam.service.OrderService;
 import com.epam.validator.OrderValidator;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderUserDAO orderUserDAO;
     private OrderDAO orderDAO;
     private OrderValidator orderValidator;
+    private final Mapper mapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     public OrderServiceImpl(OrderDAO orderDAO, OrderUserDAO orderUserDAO, OrderValidator orderValidator) {
@@ -30,18 +34,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order makeAnOrder(MakeAnOrderRequestDTO requestDTO) {
-        long orderId = orderDAO.makeAnOrder(requestDTO.getOrderTime(), requestDTO.getPrice(),
-                requestDTO.getBookId());
-        orderUserDAO.createConnection(requestDTO.getUserId(), orderId);
+        long orderId = orderDAO.makeAnOrder(mapper.orderDTOtOrder(requestDTO));
+        orderUserDAO.createConnection(new OrderUser(requestDTO.getUserId(), orderId));
         return new Order(requestDTO.getOrderTime(), requestDTO.getPrice(), requestDTO.getBookId(), orderId, requestDTO.getUserId());
     }
 
     @Override
-    public Order updateOrder(UpdateOrderDTO updateOrderDTO) {
-        if (orderValidator.isConnected(updateOrderDTO.getUserId(), updateOrderDTO.getOrderId())) {
-            Order order = orderDAO.updateOrder(updateOrderDTO.getOrderTime(), updateOrderDTO.getPrice(),
-                    updateOrderDTO.getBookId(), updateOrderDTO.getUserId());
-            order.setUserId(updateOrderDTO.getUserId());
+    public Order updateOrder(UpdateOrderDTO requestDTO) {
+        if (orderValidator.isConnected(new OrderUser(requestDTO.getUserId(), requestDTO.getOrderId()))) {
+            Order order = orderDAO.updateOrder(mapper.orderDTOtOrder(requestDTO));
+            order.setUserId(requestDTO.getUserId());
             return order;
         }
         throw new NoSuchElementException();
@@ -55,19 +57,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrder(long userId, long orderId) {
-        if (orderValidator.isConnected(userId, orderId)) {
-            Order order = orderDAO.getOrder(orderId);
-            order.setUserId(userId);
+    public Order getOrder(OrderUser orderUser) {
+        if (orderValidator.isConnected(orderUser)) {
+            Order order = orderDAO.getOrder(orderUser.getOrderId());
+            order.setUserId(orderUser.getUserId());
             return order;
         }
         throw new NoSuchElementException();
     }
 
     @Override
-    public void removeOrder(long userId, long orderId) {
-        if (orderValidator.isExist(orderId) && orderValidator.isConnected(userId, orderId)) {
-            orderDAO.removeOrder(orderId);
+    public void removeOrder(OrderUser orderUser) {
+        if (orderValidator.isExist(orderUser.getOrderId()) && orderValidator.isConnected(orderUser)) {
+            orderDAO.removeOrder(orderUser.getOrderId());
         }
         throw new NoSuchElementException();
     }

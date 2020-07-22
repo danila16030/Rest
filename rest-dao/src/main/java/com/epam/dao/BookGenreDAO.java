@@ -1,6 +1,7 @@
 package com.epam.dao;
 
 import com.epam.entity.Book;
+import com.epam.entity.BookGenre;
 import com.epam.entity.Genre;
 
 import java.util.List;
@@ -14,10 +15,10 @@ public interface BookGenreDAO {
 
     Optional<List<Genre>> getAllGenresOnBook(long bookId);
 
-    void createConnection(long bookId, long genreId);
+    void createConnection(BookGenre bookGenre);
 
-    void removeConnection(long bookId, long genreId);
+    void removeConnection(BookGenre bookGenre);
 
-    boolean checkConnection(long bookId, long genreId);
+    boolean checkConnection(BookGenre bookGenre);
 
 }

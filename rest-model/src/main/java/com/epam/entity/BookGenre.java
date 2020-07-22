@@ -3,7 +3,18 @@ package com.epam.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "book_genre",schema = "public")
+@Table(name = "book_genre", schema = "public")
+@NamedQuery(name = "BookGenre.getAllBooksByGenre", query = "SELECT c FROM BookGenre sc INNER JOIN Book c ON " +
+        "c.bookId=sc.bookId WHERE sc.genreId= :genreId")
+@NamedQuery(name = "BookGenre.getAllGenresOnBook", query = "SELECT c FROM BookGenre sc INNER JOIN Genre c ON " +
+        "c.genreId=sc.genreId WHERE sc.bookId= :bookId")
+
+@SqlResultSetMapping(name = "deleteResult", columns = {@ColumnResult(name = "count")})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "remove",
+                query = "DELETE FROM book_genre WHERE genre_id = ? AND book_id=?",
+                resultSetMapping = "deleteResult")
+})
 public class BookGenre {
     @Column(name = "book_id", nullable = false)
     private long bookId;

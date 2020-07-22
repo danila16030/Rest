@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user", schema = "public")
+
 @EntityListeners(AuditingEntityListener.class)
 public class User extends Auditable<String> {
     @Column(name = "username", nullable = false)
@@ -70,7 +71,6 @@ public class User extends Auditable<String> {
     public void setActive(int active) {
         this.active = active;
     }
-
 
 
     @Override

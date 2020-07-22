@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ExceptionController {
 
     @ExceptionHandler({InvalidDataException.class, ArgumentsNotValidException.class, DuplicatedException.class,
-            CantBeRemovedException.class, TokenException.class, BadCredentialsException.class})
+            ForbitenToDelete .class, TokenException.class, BadCredentialsException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleInvalidData(final Exception exception) {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
         return ResponseEntity.badRequest().body(responseDTO);

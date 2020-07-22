@@ -6,8 +6,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "public.order")
+@NamedQuery(name = "Order.findOrders", query = "SELECT o FROM OrderUser ou INNER JOIN Order o ON " +
+        "o.orderId=ou.orderId WHERE ou.userId = :userId")
 @EntityListeners(AuditingEntityListener.class)
-public class Order  extends Auditable<String>{
+public class Order extends Auditable<String> {
     @Column(name = "order_time", nullable = false)
     private String orderTime;
     @Column(name = "order_price", nullable = false)

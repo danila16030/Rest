@@ -7,19 +7,19 @@ import java.util.Optional;
 
 public interface GenreDAO {
 
-    Long createGenreAndReturnId(String genreName);
+    Long createGenreAndReturnId(Genre genre);
 
     void removeGenre(long genreId);
 
-    Optional<List<Genre>> getGenreList(int limit,int offset);
+    Optional<List<Genre>> getGenreList(int limit, int offset);
 
     Genre getGenreById(long genreId);
 
-    Genre createGenre(String genreName);
+    Genre createGenre(Genre genre);
 
     Genre getGenreByNameWithoutException(String genreName);
 
-    Genre updateGenre(String genreName,long genreId);
+    Genre updateGenre(Genre genre);
 
     Genre getGenreByIdWithoutException(long genreId);
 }

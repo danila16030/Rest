@@ -1,7 +1,7 @@
 package com.epam.exception;
 
 public class TokenException extends RuntimeException {
-    public TokenException(String message) {
-        super(message);
+    public TokenException() {
+        super("Expired or invalid JWT token");
     }
 }

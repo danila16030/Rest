@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface BookDAO {
 
-    Long createNewBook(String author, String description, float price, String writingDate, int numberOfPages, String title);
+    Book createNewBook(Book book);
 
     void removeBook(long bookId);
 
     Optional<List<Book>> getAllBooks(int limit,int offset);
 
-    Book updateBook(String title, String author, String writingDate, String description, int numberOfPages, float price, long bookId);
+    Book updateBook(Book book);
 
     Optional<List<Book>> searchByPartialCoincidence(String title,int limit,int offset);
 

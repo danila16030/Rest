@@ -11,9 +11,9 @@ import java.util.List;
 @Component
 public class UserValidator {
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Autowired
-    OrderUserDAO orderUserDAO;
+    private OrderUserDAO orderUserDAO;
 
     public boolean isExistByName(String username) {
         if (userDAO.getUserByNameWithoutException(username).getUsername() == null) {

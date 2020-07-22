@@ -3,13 +3,13 @@ package com.epam.dao;
 import com.epam.entity.Order;
 
 public interface OrderDAO{
-    Long makeAnOrder(String time, float price, long bookId);
+    Long makeAnOrder(Order order);
 
     Order getOrder(long orderId);
 
     Order getOrderWithoutException(long orderId);
 
-    Order updateOrder(String time, float price, long bookId,long orderId);
+    Order updateOrder(Order order);
 
     void removeOrder(long orderId);
 

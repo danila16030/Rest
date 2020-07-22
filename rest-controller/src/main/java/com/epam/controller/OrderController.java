@@ -4,6 +4,7 @@ import com.epam.assembler.OrderAssembler;
 import com.epam.dto.request.create.MakeAnOrderRequestDTO;
 import com.epam.dto.request.update.UpdateOrderDTO;
 import com.epam.entity.Order;
+import com.epam.entity.OrderUser;
 import com.epam.model.OrderModel;
 import com.epam.principal.UserPrincipal;
 import com.epam.service.OrderService;
@@ -49,13 +50,13 @@ public class OrderController {
     public ResponseEntity<OrderModel> getOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal,
                                                @PathVariable long orderId) {
         long userId = userPrincipal.getUserId();
-        return ResponseEntity.ok(orderAssembler.toModel(orderService.getOrder(userId, orderId)));
+        return ResponseEntity.ok(orderAssembler.toModel(orderService.getOrder(new OrderUser(userId, orderId))));
     }
 
     @DeleteMapping("{orderId:[0-9]+}")
     public ResponseEntity removeOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal, @PathVariable long orderId) {
         long userId = userPrincipal.getUserId();
-        orderService.removeOrder(userId, orderId);
+        orderService.removeOrder(new OrderUser(userId, orderId));
         return ResponseEntity.noContent().build();
     }
 

@@ -4,6 +4,19 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@SqlResultSetMapping(name = "result", classes = {@ConstructorResult(targetClass = Customer.class, columns = {
+        @ColumnResult(name = "user_id", type = long.class),
+        @ColumnResult(name = "username", type = String.class),
+        @ColumnResult(name = "totalPrice", type = float.class)})})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "topCustomer",
+                query = "SELECT r.user_id,r.username,r.totalPrice " +
+                        "FROM (SELECT us.user_id,us.username, SUM(o.order_price) AS totalPrice " +
+                        "FROM public.order o INNER JOIN order_user ou ON " +
+                        "o.order_id=ou.order_id INNER JOIN public.user us ON ou.user_id = us.user_id " +
+                        "GROUP BY us.user_id) r GROUP BY r.user_id, r.username,r.totalPrice",
+                resultSetMapping = "result")
+})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +30,15 @@ public class Customer {
     private Genre favoriteGenre;
     @Transient
     private List<Order> orders;
+
+    public Customer(long userId, String username, float totalPrice) {
+        this.username = username;
+        this.totalPrice = totalPrice;
+        this.userId = userId;
+    }
+
+    public Customer() {
+    }
 
     public Genre getFavoriteGenre() {
         return favoriteGenre;

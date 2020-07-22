@@ -1,12 +1,10 @@
 package com.epam.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "order_user",schema = "public")
+@Table(name = "order_user", schema = "public")
+
 public class OrderUser {
     @Column(name = "user_id", nullable = false)
     private long userId;

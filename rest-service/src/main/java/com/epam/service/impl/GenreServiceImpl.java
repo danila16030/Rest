@@ -6,8 +6,10 @@ import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.entity.Genre;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.InvalidDataException;
+import com.epam.mapper.Mapper;
 import com.epam.service.GenreService;
 import com.epam.validator.GenreValidator;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +21,8 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
 
     private GenreDAO genreDAO;
-
     private GenreValidator genreValidator;
+    private final Mapper mapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
     public GenreServiceImpl(GenreDAO genreDAO, GenreValidator genreValidator) {
@@ -41,7 +43,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Genre updateGenre(UpdateGenreRequestDTO genreDTO) {
         if (!genreValidator.isExistByName(genreDTO.getGenreName())) {
-            return genreDAO.updateGenre(genreDTO.getGenreName(), genreDTO.getGenreId());
+            return genreDAO.updateGenre(mapper.genreDTOtoGenre(genreDTO));
         }
         throw new DuplicatedException("Genre with this name is already exist");
     }
@@ -49,8 +51,8 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre createGenre(CreateGenreRequestDTO genreDTO) {
-        if (genreDTO != null && genreValidator.isValid(genreDTO)) {
-            return genreDAO.createGenre(genreDTO.getGenreName());
+        if (genreDTO != null) {
+            return genreDAO.createGenre(mapper.genreDTOtoGenre(genreDTO));
         }
         throw new InvalidDataException();
     }
@@ -59,7 +61,8 @@ public class GenreServiceImpl implements GenreService {
     public void removeGenre(long genreId) {
         if (genreValidator.isExistById(genreId)) {
             genreDAO.removeGenre(genreId);
+        } else {
+            throw new InvalidDataException();
         }
-        throw new InvalidDataException();
     }
 }

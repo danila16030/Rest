@@ -18,7 +18,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/customers")
-@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 public class CustomerController {
     @Autowired
     private CustomerAssembler customerAssembler;
@@ -26,6 +25,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<CustomerModel> getCustomer(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         long id = userPrincipal.getUserId();
         Customer response = customerService.getUser(id);

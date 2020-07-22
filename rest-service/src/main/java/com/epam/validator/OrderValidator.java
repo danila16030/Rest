@@ -2,18 +2,19 @@ package com.epam.validator;
 
 import com.epam.dao.OrderDAO;
 import com.epam.dao.OrderUserDAO;
+import com.epam.entity.OrderUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderValidator {
     @Autowired
-    OrderUserDAO orderUserDAO;
+    private OrderUserDAO orderUserDAO;
     @Autowired
-    OrderDAO orderDAO;
+    private OrderDAO orderDAO;
 
-    public boolean isConnected(long userId, long orderId) {
-        return orderUserDAO.checkConnection(userId, orderId);
+    public boolean isConnected(OrderUser orderUser) {
+        return orderUserDAO.checkConnection(orderUser);
     }
 
     public boolean isExist(long orderId) {
