@@ -70,7 +70,7 @@ public class BookController {
     @GetMapping(value = "{fistId:[0-9]+},{secondId:[0-9]+},{thirdId:[0-9]+}")
     public ResponseEntity<GenreModel> getTopGenre(@PathVariable long fistId, @PathVariable long secondId,
                                                   @PathVariable long thirdId) {
-        Genre genre = bookService.getTopGenre(fistId, secondId, thirdId);
+        Genre genre = bookService.geTheMostCommonGenre(fistId, secondId, thirdId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + genre.getGenreId()).build().toUri();
         return ResponseEntity.created(location).body(genreAssembler.toModel(genre));
     }

@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface UserService {
 
-    User getUser(long userId);
 
     User getUser(String username);
 

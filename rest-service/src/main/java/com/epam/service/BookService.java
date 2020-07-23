@@ -23,7 +23,7 @@ public interface BookService {
 
     Book updateBook(UpdateBookRequestDTO book) throws InvalidDataException;
 
-    Genre getTopGenre(long fist,long second,long third);
+    Genre geTheMostCommonGenre(long fist, long second, long third);
 
     List<Book> getBooksSortedByName(int limit, int offset);
 
