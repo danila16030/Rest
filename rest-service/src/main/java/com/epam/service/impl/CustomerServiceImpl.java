@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Customer getTopCustomer() {
-        List<Customer> response = orderUserDAO.getTopUser();
+        List<Customer> response = orderUserDAO.getCustomers();
         Customer topCustomer = topCustomer(response);
         topCustomer.setOrders(getOrder(topCustomer.getUserId()));
         Map<Genre, Integer> counter = getGenreCount(topCustomer);

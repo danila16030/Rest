@@ -62,8 +62,8 @@ public class OrderUserDAOImpl extends BaseDAO<OrderUser> implements OrderUserDAO
     }
 
     @Override
-    public List<Customer> getTopUser() {
-        Query query = entityManager.createNamedQuery("topCustomer", Customer.class);
+    public List<Customer> getCustomers() {
+        Query query = entityManager.createNamedQuery("getCustomers", Customer.class);
         try {
             return (List<Customer>) query.getResultList();
         } catch (NoResultException e) {

@@ -16,5 +16,5 @@ public interface OrderUserDAO {
 
     boolean checkConnection(OrderUser orderUser);
 
-    List<Customer> getTopUser();
+    List<Customer> getCustomers();
 }

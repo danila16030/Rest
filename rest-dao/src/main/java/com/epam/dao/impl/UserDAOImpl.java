@@ -67,26 +67,17 @@ public class UserDAOImpl extends BaseDAO<User> implements UserDAO {
 
     @Override
     public Optional<List<User>> getAll(int limit, int offset) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.select(root);
-        try {
-            return Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
-                    setMaxResults(limit).getResultList());
-        } catch (NoResultException e) {
-            throw new NoSuchElementException();
-        }
+        return getAll(limit, offset, User.class);
     }
 
     @Override
     public User createUser(User user) {
-       return create(user);
+        return create(user);
     }
 
     @Override
     public void removeUser(long userId) {
-      remove(userId,User.class);
+        remove(userId, User.class);
     }
 
     @Override

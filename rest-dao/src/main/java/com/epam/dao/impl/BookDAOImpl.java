@@ -35,16 +35,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     @Override
     public Optional<List<Book>> getAllBooks(int limit, int offset) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
-        Root<Book> root = criteria.from(Book.class);
-        criteria.select(root);
-        try {
-            return Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
-                    setMaxResults(limit).getResultList());
-        } catch (NoResultException e) {
-            throw new NoSuchElementException();
-        }
+       return getAll(limit, offset, Book.class);
     }
 
     @Override

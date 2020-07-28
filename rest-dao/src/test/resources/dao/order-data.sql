@@ -1,0 +1,3 @@
+INSERT INTO public.order (order_price, order_time,book_id, created_by, created_date, last_modified_by, last_modified_date) VALUES (78,'2020-01-19 00:45:51.000000',1,'', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000')
+INSERT INTO public.order (order_price, order_time,book_id, created_by, created_date, last_modified_by, last_modified_date) VALUES (11,'2020-01-19 00:45:51.000000',1,'', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000')
+INSERT INTO public.order (order_price, order_time,book_id, created_by, created_date, last_modified_by, last_modified_date) VALUES (12,'2020-01-19 00:45:51.000000',1,'', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000')

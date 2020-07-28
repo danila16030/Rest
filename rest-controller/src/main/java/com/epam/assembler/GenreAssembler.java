@@ -39,7 +39,6 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
                 methodOn(GenreController.class)
                         .updateGenre(new UpdateGenreRequestDTO()))
                 .withSelfRel());
-
         return userModel;
     }
 

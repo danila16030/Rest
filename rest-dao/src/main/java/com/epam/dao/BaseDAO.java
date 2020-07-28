@@ -5,7 +5,13 @@ import com.epam.exception.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseDAO<T> {
     @Autowired
@@ -16,8 +22,7 @@ public abstract class BaseDAO<T> {
         try {
             entityManager.persist(entity);
             return entity;
-        } catch (
-                PersistenceException e) {
+        } catch (PersistenceException e) {
             throw new DuplicatedException("Object with this name is already exist");
         }
     }
@@ -41,4 +46,16 @@ public abstract class BaseDAO<T> {
         entityManager.remove(user);
     }
 
+    public Optional<List<T>> getAll(int limit, int offset, Class<T> aClass) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteria = builder.createQuery(aClass);
+        Root<T> root = criteria.from(aClass);
+        criteria.select(root);
+        try {
+            return Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
+                    setMaxResults(limit).getResultList());
+        } catch (NoResultException e) {
+            throw new NoSuchElementException();
+        }
+    }
 }
