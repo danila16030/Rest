@@ -1,7 +1,7 @@
 package com.epam.controller;
 
 import com.epam.assembler.UserAssembler;
-import com.epam.dto.request.update.UpdateUserDTO;
+import com.epam.dto.request.update.updateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.model.UserModel;
 import com.epam.principal.UserPrincipal;
@@ -54,10 +54,10 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<UserModel> update(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-        User response = userService.updateUser(updateUserDTO);
+    public ResponseEntity<UserModel> update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO) {
+        User response = userService.updateUser(updateUserRequestDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
-        response.setUserId(updateUserDTO.getUserId());
+        response.setUserId(updateUserRequestDTO.getUserId());
         return ResponseEntity.created(location).body(userAssembler.toModel(response));
     }
 

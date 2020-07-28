@@ -24,8 +24,8 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @GetMapping()
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @GetMapping()
     public ResponseEntity<CustomerModel> getCustomer(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         long id = userPrincipal.getUserId();
         Customer response = customerService.getUser(id);

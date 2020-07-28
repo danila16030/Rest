@@ -2,7 +2,7 @@ package com.epam.controller;
 
 import com.epam.assembler.OrderAssembler;
 import com.epam.dto.request.create.MakeAnOrderRequestDTO;
-import com.epam.dto.request.update.UpdateOrderDTO;
+import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
 import com.epam.model.OrderModel;
@@ -61,10 +61,10 @@ public class OrderController {
     }
 
     @PutMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<OrderModel> update(@RequestBody @Valid UpdateOrderDTO updateOrderDTO) {
-        Order response = orderService.updateOrder(updateOrderDTO);
+    public ResponseEntity<OrderModel> update(@RequestBody @Valid UpdateOrderRequestDTO updateOrderRequestDTO) {
+        Order response = orderService.updateOrder(updateOrderRequestDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
-        response.setUserId(updateOrderDTO.getUserId());
+        response.setUserId(updateOrderRequestDTO.getUserId());
         return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 }

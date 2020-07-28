@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class CreateUserDTO {
+public class CreateUserRequestDTO {
     @Size(min = 2, max = 30, message = "Incorrect username(Should have size 2-30)")
     @Pattern(regexp = "[a-zA-Z 0-9]+",
             message = "Incorrect username (Should contain Latin letters, spaces or numbers)")

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class UpdateOrderDTO {
+public class UpdateOrderRequestDTO {
     @Pattern(regexp = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Incorrect orderTime " +
             "(Date must follow pattern hh.mm and be correct)")
     @NotBlank(message = "Incorrect orderTime (Should contain not only spaces)")

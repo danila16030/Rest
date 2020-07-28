@@ -3,7 +3,7 @@ package com.epam.service.impl;
 import com.epam.dao.OrderDAO;
 import com.epam.dao.OrderUserDAO;
 import com.epam.dto.request.create.MakeAnOrderRequestDTO;
-import com.epam.dto.request.update.UpdateOrderDTO;
+import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
 import com.epam.exception.NoSuchElementException;
@@ -62,10 +62,10 @@ public class OrderServiceImpl implements OrderService {
      * @return the order that was updated
      * @throws NoSuchElementException
      * @see Order
-     * @see UpdateOrderDTO
+     * @see UpdateOrderRequestDTO
      */
     @Override
-    public Order updateOrder(UpdateOrderDTO requestDTO) {
+    public Order updateOrder(UpdateOrderRequestDTO requestDTO) {
         if (orderValidator.isConnected(new OrderUser(requestDTO.getUserId(), requestDTO.getOrderId()))) {
             Order order = orderDAO.updateOrder(mapper.orderDTOtOrder(requestDTO));
             order.setUserId(requestDTO.getUserId());

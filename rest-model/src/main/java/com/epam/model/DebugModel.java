@@ -1,34 +1,26 @@
-package com.epam.entity;
+package com.epam.model;
 
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.hateoas.RepresentationModel;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public class Auditable {
-    @CreatedBy
-    @Column(name = "created_by")
+public class DebugModel extends RepresentationModel<DebugModel> {
+    private long id;
     private String createdBy;
-
-    @CreatedDate
-    @Column(name = "created_date")
     private Date createdDate;
-
-    @LastModifiedBy
-    @Column(name = "last_modified_by")
     private String lastModifiedBy;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+    private List<DebugModel> innerModels=new ArrayList<>();
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getCreatedBy() {
         return createdBy;
@@ -62,4 +54,11 @@ public class Auditable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public List<DebugModel> getInnerModels() {
+        return innerModels;
+    }
+
+    public void setInnerModels(List<DebugModel> innerModels) {
+        this.innerModels = innerModels;
+    }
 }

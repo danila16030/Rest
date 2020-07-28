@@ -2,7 +2,7 @@ package com.epam.dto.request.update;
 
 import javax.validation.constraints.*;
 
-public class UpdateUserDTO {
+public class updateUserRequestDTO {
     @Size(min = 2, max = 30, message = "Incorrect username(Should have size 2-30)")
     @Pattern(regexp = "[a-zA-Z 0-9]+",
             message = "Incorrect username (Should contain Latin letters, spaces or numbers)")

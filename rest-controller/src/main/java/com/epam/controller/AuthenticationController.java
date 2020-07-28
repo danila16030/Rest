@@ -2,7 +2,7 @@ package com.epam.controller;
 
 import com.epam.details.UserPrincipalDetailsService;
 import com.epam.dto.request.AuthenticationRequestDTO;
-import com.epam.dto.request.create.CreateUserDTO;
+import com.epam.dto.request.create.CreateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.principal.UserPrincipal;
 import com.epam.service.UserService;
@@ -51,7 +51,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/singIn")
-    public ResponseEntity singIn(@RequestBody @Valid CreateUserDTO userDTO) {
+    public ResponseEntity singIn(@RequestBody @Valid CreateUserRequestDTO userDTO) {
         String username = userDTO.getUsername();
         authentication(userDTO);
         User user = userService.createUser(userDTO);
@@ -62,7 +62,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
-    private void authentication(CreateUserDTO userDTO) {
+    private void authentication(CreateUserRequestDTO userDTO) {
         UserPrincipal user = service.loadUserByUsername(userDTO.getUsername());
         user.setUsername(userDTO.getUsername());
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());

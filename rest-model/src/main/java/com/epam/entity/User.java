@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "user", schema = "public")
 
 @EntityListeners(AuditingEntityListener.class)
-public class User extends Auditable<String> {
+public class User extends Auditable {
     @Column(name = "username", nullable = false)
     private String username;
     @Id

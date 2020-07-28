@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "genre", schema = "public")
 @EntityListeners(AuditingEntityListener.class)
 
-public class Genre extends Auditable<String> {
+public class Genre extends Auditable{
 
     @Column(name = "genre_name", nullable = false, unique = true)
     private String genreName;
@@ -24,9 +24,9 @@ public class Genre extends Auditable<String> {
         this.genreName = genreName;
     }
 
-    public Genre(String genreName, long genreId) {
+    public Genre(String genreName, long id) {
         this.genreName = genreName;
-        this.genreId = genreId;
+        this.genreId = id;
     }
 
     public String getGenreName() {

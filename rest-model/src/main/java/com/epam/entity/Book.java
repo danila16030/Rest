@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "book",schema = "public")
 @EntityListeners(AuditingEntityListener.class)
-public class Book  extends Auditable<String>{
+public class Book  extends Auditable{
     @Column(name = "author", nullable = false)
     private String author;
     @Column(name = "description", nullable = false)
