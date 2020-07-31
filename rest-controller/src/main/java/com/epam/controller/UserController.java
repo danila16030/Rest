@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private UserAssembler userAssembler;
 
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping()
     public ResponseEntity<UserModel> getUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         String username = userPrincipal.getUsername();
@@ -39,18 +39,34 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<UserModel>> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
-        List<User> responce = userService.getAll(limit, offset);
-        return ResponseEntity.ok(userAssembler.toCollectionModel(responce));
+    @GetMapping("{id:[0-9]+}")
+    public ResponseEntity<UserModel> getSomeUser(@PathVariable long id) {
+        User response = userService.getUser(id);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
+        return ResponseEntity.ok().location(location).body(userAssembler.toModel(response));
     }
 
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    @DeleteMapping("{id:[0-9]+}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("{limit:[0-9]+},{offset:[0-9]+}")
+    public ResponseEntity<CollectionModel<UserModel>> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
+        List<User> response = userService.getAll(limit, offset);
+        return ResponseEntity.ok(userAssembler.toCollectionModel(response));
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping()
     public ResponseEntity removeUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         userService.removeUser(userPrincipal.getUserId());
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("{id:[0-9]+}")
+    public ResponseEntity removeSomeUser(@PathVariable long id) {
+        userService.removeUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
@@ -60,5 +76,4 @@ public class UserController {
         response.setUserId(updateUserRequestDTO.getUserId());
         return ResponseEntity.created(location).body(userAssembler.toModel(response));
     }
-
 }

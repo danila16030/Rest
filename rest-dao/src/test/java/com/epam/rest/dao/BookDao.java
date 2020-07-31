@@ -56,6 +56,7 @@ public class BookDao {
 
     @Test
     public void getAllBooksTest() {
+        bookDAO.removeBook(1);
         List<Book> bookList = bookDAO.getAllBooks(10, 0).get();
         Assert.assertEquals(3, bookList.size());
     }

@@ -3,6 +3,7 @@ package com.epam.handler;
 import com.epam.dto.responce.ExceptionResponseDTO;
 import com.epam.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,17 +19,22 @@ import java.util.stream.Collectors;
 public class ExceptionController {
 
     @ExceptionHandler({InvalidDataException.class, ArgumentsNotValidException.class, DuplicatedException.class,
-            ForbitenToDelete .class, TokenException.class, BadCredentialsException.class})
+            ForbitenToDelete.class, BadCredentialsException.class, TokenException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleInvalidData(final Exception exception) {
         ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
         return ResponseEntity.badRequest().body(responseDTO);
     }
 
-    @ExceptionHandler({NoSuchElementException.class, AccessDeniedException.class,
-            HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({NoSuchElementException.class, HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<ExceptionResponseDTO> hadleNoSuchElement() {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<ExceptionResponseDTO> hadleAccessDenied() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ExceptionResponseDTO> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
@@ -40,6 +46,4 @@ public class ExceptionController {
                 .orElse("Problems with input data"));
         return ResponseEntity.badRequest().body(responseDto);
     }
-
-
 }

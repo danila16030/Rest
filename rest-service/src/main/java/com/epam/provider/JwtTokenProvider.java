@@ -1,4 +1,4 @@
-package com.epam.token;
+package com.epam.provider;
 
 import com.epam.details.UserPrincipalDetailsService;
 import com.epam.exception.TokenException;
@@ -34,36 +34,30 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, String role) {
+    public String createToken(String username) {
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("role", role);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secret)//
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
-
     public Authentication getAuthentication(String token) {
         UserPrincipal user = service.loadUserByUsername(getUserName(token));
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "",
+                user.getAuthorities());
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(auth);
         return auth;
     }
 
-    public String getUserName(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-    }
-
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Basic ")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(6);
         }
         return null;
@@ -76,6 +70,11 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw new TokenException();
         }
+    }
+
+
+    private String getUserName(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
 }

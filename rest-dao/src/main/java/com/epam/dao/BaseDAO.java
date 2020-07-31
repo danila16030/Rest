@@ -39,11 +39,11 @@ public abstract class BaseDAO<T> {
 
     public void remove(long id, Class<T> aClass) {
         entityManager.joinTransaction();
-        T user = entityManager.find(aClass, id);
-        if (user == null) {
+        T entity = entityManager.find(aClass, id);
+        if (entity == null) {
             throw new NoSuchElementException();
         }
-        entityManager.remove(user);
+        entityManager.remove(entity);
     }
 
     public Optional<List<T>> getAll(int limit, int offset, Class<T> aClass) {
@@ -52,8 +52,8 @@ public abstract class BaseDAO<T> {
         Root<T> root = criteria.from(aClass);
         criteria.select(root);
         try {
-            return Optional.of(entityManager.createQuery(criteria).setFirstResult(offset).
-                    setMaxResults(limit).getResultList());
+            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).getResultList());
+
         } catch (NoResultException e) {
             throw new NoSuchElementException();
         }

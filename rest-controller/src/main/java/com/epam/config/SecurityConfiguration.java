@@ -1,7 +1,7 @@
 package com.epam.config;
 
+import com.epam.provider.JwtTokenProvider;
 import com.epam.token.JwtTokenConfigurer;
-import com.epam.token.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +20,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtTokenProvider provider;
 
-
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .httpBasic().disable()
-                .csrf().disable()
+                .csrf().disable()// защита от межсайтовой подделки запроса
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()

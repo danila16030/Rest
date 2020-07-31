@@ -13,10 +13,12 @@ import com.epam.validator.UserValidator;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Returns an User object by user name
+     * Returns an User object by username
      * The username argument specify user in database
      * <p>
      * This method return user by name. If user doesn't exist throw exception NoSuchElementException
@@ -43,6 +45,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String username) {
         return userDAO.getUser(username);
+    }
+    /**
+     * Returns an User object by user id
+     * The id argument specify user in database
+     * <p>
+     * This method return user by id. If user doesn't exist throw exception NoSuchElementException
+     *
+     * @param id specified user id
+     * @return the user at the specified name
+     * @throws NoSuchElementException
+     * @see User
+     */
+    @Override
+    public User getUser(long id) {
+        return userDAO.getUser(id);
     }
 
     /**

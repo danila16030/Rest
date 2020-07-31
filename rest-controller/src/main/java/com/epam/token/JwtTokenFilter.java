@@ -1,5 +1,6 @@
 package com.epam.token;
 
+import com.epam.provider.JwtTokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;

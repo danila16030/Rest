@@ -10,6 +10,8 @@ public interface UserService {
 
     User getUser(String username);
 
+    User getUser(long id);
+
     User createUser(CreateUserRequestDTO user);
 
     List<User> getAll(int limit, int offset);

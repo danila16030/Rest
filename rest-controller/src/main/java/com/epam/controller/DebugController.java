@@ -22,7 +22,6 @@ public class DebugController {
 
     private BookService bookService;
 
-
     private GenreService genreService;
 
     private OrderService orderService;
