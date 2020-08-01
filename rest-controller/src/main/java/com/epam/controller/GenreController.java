@@ -5,11 +5,13 @@ import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.entity.Genre;
 import com.epam.model.GenreModel;
+import com.epam.principal.UserPrincipal;
 import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,27 +37,32 @@ public class GenreController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<GenreModel> creteNewGenre(@RequestBody @Valid CreateGenreRequestDTO genreDTO) {
+    public ResponseEntity<GenreModel> creteNewGenre(@RequestBody @Valid CreateGenreRequestDTO genreDTO,
+                                                    @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         Genre response = genreService.createGenre(genreDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getGenreId()).build().toUri();
-        return ResponseEntity.created(location).body(genreAssembler.toModel(response));
+        return ResponseEntity.created(location).body(genreAssembler.toGenreModel(response, userPrincipal));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<GenreModel> updateGenre(@RequestBody @Valid UpdateGenreRequestDTO genreDTO) {
+    public ResponseEntity<GenreModel> updateGenre(@RequestBody @Valid UpdateGenreRequestDTO genreDTO,
+                                                  @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         Genre response = genreService.updateGenre(genreDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getGenreId()).build().toUri();
-        return ResponseEntity.ok().location(location).body(genreAssembler.toModel(response));
+        return ResponseEntity.ok().location(location).body(genreAssembler.toGenreModel(response, userPrincipal));
     }
 
     @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@PathVariable int limit, @PathVariable int offset) {
-        return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit, offset)));
+    public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@PathVariable int limit, @PathVariable int offset,
+                                                                    @AuthenticationPrincipal final
+                                                                    UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit, offset), userPrincipal));
     }
 
     @GetMapping(value = "{genreId:[0-9]+}")
-    public ResponseEntity<GenreModel> getGenre(@PathVariable long genreId) {
-        return ResponseEntity.ok(genreAssembler.toModel(genreService.getGenre(genreId)));
+    public ResponseEntity<GenreModel> getGenre(@PathVariable long genreId,
+                                               @AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(genreAssembler.toGenreModel(genreService.getGenre(genreId), userPrincipal));
     }
 }

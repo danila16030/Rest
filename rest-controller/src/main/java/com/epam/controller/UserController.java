@@ -5,6 +5,7 @@ import com.epam.dto.request.update.updateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.model.UserModel;
 import com.epam.principal.UserPrincipal;
+import com.epam.provider.JwtTokenProvider;
 import com.epam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -17,7 +18,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -28,6 +31,9 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserAssembler userAssembler;
+
+    @Autowired
+    private JwtTokenProvider provider;
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping()
@@ -67,13 +73,25 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<UserModel> update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO) {
-        User response = userService.updateUser(updateUserRequestDTO);
+    public ResponseEntity update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO,
+                                 @AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        User result = userService.updateUser(updateUserRequestDTO, userPrincipal);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + result.getUserId()).build().toUri();
+        Map<Object, Object> response = new HashMap<>();
+        response.put("result", userAssembler.toModel(result));
+        String token = provider.createToken(result.getUsername());
+        response.put("token", token);
+        return ResponseEntity.created(location).body(response);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping(value = "{userId:[0-9]+}", headers = {"Accept=application/json"})
+    public ResponseEntity<UserModel> update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO,
+                                            @PathVariable long userId) {
+        User response = userService.updateUser(updateUserRequestDTO, userId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
-        response.setUserId(updateUserRequestDTO.getUserId());
         return ResponseEntity.created(location).body(userAssembler.toModel(response));
     }
 }

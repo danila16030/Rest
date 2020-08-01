@@ -5,7 +5,6 @@ import org.springframework.hateoas.RepresentationModel;
 public class UserModel extends RepresentationModel<UserModel> {
 
     private String username;
-    private String password;
     private long userId;
 
     public long getUserId() {
@@ -22,13 +21,5 @@ public class UserModel extends RepresentationModel<UserModel> {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

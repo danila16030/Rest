@@ -8,10 +8,12 @@ import com.epam.exception.DuplicatedException;
 import com.epam.exception.ForbitenToDelete;
 import com.epam.exception.NoSuchElementException;
 import com.epam.mapper.Mapper;
+import com.epam.principal.UserPrincipal;
 import com.epam.service.UserService;
 import com.epam.validator.UserValidator;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +26,13 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private UserValidator userValidator;
     private final Mapper mapper = Mappers.getMapper(Mapper.class);
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserServiceImpl(UserDAO userDAO, UserValidator userValidator) {
+    UserServiceImpl(UserDAO userDAO, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userDAO = userDAO;
         this.userValidator = userValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -46,6 +50,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(String username) {
         return userDAO.getUser(username);
     }
+
     /**
      * Returns an User object by user id
      * The id argument specify user in database
@@ -136,12 +141,25 @@ public class UserServiceImpl implements UserService {
      * @see updateUserRequestDTO
      */
     @Override
-    public User updateUser(updateUserRequestDTO userDTO) {
-        if (userValidator.isExistById(userDTO.getUserId())) {
-            return userDAO.updateUser(mapper.userDTOtUser(userDTO));
+    public User updateUser(updateUserRequestDTO userDTO, long userId) {
+        if (userValidator.isExistById(userId)) {
+            User user = mapper.userDTOtUser(userDTO);
+            user.setUserId(userId);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            return userDAO.updateUser(user);
         }
         throw new NoSuchElementException("User does not exist");
     }
 
+    @Override
+    public User updateUser(updateUserRequestDTO userDTO, UserPrincipal userPrincipal) {
+        if (userPrincipal != null && userValidator.isExistById(userPrincipal.getUserId())) {
+            User user = mapper.userDTOtUser(userDTO);
+            user.setUserId(userPrincipal.getUserId());
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            return userDAO.updateUser(user);
+        }
+        throw new NoSuchElementException("User does not exist");
+    }
 
 }

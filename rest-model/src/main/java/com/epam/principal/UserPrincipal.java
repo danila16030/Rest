@@ -37,6 +37,10 @@ public class UserPrincipal implements UserDetails {
         return this.user.getUsername();
     }
 
+    public String getRole() {
+        return this.user.getRole();
+    }
+
     public long getUserId() {
         return this.user.getUserId();
     }

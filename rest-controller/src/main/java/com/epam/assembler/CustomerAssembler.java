@@ -4,6 +4,7 @@ import com.epam.controller.CustomerController;
 import com.epam.controller.GenreController;
 import com.epam.controller.OrderController;
 import com.epam.controller.UserController;
+import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Customer;
 import com.epam.mapper.Mapper;
 import com.epam.model.CustomerModel;
@@ -30,16 +31,29 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
     @Override
     public CustomerModel toModel(Customer entity) {
         CustomerModel customerModel = mapper.customerToCustomerModel(entity);
-        setOrderLinks(customerModel.getOrders());
-        customerModel.add(linkTo(
-                methodOn(CustomerController.class)
-                        .getCustomer(new UserPrincipal()))
-                .withSelfRel());
         if (entity.getFavoriteGenre() != null) {
             customerModel.setFavoriteGenre(mapper.genreToGenreModel(entity.getFavoriteGenre()));
             customerModel.getFavoriteGenre().add(linkTo(
                     methodOn(GenreController.class)
-                            .getGenre(entity.getFavoriteGenre().getGenreId()))
+                            .getGenre(entity.getFavoriteGenre().getGenreId(), new UserPrincipal()))
+                    .withSelfRel());
+        }
+        return customerModel;
+    }
+
+    public CustomerModel toCustomerModel(Customer entity, UserPrincipal principal) {
+        CustomerModel customerModel = toModel(entity);
+        if (principal != null && principal.getRole().equals("ADMIN")) {
+            customerModel.add(linkTo(
+                    methodOn(CustomerController.class)
+                            .getCustomer(0,new UserPrincipal()))
+                    .withSelfRel());
+        }
+        if (principal != null) {
+            setOrderLinks(customerModel.getOrders());
+            customerModel.add(linkTo(
+                    methodOn(CustomerController.class)
+                            .getCustomer(new UserPrincipal()))
                     .withSelfRel());
         }
         return customerModel;
@@ -53,6 +67,10 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
             order.add(linkTo(
                     methodOn(OrderController.class)
                             .removeOrder(new UserPrincipal(), order.getOrderId()))
+                    .withSelfRel());
+            order.add(linkTo(
+                    methodOn(OrderController.class)
+                            .updateOrder(new UpdateOrderRequestDTO(),new UserPrincipal()))
                     .withSelfRel());
             order.add(linkTo(
                     methodOn(OrderController.class)

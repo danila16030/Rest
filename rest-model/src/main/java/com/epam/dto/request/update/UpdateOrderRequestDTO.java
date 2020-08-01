@@ -15,8 +15,6 @@ public class UpdateOrderRequestDTO {
     private float price;
     @Min(value = 1, message = "Incorrect bookId value(Value must be more then 0)")
     private long bookId;
-    @Min(value = 1, message = "Incorrect userId value(Value must be more then 0)")
-    private long userId;
     @Min(value = 1, message = "Incorrect orderId value(Value must be more then 0)")
     private long orderId;
 
@@ -42,14 +40,6 @@ public class UpdateOrderRequestDTO {
 
     public void setBookId(long bookId) {
         this.bookId = bookId;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public long getOrderId() {

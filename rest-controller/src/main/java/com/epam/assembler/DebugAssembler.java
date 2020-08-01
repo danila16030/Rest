@@ -10,6 +10,7 @@ import com.epam.dto.request.update.updateUserRequestDTO;
 import com.epam.entity.*;
 import com.epam.mapper.Mapper;
 import com.epam.model.DebugModel;
+import com.epam.principal.UserPrincipal;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class DebugAssembler extends RepresentationModelAssemblerSupport<Auditabl
         debugModel.setId(entity.getBookId());
         debugModel.add(linkTo(
                 methodOn(BookController.class)
-                        .updateBook(new UpdateBookRequestDTO()))
+                        .updateBook(new UpdateBookRequestDTO(), new UserPrincipal()))
                 .withSelfRel());
         return debugModel;
     }
@@ -45,7 +46,7 @@ public class DebugAssembler extends RepresentationModelAssemblerSupport<Auditabl
         debugModel.setId(entity.getGenreId());
         debugModel.add(linkTo(
                 methodOn(GenreController.class)
-                        .updateGenre(new UpdateGenreRequestDTO()))
+                        .updateGenre(new UpdateGenreRequestDTO(), new UserPrincipal()))
                 .withSelfRel());
         return debugModel;
     }
@@ -55,7 +56,7 @@ public class DebugAssembler extends RepresentationModelAssemblerSupport<Auditabl
         debugModel.setId(entity.getUserId());
         debugModel.add(linkTo(
                 methodOn(UserController.class)
-                        .update(new updateUserRequestDTO()))
+                        .update(new updateUserRequestDTO(),new UserPrincipal()))
                 .withSelfRel());
         return debugModel;
     }
@@ -86,7 +87,7 @@ public class DebugAssembler extends RepresentationModelAssemblerSupport<Auditabl
             for (DebugModel debugModel : debugModels) {
                 debugModel.add(linkTo(
                         methodOn(tClass)
-                                .updateGenre(new UpdateGenreRequestDTO()))
+                                .updateGenre(new UpdateGenreRequestDTO(), new UserPrincipal()))
                         .withSelfRel());
             }
         }

@@ -15,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
@@ -35,19 +38,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String logIn(AuthenticationRequestDTO request) {
+    public Map<Object, Object> logIn(AuthenticationRequestDTO request) {
         String username = request.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
-        return provider.createToken(username);
+        String token = provider.createToken(username);
+        Map<Object, Object> response = new HashMap<>();
+        response.put("username", username);
+        response.put("token", token);
+        return response;
     }
 
     @Override
-    public String singIn(CreateUserRequestDTO request) {
+    public Map<Object, Object> singIn(CreateUserRequestDTO request) {
         String password = passwordEncoder.encode(request.getPassword());
         request.setPassword(password);
         authentication(request);
         userService.createUser(request);
-        return provider.createToken(request.getUsername());
+        String username = request.getUsername();
+        String token = provider.createToken(username);
+        Map<Object, Object> response = new HashMap<>();
+        response.put("username", username);
+        response.put("token", token);
+        return response;
     }
 
     private void authentication(CreateUserRequestDTO userDTO) {

@@ -65,10 +65,10 @@ public class OrderServiceImpl implements OrderService {
      * @see UpdateOrderRequestDTO
      */
     @Override
-    public Order updateOrder(UpdateOrderRequestDTO requestDTO) {
-        if (orderValidator.isConnected(new OrderUser(requestDTO.getUserId(), requestDTO.getOrderId()))) {
+    public Order updateOrder(UpdateOrderRequestDTO requestDTO, long userId) {
+        if (orderValidator.isConnected(new OrderUser(userId, requestDTO.getOrderId()))) {
             Order order = orderDAO.updateOrder(mapper.orderDTOtOrder(requestDTO));
-            order.setUserId(requestDTO.getUserId());
+            order.setUserId(userId);
             return order;
         }
         throw new NoSuchElementException();

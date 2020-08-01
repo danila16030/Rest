@@ -9,6 +9,7 @@ import com.epam.entity.Book;
 import com.epam.mapper.Mapper;
 import com.epam.model.BookModel;
 import com.epam.model.GenreModel;
+import com.epam.principal.UserPrincipal;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -28,41 +29,69 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         super(BookController.class, BookModel.class);
     }
 
-    @Override
+
     public BookModel toModel(Book entity) {
         BookModel bookModel = mapper.bookToBookModel(entity);
         bookModel.add(linkTo(
                 methodOn(BookController.class)
-                        .getBook(entity.getBookId()))
+                        .getBook(entity.getBookId(), new UserPrincipal()))
                 .withSelfRel());
-        setGenreLinks(bookModel.getGenres());
-        bookModel.add(linkTo(
-                methodOn(BookController.class)
-                        .removeBook(entity.getBookId()))
-                .withSelfRel());
-        bookModel.add(linkTo(
-                methodOn(BookController.class)
-                        .updateBook(new UpdateBookRequestDTO()))
-                .withSelfRel());
+        addGenreLinks(bookModel.getGenres());
         return bookModel;
     }
 
-
-    public CollectionModel<BookModel> toCollectionModel(Iterable<? extends Book> entities) {
+    public CollectionModel<BookModel> toCollection(Iterable<? extends Book> entities, UserPrincipal principal) {
         CollectionModel<BookModel> bookModels = super.toCollectionModel(entities);
+        if (principal != null && principal.getRole().equals("ADMIN")) {
+            bookModels.forEach(bookModel -> bookModel = addAdminLinks(bookModel));
+        }
+        return bookModels;
+    }
 
-        bookModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0)).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0)).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0)).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).creteNewBook(new CreateBookRequestDTO())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0)).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0)).withSelfRel());
+    public CollectionModel<BookModel> toCollectionModel(Iterable<? extends Book> entities, UserPrincipal principal) {
+        CollectionModel<BookModel> bookModels = super.toCollectionModel(entities);
+        if (principal != null && principal.getRole().equals("ADMIN")) {
+            bookModels.forEach(bookModel -> bookModel = addAdminLinks(bookModel));
+            bookModels.add(linkTo(methodOn(BookController.class).creteNewBook(new CreateBookRequestDTO(),
+                    new UserPrincipal())).withSelfRel());
+            bookModels.add(linkTo(methodOn(BookController.class).removeBook(0)).withSelfRel());
+        }
+        bookModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0,
+                new UserPrincipal())).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0,
+                new UserPrincipal())).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0,
+                new UserPrincipal())).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0,
+                new UserPrincipal())).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0,
+                new UserPrincipal())).withSelfRel());
         bookModels.add(linkTo(methodOn(BookController.class).getTopGenre(0, 0, 0)).withSelfRel());
         return bookModels;
     }
 
+    public BookModel toBookModel(Book entity, UserPrincipal principal) {
+        BookModel bookModel = toModel(entity);
+        if (principal != null && principal.getRole().equals("ADMIN")) {
+            return addAdminLinks(bookModel);
+        }
+        return bookModel;
+    }
 
-    private void setGenreLinks(List<GenreModel> genres) {
+    private BookModel addAdminLinks(BookModel bookModel) {
+        bookModel.add(linkTo(
+                methodOn(BookController.class)
+                        .removeBook(bookModel.getBookId()))
+                .withSelfRel());
+        bookModel.add(linkTo(
+                methodOn(BookController.class)
+                        .updateBook(new UpdateBookRequestDTO(), new UserPrincipal()))
+                .withSelfRel());
+        addAdminGenreLinks(bookModel.getGenres());
+        return bookModel;
+    }
+
+    private void addAdminGenreLinks(List<GenreModel> genres) {
         if (genres.isEmpty()) {
             return;
         }
@@ -73,11 +102,19 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
                     .withSelfRel());
             genre.add(linkTo(
                     methodOn(GenreController.class)
-                            .getGenre(genre.getGenreId()))
+                            .updateGenre(new UpdateGenreRequestDTO(), new UserPrincipal()))
                     .withSelfRel());
+        }
+    }
+
+    private void addGenreLinks(List<GenreModel> genres) {
+        if (genres.isEmpty()) {
+            return;
+        }
+        for (GenreModel genre : genres) {
             genre.add(linkTo(
                     methodOn(GenreController.class)
-                            .updateGenre(new UpdateGenreRequestDTO()))
+                            .getGenre(genre.getGenreId(), new UserPrincipal()))
                     .withSelfRel());
         }
     }

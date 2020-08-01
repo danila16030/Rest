@@ -1,9 +1,7 @@
 package com.epam.assembler;
 
-import com.epam.controller.AuthenticationController;
 import com.epam.controller.UserController;
-import com.epam.dto.request.AuthenticationRequestDTO;
-import com.epam.dto.request.create.CreateUserRequestDTO;
+import com.epam.dto.request.update.updateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.mapper.Mapper;
 import com.epam.model.UserModel;
@@ -32,15 +30,33 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
                 methodOn(UserController.class)
                         .removeUser(new UserPrincipal()))
                 .withSelfRel());
+        userModel.add(linkTo(
+                methodOn(UserController.class)
+                        .update(new updateUserRequestDTO(), new UserPrincipal()))
+                .withSelfRel());
         return userModel;
     }
 
     public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
         CollectionModel<UserModel> userModels = super.toCollectionModel(entities);
+        userModels.forEach(userModel -> userModel = addAdminLinks(userModel));
         userModels.add(linkTo(methodOn(UserController.class).getAllUsers(10, 0)).withSelfRel());
-        userModels.add(linkTo(methodOn(AuthenticationController.class).singIn(new CreateUserRequestDTO())).withSelfRel());
-        userModels.add(linkTo(methodOn(AuthenticationController.class).login(new AuthenticationRequestDTO())).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).getSomeUser(0)).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).removeSomeUser(0)).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).getUser(new UserPrincipal())).withSelfRel());
         return userModels;
+    }
+
+    private UserModel addAdminLinks(UserModel userModel) {
+        userModel.add(linkTo(
+                methodOn(UserController.class)
+                        .removeSomeUser(userModel.getUserId()))
+                .withSelfRel());
+        userModel.add(linkTo(
+                methodOn(UserController.class)
+                        .update(new updateUserRequestDTO(), 0))
+                .withSelfRel());
+        return userModel;
     }
 
 

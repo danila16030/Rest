@@ -16,7 +16,7 @@ public class UserValidator {
     private OrderUserDAO orderUserDAO;
 
     public boolean isExistByName(String username) {
-        if (userDAO.getUserByNameWithoutException(username).getUsername() == null) {
+        if (userDAO.getUserByNameWithoutException(username) == null) {
             return false;
         } else {
             return true;
@@ -24,7 +24,7 @@ public class UserValidator {
     }
 
     public boolean isExistById(long userId) {
-        if (userDAO.getUserByIdWithoutException(userId).getUsername() == null) {
+        if (userDAO.getUserByIdWithoutException(userId) == null) {
             return false;
         } else {
             return true;

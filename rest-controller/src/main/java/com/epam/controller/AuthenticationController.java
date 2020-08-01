@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -23,21 +21,11 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDTO request) {
-        String token = authenticationService.logIn(request);
-        String username = request.getUsername();
-        Map<Object, Object> response = new HashMap<>();
-        response.put("username", username);
-        response.put("token", token);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authenticationService.logIn(request));
     }
 
     @PostMapping(value = "/singIn")
     public ResponseEntity singIn(@RequestBody @Valid CreateUserRequestDTO userDTO) {
-        String token = authenticationService.singIn(userDTO);
-        String username = userDTO.getUsername();
-        Map<Object, Object> response = new HashMap<>();
-        response.put("username", username);
-        response.put("token", token);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authenticationService.singIn(userDTO));
     }
 }

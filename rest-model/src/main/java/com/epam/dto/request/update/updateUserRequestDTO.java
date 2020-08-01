@@ -9,8 +9,6 @@ public class updateUserRequestDTO {
     @NotBlank(message = "Incorrect username(Should contain not only spaces)")
     @NotEmpty(message = "Incorrect username(Should contain some information)")
     private String username;
-    @Min(value = 1, message = "Incorrect id value (Value must be more then 0)")
-    private long userId;
     @Size(min = 2, max = 30, message = "Incorrect password(Should have size 2-30)")
     @Pattern(regexp = "[a-zA-Z0-9]+",
             message = "Incorrect password (Should contain Latin letters, spaces or numbers)")
@@ -32,13 +30,5 @@ public class updateUserRequestDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 }
