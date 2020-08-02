@@ -11,17 +11,18 @@ public interface BookDAO {
 
     void removeBook(long bookId);
 
-    Optional<List<Book>> getAllBooks(int limit,int offset);
+    Optional<List<Book>> getAllBooks(int limit, int offset);
 
     Book updateBook(Book book);
 
-    Optional<List<Book>> searchByPartialCoincidence(String title,int limit,int offset);
+    Optional<List<Book>> searchByPartialCoincidence(String title, int limit, int offset);
 
-    Optional<List<Book>> searchByFullCoincidence(String title,int limit,int offset);
+    Optional<List<Book>> searchByFullCoincidence(String title, int limit, int offset);
 
     Book getBookById(long bookId);
 
     Book getBookByIdWithoutException(long bookId);
 
+    Optional<List<Book>> getBookSortedByName(int limit, int offset);
 
 }

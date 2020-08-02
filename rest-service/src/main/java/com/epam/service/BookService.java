@@ -26,8 +26,4 @@ public interface BookService {
     Genre geTheMostCommonGenre(long fist, long second, long third);
 
     List<Book> getBooksSortedByName(int limit, int offset);
-
-    List<Book> getBooksSortedByDate(int limit, int offset);
-
-
 }

@@ -1,7 +1,5 @@
 package com.epam.service.impl;
 
-import com.epam.comparator.BookDateComparator;
-import com.epam.comparator.BookTitleComparator;
 import com.epam.dao.BookDAO;
 import com.epam.dao.BookGenreDAO;
 import com.epam.dao.GenreDAO;
@@ -28,15 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
     private BookDAO bookDAO;
-    private BookTitleComparator bookTitleComparator;
-    private BookDateComparator bookDateComparator;
     private BookValidator bookValidator;
     private GenreDAO genreDAO;
     private BookGenreDAO bookGenreDAO;
@@ -45,11 +40,8 @@ public class BookServiceImpl implements BookService {
     private final Mapper mapper = Mappers.getMapper(Mapper.class);
 
     @Autowired
-    public BookServiceImpl(BookDAO bookDAO, BookDateComparator bookDateComparator, BookGenreValidator bookGenreValidator,
-                           BookTitleComparator bookTitleComparator, BookValidator bookValidator,
+    public BookServiceImpl(BookDAO bookDAO, BookGenreValidator bookGenreValidator, BookValidator bookValidator,
                            GenreDAO genreDAO, BookGenreDAO bookGenreDAO, GenreValidator genreValidator) {
-        this.bookDateComparator = bookDateComparator;
-        this.bookTitleComparator = bookTitleComparator;
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
@@ -266,28 +258,7 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public List<Book> getBooksSortedByName(int limit, int offset) {
-        List<Book> bookList = bookDAO.getAllBooks(limit, offset).get();
-        bookList = bookList.stream().sorted(bookTitleComparator).collect(Collectors.toList());
-        setGenreForAllBooks(bookList);
-        return bookList;
-    }
-
-    /**
-     * Returns a list of books sorted by date.
-     * The limit argument specify maximum size of list
-     * The offset argument specify offset from the beginning in database
-     * <p>
-     * This method return list of books from database sorted by date
-     *
-     * @param limit  the maximum number of books in list
-     * @param offset the offset in database from beginning
-     * @return the list is sorted by date and containing books from the database
-     * @see Book
-     */
-    @Override
-    public List<Book> getBooksSortedByDate(int limit, int offset) {
-        List<Book> bookList = bookDAO.getAllBooks(limit, offset).get();
-        bookList = bookList.stream().sorted(bookDateComparator).collect(Collectors.toList());
+        List<Book> bookList = bookDAO.getBookSortedByName(limit, offset).get();
         setGenreForAllBooks(bookList);
         return bookList;
     }

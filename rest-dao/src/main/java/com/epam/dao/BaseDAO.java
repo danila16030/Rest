@@ -52,8 +52,8 @@ public abstract class BaseDAO<T> {
         Root<T> root = criteria.from(aClass);
         criteria.select(root);
         try {
-            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).getResultList());
-
+            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).
+                    getResultList());
         } catch (NoResultException e) {
             throw new NoSuchElementException();
         }

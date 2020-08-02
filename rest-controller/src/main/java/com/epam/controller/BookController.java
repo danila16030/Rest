@@ -92,15 +92,6 @@ public class BookController {
                 userPrincipal));
     }
 
-    @GetMapping(value = "/by-date/{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByDate(@PathVariable int offset,
-                                                                           @PathVariable int limit,
-                                                                           @AuthenticationPrincipal final
-                                                                           UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByDate(limit, offset),
-                userPrincipal));
-    }
-
     @GetMapping(value = "/by-partial-coincidence/{title},{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<BookModel>> searchByPartialCoincidence(@PathVariable String title,
                                                                                  @PathVariable int limit,

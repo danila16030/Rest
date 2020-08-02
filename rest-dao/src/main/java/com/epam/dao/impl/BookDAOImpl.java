@@ -35,7 +35,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     @Override
     public Optional<List<Book>> getAllBooks(int limit, int offset) {
-       return getAll(limit, offset, Book.class);
+        return getAll(limit, offset, Book.class);
     }
 
     @Override
@@ -61,6 +61,21 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     @Override
     public Book getBookByIdWithoutException(long bookId) {
         return entityManager.find(Book.class, bookId);
+    }
+
+    @Override
+    public Optional<List<Book>> getBookSortedByName(int limit, int offset) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
+        Root<Book> root = criteria.from(Book.class);
+        criteria.select(root);
+        criteria.orderBy(builder.asc(root.get(Book_.TITLE)));
+        try {
+            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).
+                    getResultList());
+        } catch (NoResultException e) {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override

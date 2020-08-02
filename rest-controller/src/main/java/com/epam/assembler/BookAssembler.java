@@ -58,8 +58,6 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         }
         bookModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0,
                 new UserPrincipal())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByDate(10, 0,
-                new UserPrincipal())).withSelfRel());
         bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0,
                 new UserPrincipal())).withSelfRel());
         bookModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0,

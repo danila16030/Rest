@@ -5,12 +5,12 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
 public class BookModel extends RepresentationModel<BookModel> {
+    private String title;
     private String author;
     private String description;
     private float price;
     private String writingDate;
     private int numberOfPages;
-    private String title;
     private long bookId;
     private List<GenreModel> genres;
 
