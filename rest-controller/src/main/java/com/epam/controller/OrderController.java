@@ -31,10 +31,11 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO) {
+    public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO,
+                                                  @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         Order response = orderService.makeAnOrder(makeAnOrderRequestDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
-        response.setUserId(makeAnOrderRequestDTO.getUserId());
+        response.setUserId(userPrincipal.getUserId());
         return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 
