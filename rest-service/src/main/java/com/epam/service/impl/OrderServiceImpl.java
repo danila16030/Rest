@@ -45,10 +45,10 @@ public class OrderServiceImpl implements OrderService {
      * @see MakeAnOrderRequestDTO
      */
     @Override
-    public Order makeAnOrder(MakeAnOrderRequestDTO requestDTO) {
+    public Order makeAnOrder(MakeAnOrderRequestDTO requestDTO, long userId) {
         long orderId = orderDAO.makeAnOrder(mapper.orderDTOtOrder(requestDTO));
-        orderUserDAO.createConnection(new OrderUser(requestDTO.getUserId(), orderId));
-        return new Order(requestDTO.getOrderTime(), requestDTO.getPrice(), requestDTO.getBookId(), orderId, requestDTO.getUserId());
+        orderUserDAO.createConnection(new OrderUser(userId, orderId));
+        return new Order(requestDTO.getOrderTime(), requestDTO.getPrice(), requestDTO.getBookId(), orderId, userId);
     }
 
     /**

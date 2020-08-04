@@ -34,7 +34,7 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
                 .withSelfRel());
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
-                        .makeAnOrder(new MakeAnOrderRequestDTO()))
+                        .makeAnOrder(new MakeAnOrderRequestDTO(), new UserPrincipal()))
                 .withSelfRel());
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
@@ -62,7 +62,7 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
                     0)).withSelfRel());
 
         }
-        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO())).withSelfRel());
+        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO(),new UserPrincipal())).withSelfRel());
         orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(new UserPrincipal(), 10, 0)).
                 withSelfRel());
         return orderModels;

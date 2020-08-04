@@ -33,7 +33,7 @@ public class OrderController {
     @PostMapping(headers = {"Accept=application/json"})
     public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO,
                                                   @AuthenticationPrincipal final UserPrincipal userPrincipal) {
-        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO);
+        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO,userPrincipal.getUserId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
         response.setUserId(userPrincipal.getUserId());
         return ResponseEntity.created(location).body(orderAssembler.toModel(response));
