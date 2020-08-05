@@ -36,7 +36,7 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
             customerModel.getFavoriteGenre().add(linkTo(
                     methodOn(GenreController.class)
                             .getGenre(entity.getFavoriteGenre().getGenreId(), new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("get"));
         }
         return customerModel;
     }
@@ -47,14 +47,14 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
             customerModel.add(linkTo(
                     methodOn(CustomerController.class)
                             .getCustomer(0,new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("get"));
         }
         if (principal != null) {
             setOrderLinks(customerModel.getOrders());
             customerModel.add(linkTo(
                     methodOn(CustomerController.class)
                             .getCustomer(new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("get"));
         }
         return customerModel;
     }
@@ -67,15 +67,15 @@ public class CustomerAssembler extends RepresentationModelAssemblerSupport<Custo
             order.add(linkTo(
                     methodOn(OrderController.class)
                             .removeOrder(new UserPrincipal(), order.getOrderId()))
-                    .withSelfRel());
+                    .withSelfRel().withName("remove"));
             order.add(linkTo(
                     methodOn(OrderController.class)
                             .updateOrder(new UpdateOrderRequestDTO(),new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("update"));
             order.add(linkTo(
                     methodOn(OrderController.class)
                             .getOrder(new UserPrincipal(), order.getOrderId()))
-                    .withSelfRel());
+                    .withSelfRel().withName("get"));
         }
     }
 }

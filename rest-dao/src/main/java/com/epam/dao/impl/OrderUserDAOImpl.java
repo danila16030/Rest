@@ -24,6 +24,7 @@ public class OrderUserDAOImpl extends BaseDAO<OrderUser> implements OrderUserDAO
 
     @Override
     public Optional<List<Order>> getOrders(long userId, int limit, int offset) {
+        limit=limiting(limit);
         Query query = entityManager.createNamedQuery("Order.findOrders", Order.class);
         query.setParameter("userId", userId);
         try {

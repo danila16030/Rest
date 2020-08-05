@@ -35,7 +35,7 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         bookModel.add(linkTo(
                 methodOn(BookController.class)
                         .getBook(entity.getBookId(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("get"));
         addGenreLinks(bookModel.getGenres());
         return bookModel;
     }
@@ -56,15 +56,16 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
                     new UserPrincipal())).withSelfRel());
             bookModels.add(linkTo(methodOn(BookController.class).removeBook(0)).withSelfRel());
         }
-        bookModels.add(linkTo(methodOn(BookController.class).getAllBooks(10, 0,
-                new UserPrincipal())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).getBooksSortedByName(10, 0,
-                new UserPrincipal())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).searchByFullCoincidence("", 10, 0,
-                new UserPrincipal())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).searchByPartialCoincidence("", 10, 0,
-                new UserPrincipal())).withSelfRel());
-        bookModels.add(linkTo(methodOn(BookController.class).getTopGenre(0, 0, 0)).withSelfRel());
+        bookModels.add(linkTo(methodOn(BookController.class).getResult("", 10, 0, "all",
+                new UserPrincipal())).withSelfRel().withName("get all"));
+        bookModels.add(linkTo(methodOn(BookController.class).getResult("", 10, 0, "sort",
+                new UserPrincipal())).withSelfRel().withName("sort by author"));
+        bookModels.add(linkTo(methodOn(BookController.class).getResult("", 10, 0, "full",
+                new UserPrincipal())).withSelfRel().withName("search by full coincidence"));
+        bookModels.add(linkTo(methodOn(BookController.class).getResult("", 10, 0, "partial",
+                new UserPrincipal())).withSelfRel().withName("search by partial coincidence"));
+        bookModels.add(linkTo(methodOn(BookController.class).getTopGenre(0, 0, 0,
+                new UserPrincipal())).withSelfRel().withName("get top genre"));
         return bookModels;
     }
 
@@ -80,11 +81,11 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         bookModel.add(linkTo(
                 methodOn(BookController.class)
                         .removeBook(bookModel.getBookId()))
-                .withSelfRel());
+                .withSelfRel().withName("remove"));
         bookModel.add(linkTo(
                 methodOn(BookController.class)
                         .updateBook(new UpdateBookRequestDTO(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("update"));
         addAdminGenreLinks(bookModel.getGenres());
         return bookModel;
     }
@@ -97,11 +98,11 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
             genre.add(linkTo(
                     methodOn(GenreController.class)
                             .removeGenre(genre.getGenreId()))
-                    .withSelfRel());
+                    .withSelfRel().withName("remove"));
             genre.add(linkTo(
                     methodOn(GenreController.class)
                             .updateGenre(new UpdateGenreRequestDTO(), new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("update"));
         }
     }
 
@@ -113,7 +114,7 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
             genre.add(linkTo(
                     methodOn(GenreController.class)
                             .getGenre(genre.getGenreId(), new UserPrincipal()))
-                    .withSelfRel());
+                    .withSelfRel().withName("get"));
         }
     }
 }

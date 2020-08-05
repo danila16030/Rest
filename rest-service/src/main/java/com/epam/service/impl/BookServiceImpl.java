@@ -91,7 +91,7 @@ public class BookServiceImpl implements BookService {
      * Returns an list of books those name a partial similar to the argument.
      * The limit argument specify maximum size of list
      * The offset argument specify offset from the beginning in database
-     * title.
+     * The title is the argument by which to search .
      * <p>
      * This method returns list of books those name a partial similar to the argument title.
      * If there were no matches return empty list.
@@ -113,7 +113,7 @@ public class BookServiceImpl implements BookService {
      * Returns an list of books those name a exact similar to the argument.
      * The limit argument specify maximum size of list
      * The offset argument specify offset from the beginning in database
-     * title.
+     * The title is the argument by which to search .
      * <p>
      * This method returns list of books those name a full similar to the argument title.
      * If there were no matches return empty list.
@@ -257,10 +257,45 @@ public class BookServiceImpl implements BookService {
      * @see Book
      */
     @Override
-    public List<Book> getBooksSortedByName(int limit, int offset) {
-        List<Book> bookList = bookDAO.getBookSortedByName(limit, offset).get();
+    public List<Book> getBooksSortedByAuthor(int limit, int offset) {
+        List<Book> bookList = bookDAO.getBookSortedByAuthor(limit, offset).get();
         setGenreForAllBooks(bookList);
         return bookList;
+    }
+
+    /**
+     * Returns a list of books
+     * The limit argument specify maximum size of list
+     * The offset argument specify offset from the beginning in database
+     * The title is the argument by which to search
+     * The type is the argument specify the action
+     * <p>
+     * This method calls other methods based on the type
+     *
+     * @param limit  the maximum number of books in list
+     * @param offset the offset in database from beginning
+     * @param title  exact name of book
+     * @param type   the action what will be taken
+     * @return the list of books
+     * @throws InvalidDataException
+     */
+    @Override
+    public List<Book> getResult(String title, int limit, int offset, String type) {
+        if (type != null) {
+            if (type.equals("sort")) {
+                return getBooksSortedByAuthor(limit, offset);
+            }
+            if (type.equals("all")) {
+                return getAllBooks(limit, offset);
+            }
+            if (type.equals("full")) {
+                return getBookByFullCoincidence(title, limit, offset);
+            }
+            if (type.equals("partial")) {
+                return getBookByPartialCoincidence(title, limit, offset);
+            }
+        }
+        throw new InvalidDataException();
     }
 
     /**

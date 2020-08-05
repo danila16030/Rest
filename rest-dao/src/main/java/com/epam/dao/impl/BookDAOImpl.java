@@ -35,7 +35,18 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     @Override
     public Optional<List<Book>> getAllBooks(int limit, int offset) {
-        return getAll(limit, offset, Book.class);
+        limit = limiting(limit);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
+        Root<Book> root = criteria.from(Book.class);
+        criteria.select(root);
+        criteria.orderBy(builder.asc(root.get(Book_.TITLE)));
+        try {
+            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).
+                    getResultList());
+        } catch (NoResultException e) {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
@@ -64,7 +75,8 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     }
 
     @Override
-    public Optional<List<Book>> getBookSortedByName(int limit, int offset) {
+    public Optional<List<Book>> getBookSortedByAuthor(int limit, int offset) {
+        limit = limiting(limit);
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
@@ -80,6 +92,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     @Override
     public Optional<List<Book>> searchByPartialCoincidence(String title, int limit, int offset) {
+        limit = limiting(limit);
         title = "%" + title + "%";
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
@@ -96,6 +109,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     @Override
     public Optional<List<Book>> searchByFullCoincidence(String title, int limit, int offset) {
+        limit = limiting(limit);
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Book> criteria = builder.createQuery(Book.class);
         Root<Book> root = criteria.from(Book.class);
@@ -108,6 +122,5 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
             throw new NoSuchElementException();
         }
     }
-
 }
 

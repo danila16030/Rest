@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "genre", schema = "public")
 @EntityListeners(AuditingEntityListener.class)
-
 public class Genre extends Auditable{
 
     @Column(name = "genre_name", nullable = false, unique = true)

@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface AuthenticationService {
     Map<Object, Object> logIn(AuthenticationRequestDTO requestDTO);
-    Map<Object, Object> singIn(CreateUserRequestDTO request);
+    Map<Object, Object> singUp(CreateUserRequestDTO request);
 }

@@ -30,7 +30,7 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
         genreModel.add(linkTo(
                 methodOn(GenreController.class)
                         .getGenre(entity.getGenreId(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("get"));
         return genreModel;
     }
 
@@ -55,12 +55,11 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
         if (principal != null && principal.getRole().equals("ADMIN")) {
             genreModels.forEach(genreModel -> genreModel = addAdminLinks(genreModel));
             genreModels.add(linkTo(methodOn(GenreController.class).
-                    creteNewGenre(new CreateGenreRequestDTO(), new UserPrincipal())).withSelfRel());
-            genreModels.add(linkTo(methodOn(GenreController.class).removeGenre(0)).withSelfRel());
+                    creteNewGenre(new CreateGenreRequestDTO(), new UserPrincipal())).withSelfRel().withName("create"));
         }
 
         genreModels.add(linkTo(methodOn(GenreController.class).getAllGenres(10, 0, new UserPrincipal())).
-                withSelfRel());
+                withSelfRel().withName("get all"));
         return genreModels;
     }
 
@@ -68,11 +67,11 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
         genreModel.add(linkTo(
                 methodOn(GenreController.class)
                         .removeGenre(genreModel.getGenreId()))
-                .withSelfRel());
+                .withSelfRel().withName("remove"));
         genreModel.add(linkTo(
                 methodOn(GenreController.class)
                         .updateGenre(new UpdateGenreRequestDTO(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("update"));
         return genreModel;
     }
 }

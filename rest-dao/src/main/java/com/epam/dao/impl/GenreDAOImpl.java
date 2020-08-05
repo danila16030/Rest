@@ -24,12 +24,23 @@ public class GenreDAOImpl extends BaseDAO<Genre> implements GenreDAO {
 
     @Override
     public void removeGenre(long genreId) {
-        remove(genreId,Genre.class);
+        remove(genreId, Genre.class);
     }
 
     @Override
     public Optional<List<Genre>> getGenreList(int limit, int offset) {
-        return getAll(limit, offset, Genre.class);
+        limit=limiting(limit);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Genre> criteria = builder.createQuery(Genre.class);
+        Root<Genre> root = criteria.from(Genre.class);
+        criteria.select(root);
+        criteria.orderBy(builder.asc(root.get(Genre_.GENRE_NAME)));
+        try {
+            return Optional.ofNullable(entityManager.createQuery(criteria).setFirstResult(offset).setMaxResults(limit).
+                    getResultList());
+        } catch (NoResultException e) {
+            throw new NoSuchElementException();
+        }
     }
 
     @Override
@@ -75,4 +86,6 @@ public class GenreDAOImpl extends BaseDAO<Genre> implements GenreDAO {
     public Genre getGenreByIdWithoutException(long genreId) {
         return entityManager.find(Genre.class, genreId);
     }
+
+
 }

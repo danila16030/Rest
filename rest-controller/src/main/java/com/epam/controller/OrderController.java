@@ -33,27 +33,27 @@ public class OrderController {
     @PostMapping(headers = {"Accept=application/json"})
     public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO,
                                                   @AuthenticationPrincipal final UserPrincipal userPrincipal) {
-        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO,userPrincipal.getUserId());
+        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO, userPrincipal.getUserId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
         response.setUserId(userPrincipal.getUserId());
         return ResponseEntity.created(location).body(orderAssembler.toModel(response));
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("{limit:[0-9]+},{offset:[0-9]+}")
+    @GetMapping()
     public ResponseEntity<CollectionModel<OrderModel>> getAllOrders(@AuthenticationPrincipal final UserPrincipal userPrincipal,
-                                                                    @PathVariable int limit,
-                                                                    @PathVariable int offset) {
+                                                                    @RequestParam(defaultValue = "10") int limit,
+                                                                    @RequestParam(defaultValue = "0") int offset) {
         long userId = userPrincipal.getUserId();
         return ResponseEntity.ok(orderAssembler.toCollectionModel(orderService.getOrders(userId, limit, offset),
                 userPrincipal));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{limit:[0-9]+},{offset:[0-9]+},{userId:[0-9]+}")
+    @GetMapping("{userId:[0-9]+}")
     public ResponseEntity<CollectionModel<OrderModel>> getAllUserOrders(@PathVariable int userId,
-                                                                        @PathVariable int limit,
-                                                                        @PathVariable int offset,
+                                                                        @RequestParam(defaultValue = "10") int limit,
+                                                                        @RequestParam(defaultValue = "0") int offset,
                                                                         @AuthenticationPrincipal final
                                                                         UserPrincipal userPrincipal) {
         return ResponseEntity.ok(orderAssembler.toCollectionModel(orderService.getOrders(userId, limit, offset),

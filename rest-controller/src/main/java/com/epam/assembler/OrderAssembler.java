@@ -31,23 +31,19 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
                         .removeOrder(new UserPrincipal(), entity.getOrderId()))
-                .withSelfRel());
-        orderModel.add(linkTo(
-                methodOn(OrderController.class)
-                        .makeAnOrder(new MakeAnOrderRequestDTO(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("remove"));
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
                         .updateOrder(new UpdateOrderRequestDTO(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("update"));
         orderModel.add(linkTo(
                 methodOn(OrderController.class)
                         .getOrder(new UserPrincipal(), entity.getOrderId()))
-                .withSelfRel());
+                .withSelfRel().withName("get order"));
         orderModel.add(linkTo(
                 methodOn(BookController.class)
                         .getBook(entity.getBookId(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("get book"));
         return orderModel;
     }
 
@@ -55,16 +51,19 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
         CollectionModel<OrderModel> orderModels = super.toCollectionModel(entities);
         if (principal != null && principal.getRole().equals("ADMIN")) {
             orderModels.add(linkTo(methodOn(OrderController.class).getAllUserOrders(0, 10, 0,
-                    new UserPrincipal())).withSelfRel());
-            orderModels.add(linkTo(methodOn(OrderController.class).removeUserOrder(0, 0)).withSelfRel());
-            orderModels.add(linkTo(methodOn(OrderController.class).getUserOrder(0, 0)).withSelfRel());
+                    new UserPrincipal())).withSelfRel().withName("get all users orders"));
+            orderModels.add(linkTo(methodOn(OrderController.class).removeUserOrder(0, 0)).
+                    withSelfRel().withName("remove some user order"));
+            orderModels.add(linkTo(methodOn(OrderController.class).getUserOrder(0, 0)).withSelfRel().
+                    withName("get some user order"));
             orderModels.add(linkTo(methodOn(OrderController.class).updateUserOrder(new UpdateOrderRequestDTO(),
-                    0)).withSelfRel());
+                    0)).withSelfRel().withName("update some user order"));
 
         }
-        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO(),new UserPrincipal())).withSelfRel());
+        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO(),
+                new UserPrincipal())).withSelfRel().withName("create"));
         orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(new UserPrincipal(), 10, 0)).
-                withSelfRel());
+                withSelfRel().withName("get all"));
         return orderModels;
     }
 

@@ -29,21 +29,24 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
         userModel.add(linkTo(
                 methodOn(UserController.class)
                         .removeUser(new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("remove"));
         userModel.add(linkTo(
                 methodOn(UserController.class)
                         .update(new updateUserRequestDTO(), new UserPrincipal()))
-                .withSelfRel());
+                .withSelfRel().withName("update"));
         return userModel;
     }
 
     public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
         CollectionModel<UserModel> userModels = super.toCollectionModel(entities);
         userModels.forEach(userModel -> userModel = addAdminLinks(userModel));
-        userModels.add(linkTo(methodOn(UserController.class).getAllUsers(10, 0)).withSelfRel());
-        userModels.add(linkTo(methodOn(UserController.class).getSomeUser(0)).withSelfRel());
-        userModels.add(linkTo(methodOn(UserController.class).removeSomeUser(0)).withSelfRel());
-        userModels.add(linkTo(methodOn(UserController.class).getUser(new UserPrincipal())).withSelfRel());
+        userModels.add(linkTo(methodOn(UserController.class).getAllUsers(10, 0)).withSelfRel().
+                withName("get users"));
+        userModels.add(linkTo(methodOn(UserController.class).getSomeUser(0)).withSelfRel().withName("get some user"));
+        userModels.add(linkTo(methodOn(UserController.class).removeSomeUser(0)).withSelfRel().
+                withName("remove some user"));
+        userModels.add(linkTo(methodOn(UserController.class).getUser(new UserPrincipal())).withSelfRel().
+                withName("get some user"));
         return userModels;
     }
 
@@ -51,13 +54,11 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
         userModel.add(linkTo(
                 methodOn(UserController.class)
                         .removeSomeUser(userModel.getUserId()))
-                .withSelfRel());
+                .withSelfRel().withName("remove some user"));
         userModel.add(linkTo(
                 methodOn(UserController.class)
                         .update(new updateUserRequestDTO(), 0))
-                .withSelfRel());
+                .withSelfRel().withName("update some user"));
         return userModel;
     }
-
-
 }

@@ -21,9 +21,9 @@ import java.util.Optional;
 
 public class BookGenreDAOImpl extends BaseDAO<BookGenre> implements BookGenreDAO {
 
-
     @Override
     public Optional<List<Book>> getAllBooksByGenre(long genreId, int limit, int offset) {
+        limit = limiting(limit);
         Query query = entityManager.createNamedQuery("BookGenre.getAllBooksByGenre", Book.class);
         query.setParameter("genreId", genreId);
         try {
@@ -36,6 +36,7 @@ public class BookGenreDAOImpl extends BaseDAO<BookGenre> implements BookGenreDAO
 
     @Override
     public Optional<List<Genre>> getAllGenresOnBook(long bookId, int limit, int offset) {
+        limit = limiting(limit);
         Query query = entityManager.createNamedQuery("BookGenre.getAllGenresOnBook", Genre.class);
         query.setParameter("bookId", bookId);
         try {
@@ -59,13 +60,13 @@ public class BookGenreDAOImpl extends BaseDAO<BookGenre> implements BookGenreDAO
 
     @Override
     public void createConnection(BookGenre bookGenre) {
-       create(bookGenre);
+        create(bookGenre);
     }
 
     @Override
     public void removeConnection(BookGenre bookGenre) {
         entityManager.joinTransaction();
-        Query query = entityManager.createNamedQuery("remove",BookGenre.class);
+        Query query = entityManager.createNamedQuery("remove", BookGenre.class);
         query.setParameter(1, bookGenre.getGenreId());
         query.setParameter(2, bookGenre.getBookId());
         query.executeUpdate();
@@ -86,6 +87,5 @@ public class BookGenreDAOImpl extends BaseDAO<BookGenre> implements BookGenreDAO
             return false;
         }
     }
-
 
 }

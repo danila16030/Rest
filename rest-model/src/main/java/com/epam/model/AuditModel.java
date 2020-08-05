@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DebugModel extends RepresentationModel<DebugModel> {
+public class AuditModel extends RepresentationModel<AuditModel> {
     private long id;
     private String createdBy;
     private Date createdDate;
     private String lastModifiedBy;
     private Date lastModifiedDate;
-    private List<DebugModel> innerModels=new ArrayList<>();
+    private List<AuditModel> innerModels=new ArrayList<>();
 
     public long getId() {
         return id;
@@ -54,11 +54,11 @@ public class DebugModel extends RepresentationModel<DebugModel> {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public List<DebugModel> getInnerModels() {
+    public List<AuditModel> getInnerModels() {
         return innerModels;
     }
 
-    public void setInnerModels(List<DebugModel> innerModels) {
+    public void setInnerModels(List<AuditModel> innerModels) {
         this.innerModels = innerModels;
     }
 }

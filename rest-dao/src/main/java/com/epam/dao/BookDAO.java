@@ -23,6 +23,6 @@ public interface BookDAO {
 
     Book getBookByIdWithoutException(long bookId);
 
-    Optional<List<Book>> getBookSortedByName(int limit, int offset);
+    Optional<List<Book>> getBookSortedByAuthor(int limit, int offset);
 
 }

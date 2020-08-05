@@ -9,6 +9,4 @@ public interface BookGenreService {
     List<Genre> getGenresByBook(long bookId, int limit, int offset);
 
     List<Book> getBooksByGenre(long genreId, int limit, int offset);
-
-
 }

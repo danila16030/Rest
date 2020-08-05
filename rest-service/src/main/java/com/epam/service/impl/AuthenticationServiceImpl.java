@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Map<Object, Object> singIn(CreateUserRequestDTO request) {
+    public Map<Object, Object> singUp(CreateUserRequestDTO request) {
         String password = passwordEncoder.encode(request.getPassword());
         request.setPassword(password);
         authentication(request);

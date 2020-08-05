@@ -27,9 +27,9 @@ public interface Mapper {
 
     CustomerModel customerToCustomerModel(Customer customer);
 
-    DebugModel auditableToDebugModel(Auditable auditable);
+    AuditModel auditableToDebugModel(Auditable auditable);
 
-    List<DebugModel> auditableListToDebugModelList(List<Auditable> auditable);
+    List<AuditModel> auditableListToDebugModelList(List<Auditable> auditable);
 
     Customer userToCustomer(User user);
 

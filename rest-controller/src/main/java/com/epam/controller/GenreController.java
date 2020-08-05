@@ -53,8 +53,9 @@ public class GenreController {
         return ResponseEntity.ok().location(location).body(genreAssembler.toGenreModel(response, userPrincipal));
     }
 
-    @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@PathVariable int limit, @PathVariable int offset,
+    @GetMapping()
+    public ResponseEntity<CollectionModel<GenreModel>> getAllGenres(@RequestParam(defaultValue = "10") int limit,
+                                                                    @RequestParam(defaultValue = "0") int offset,
                                                                     @AuthenticationPrincipal final
                                                                     UserPrincipal userPrincipal) {
         return ResponseEntity.ok(genreAssembler.toCollectionModel(genreService.getAllGenres(limit, offset), userPrincipal));

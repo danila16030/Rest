@@ -36,13 +36,13 @@ public class BookController {
     private GenreAssembler genreAssembler;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping(value = "{bookId:[0-9]+}")
-    public ResponseEntity<BookModel> removeBook(@PathVariable long bookId) {
+    @DeleteMapping()
+    public ResponseEntity<BookModel> removeBook(@RequestParam long bookId) {
         bookService.removeBook(bookId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "{bookId:[0-9]+}")
+    @GetMapping("{bookId:[0-9]+}")
     public ResponseEntity<BookModel> getBook(@PathVariable long bookId,
                                              @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         return ResponseEntity.ok(bookAssembler.toBookModel(bookService.getBook(bookId), userPrincipal));
@@ -67,48 +67,23 @@ public class BookController {
         return ResponseEntity.created(location).body(bookAssembler.toBookModel(response, userPrincipal));
     }
 
-    @GetMapping(value = "{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<BookModel>> getAllBooks(@PathVariable int limit, @PathVariable int offset,
-                                                                  @AuthenticationPrincipal final
-                                                                  UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getAllBooks(limit, offset),
-                userPrincipal));
-    }
-
-    @GetMapping(value = "{fistId:[0-9]+},{secondId:[0-9]+},{thirdId:[0-9]+}")
+    @GetMapping("{fistId:[0-9]+},{secondId:[0-9]+},{thirdId:[0-9]+}")
     public ResponseEntity<GenreModel> getTopGenre(@PathVariable long fistId, @PathVariable long secondId,
-                                                  @PathVariable long thirdId) {
+                                                  @PathVariable long thirdId, @AuthenticationPrincipal final
+                                                  UserPrincipal userPrincipal) {
         Genre genre = bookService.geTheMostCommonGenre(fistId, secondId, thirdId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + genre.getGenreId()).build().toUri();
-        return ResponseEntity.created(location).body(genreAssembler.toModel(genre));
+        return ResponseEntity.created(location).body(genreAssembler.toGenreModel(genre, userPrincipal));
     }
 
-    @GetMapping(value = "/by-name/{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<BookModel>> getBooksSortedByName(@PathVariable int limit,
-                                                                           @PathVariable int offset,
-                                                                           @AuthenticationPrincipal final
-                                                                           UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBooksSortedByName(limit, offset),
-                userPrincipal));
-    }
-
-    @GetMapping(value = "/by-partial-coincidence/{title},{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<BookModel>> searchByPartialCoincidence(@PathVariable String title,
-                                                                                 @PathVariable int limit,
-                                                                                 @PathVariable int offset,
-                                                                                 @AuthenticationPrincipal final
-                                                                                 UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByPartialCoincidence(title,
-                limit, offset), userPrincipal));
-    }
-
-    @GetMapping(value = "/by-full-coincidence/{title},{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<BookModel>> searchByFullCoincidence(@PathVariable String title,
-                                                                              @PathVariable int offset,
-                                                                              @PathVariable int limit,
-                                                                              @AuthenticationPrincipal final
-                                                                              UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getBookByFullCoincidence(title,
-                limit, offset), userPrincipal));
+    @GetMapping()
+    public ResponseEntity<CollectionModel<BookModel>> getResult(@RequestParam(required = false) String title,
+                                                                @RequestParam(defaultValue = "10") int limit,
+                                                                @RequestParam(defaultValue = "0") int offset,
+                                                                @RequestParam String type,
+                                                                @AuthenticationPrincipal final
+                                                                UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getResult(title,
+                limit, offset,type), userPrincipal));
     }
 }

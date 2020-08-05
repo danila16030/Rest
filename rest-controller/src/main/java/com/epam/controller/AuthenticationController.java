@@ -24,8 +24,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.logIn(request));
     }
 
-    @PostMapping(value = "/singIn")
-    public ResponseEntity singIn(@RequestBody @Valid CreateUserRequestDTO userDTO) {
-        return ResponseEntity.ok(authenticationService.singIn(userDTO));
+    @PostMapping(value = "/singUp")
+    public ResponseEntity singUp(@RequestBody @Valid CreateUserRequestDTO userDTO) {
+        return ResponseEntity.ok(authenticationService.singUp(userDTO));
     }
 }

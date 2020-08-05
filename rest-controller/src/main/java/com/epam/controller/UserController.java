@@ -53,8 +53,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{limit:[0-9]+},{offset:[0-9]+}")
-    public ResponseEntity<CollectionModel<UserModel>> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
+    @GetMapping("/")
+    public ResponseEntity<CollectionModel<UserModel>> getAllUsers(@RequestParam(defaultValue = "10") int limit,
+                                                                  @RequestParam(defaultValue = "0") int offset) {
         List<User> response = userService.getAll(limit, offset);
         return ResponseEntity.ok(userAssembler.toCollectionModel(response));
     }
