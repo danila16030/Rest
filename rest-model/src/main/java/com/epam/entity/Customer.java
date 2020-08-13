@@ -9,7 +9,7 @@ import java.util.List;
         @ColumnResult(name = "username", type = String.class),
         @ColumnResult(name = "totalPrice", type = float.class)})})
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "getCustomers",
+        @NamedNativeQuery(name = "Customer.getCustomers",
                 query = "SELECT r.user_id,r.username,r.totalPrice " +
                         "FROM (SELECT us.user_id,us.username, SUM(o.order_price) AS totalPrice " +
                         "FROM public.order o INNER JOIN order_user ou ON " +
@@ -103,5 +103,12 @@ public class Customer {
         return "Customer{" +
                 "totalPrice=" + totalPrice +
                 '}';
+    }
+
+    public static final class QueryNames {
+        public static final String GET_CUSTOMER = "Customer.getCustomers";
+
+        public QueryNames() {
+        }
     }
 }

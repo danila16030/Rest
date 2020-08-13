@@ -112,4 +112,11 @@ public class Order extends Auditable {
                 ", orderId=" + orderId +
                 '}';
     }
+
+    public static final class QueryNames {
+        public static final String FIND_ORDERS = "Order.findOrders";
+
+        public QueryNames() {
+        }
+    }
 }

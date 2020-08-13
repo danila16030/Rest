@@ -56,7 +56,6 @@ public class BookDao {
 
     @Test
     public void getAllBooksTest() {
-        bookDAO.removeBook(1);
         List<Book> bookList = bookDAO.getAllBooks(10, 0).get();
         Assert.assertEquals(3, bookList.size());
     }
@@ -65,6 +64,18 @@ public class BookDao {
     public void getBookByIdTest() {
         Book book = bookDAO.getBookById(3);
         Assert.assertEquals("Towers", book.getTitle());
+    }
+
+    @Test
+    public void getSortedBooksTest() {
+        List<Book> bookList = bookDAO.getBookSortedByAuthor(10, 0).get();
+        Assert.assertEquals("aking", bookList.get(0).getAuthor());
+    }
+
+    @Test
+    public void getWithoutExceptionTest() {
+        Book book = bookDAO.getBookByIdWithoutException(0);
+        Assert.assertNull(book);
     }
 
     @Test

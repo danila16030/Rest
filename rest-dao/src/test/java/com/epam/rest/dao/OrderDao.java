@@ -61,4 +61,10 @@ public class OrderDao {
         Assert.assertEquals(1, order.getOrderId());
     }
 
+    @Test
+    public void getByIdWithoutExceptionTest() {
+        Order order = orderDAO.getOrderWithoutException(10);
+        Assert.assertNull(order);
+    }
+
 }

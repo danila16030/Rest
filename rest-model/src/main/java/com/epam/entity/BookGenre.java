@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @SqlResultSetMapping(name = "deleteResult", columns = {@ColumnResult(name = "count")})
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "remove",
+        @NamedNativeQuery(name = "BookGenre.remove",
                 query = "DELETE FROM book_genre WHERE genre_id = ? AND book_id=?",
                 resultSetMapping = "deleteResult")
 })
@@ -70,5 +70,14 @@ public class BookGenre {
                 "bookId=" + bookId +
                 ", genreId=" + genreId +
                 '}';
+    }
+
+    public static final class QueryNames {
+        public static final String BOOKS_BY_GENRE = "BookGenre.getAllBooksByGenre";
+        public static final String GENRE_ON_BOOK = "BookGenre.getAllGenresOnBook";
+        public static final String REMOVE = "BookGenre.remove";
+
+        public QueryNames() {
+        }
     }
 }

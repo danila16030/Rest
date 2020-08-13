@@ -55,7 +55,7 @@ public class UserDAOImpl extends BaseDAO<User> implements UserDAO {
         try {
             return entityManager.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            return new User();
+            return null;
         }
     }
 

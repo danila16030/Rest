@@ -8,51 +8,44 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {Config.class})
 public class GenreDao {
-    @InjectMocks
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    @Mock
-    private DataSource dataSource;
 
     @Autowired
     @Mock
     private GenreDAO genreDao;
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
+    protected EntityManager entityManager;
 
     @Before
-    public void setUp() {
-        ResourceDatabasePopulator tables = new ResourceDatabasePopulator();
-        tables.addScript(new ClassPathResource("/dao/genre-table.sql"));
-        tables.addScript(new ClassPathResource("/dao/genre-data.sql"));
-        DatabasePopulatorUtils.execute(tables, dataSource);
+    public void setUp() throws IOException {
+        entityManager.getTransaction().begin();
+        String data = new String(Files.readAllBytes(Paths.get("..\\rest-dao\\src\\test\\resources\\dao\\genre-table.sql")));
+        entityManager.createNativeQuery(data).executeUpdate();
+        data = new String(Files.readAllBytes(Paths.get("..\\rest-dao\\src\\test\\resources\\dao\\genre-data.sql")));
+        entityManager.createNativeQuery(data).executeUpdate();
+        entityManager.getTransaction().commit();
     }
 
     @After
     public void tearDown() {
-        JdbcTestUtils.dropTables(jdbcTemplate, "genre");
+        entityManager.getTransaction().begin();
+        entityManager.createNativeQuery("DROP TABLE genre").executeUpdate();
+        entityManager.getTransaction().commit();
     }
 
     @Test
@@ -61,10 +54,11 @@ public class GenreDao {
         Assert.assertEquals(2, genreList.size());
     }
 
+
     @Test
     public void getGenreByNameTest() {
-        Genre genre = genreDao.getGenreByNameWithoutException("horror");
-        Assert.assertEquals(1, genre.getGenreId());
+        Genre genre = genreDao.getGenreByNameWithoutException("ppol");
+        Assert.assertNull(genre.getGenreName());
     }
 
     @Test
@@ -73,6 +67,11 @@ public class GenreDao {
         Assert.assertEquals("horror", genre.getGenreName());
     }
 
+    @Test
+    public void getGenreByIdWithoutExceptionTest() {
+        Genre genre = genreDao.getGenreByIdWithoutException(0);
+        Assert.assertNull(genre);
+    }
 
 
 }

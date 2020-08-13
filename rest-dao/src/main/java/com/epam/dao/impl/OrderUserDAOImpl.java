@@ -24,8 +24,8 @@ public class OrderUserDAOImpl extends BaseDAO<OrderUser> implements OrderUserDAO
 
     @Override
     public Optional<List<Order>> getOrders(long userId, int limit, int offset) {
-        limit=limiting(limit);
-        Query query = entityManager.createNamedQuery("Order.findOrders", Order.class);
+        limit = limiting(limit);
+        Query query = entityManager.createNamedQuery(Order.QueryNames.FIND_ORDERS, Order.class);
         query.setParameter("userId", userId);
         try {
             return Optional.of(query.setFirstResult(offset).
@@ -37,7 +37,7 @@ public class OrderUserDAOImpl extends BaseDAO<OrderUser> implements OrderUserDAO
 
     @Override
     public Optional<List<Order>> getOrders(long userId) {
-        Query query = entityManager.createNamedQuery("Order.findOrders", Order.class);
+        Query query = entityManager.createNamedQuery(Order.QueryNames.FIND_ORDERS, Order.class);
         query.setParameter("userId", userId);
         try {
             return Optional.of(query.getResultList());
@@ -64,7 +64,7 @@ public class OrderUserDAOImpl extends BaseDAO<OrderUser> implements OrderUserDAO
 
     @Override
     public List<Customer> getCustomers() {
-        Query query = entityManager.createNamedQuery("getCustomers", Customer.class);
+        Query query = entityManager.createNamedQuery(Customer.QueryNames.GET_CUSTOMER, Customer.class);
         try {
             return (List<Customer>) query.getResultList();
         } catch (NoResultException e) {

@@ -62,14 +62,14 @@ public class BookGenreDao {
 
     @Test
     public void getAllBooksByGenreTest() {
-        List<Book> genreList = bookGenreDAO.getAllBooksByGenre(1,10,0).get();
+        List<Book> genreList = bookGenreDAO.getAllBooksByGenre(1, 10, 0).get();
         Assert.assertEquals(2, genreList.size());
     }
 
     @Test
     public void getAllGenresOnBookTest() {
         List<Genre> genreList = bookGenreDAO.getAllGenresOnBook(1).get();
-        Assert.assertEquals(2,genreList.size());
+        Assert.assertEquals(2, genreList.size());
     }
 
     @Test

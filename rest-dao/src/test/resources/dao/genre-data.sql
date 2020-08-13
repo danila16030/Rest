@@ -1,2 +1,2 @@
-INSERT INTO genre (genre_name, created_by, created_date,last_modified_by, last_modified_date) VALUES('horror', '', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000')
-INSERT INTO genre (genre_name, created_by, created_date,last_modified_by, last_modified_date) VALUES('adventure', '', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000')
+INSERT INTO genre (genre_name, created_by, created_date,last_modified_by, last_modified_date) VALUES('horror', '', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000');
+INSERT INTO genre (genre_name, created_by, created_date,last_modified_by, last_modified_date) VALUES('adventure', '', '2020-01-19 00:45:51.000000', '','2020-01-19 00:45:51.000000');

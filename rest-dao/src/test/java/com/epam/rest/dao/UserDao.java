@@ -71,4 +71,16 @@ public class UserDao {
         User user = userDAO.getUser("danila");
         Assert.assertEquals("danila", user.getUsername());
     }
+
+    @Test
+    public void getByNameWithoutExceptionTest() {
+        User user = userDAO.getUserByNameWithoutException("qwettui");
+        Assert.assertNull( user);
+    }
+
+    @Test
+    public void getByIdWithoutExceptionTest() {
+        User user = userDAO.getUserByIdWithoutException(10);
+        Assert.assertNull( user);
+    }
 }
