@@ -65,6 +65,22 @@ public class GenreServiceImpl implements GenreService {
     }
 
     /**
+     * Returns an Genre object by genre name
+     * The genreId argument specify genre in database
+     * <p>
+     * This method return genre by name. If genre doesn't exist throw exception NoSuchElementException
+     *
+     * @param genreName specified genre name
+     * @return the genre at the specified id
+     * @throws NoSuchElementException
+     * @see Genre
+     */
+    @Override
+    public Genre getGenre(String genreName) {
+        return genreDAO.getGenreByNameWithoutException(genreName);
+    }
+
+    /**
      * Returns the updated genre
      * The genreDTO argument must contain information about the genre being updated.
      * <p>

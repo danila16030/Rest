@@ -19,6 +19,8 @@ public interface GenreDAO {
 
     Genre getGenreByNameWithoutException(String genreName);
 
+    Genre getGenreByName(String genreName);
+
     Genre updateGenre(Genre genre);
 
     Genre getGenreByIdWithoutException(long genreId);

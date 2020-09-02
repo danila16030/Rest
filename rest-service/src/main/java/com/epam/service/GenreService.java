@@ -12,6 +12,8 @@ public interface GenreService {
 
     Genre getGenre(long genreId);
 
+    Genre getGenre(String genreName);
+
     Genre updateGenre(UpdateGenreRequestDTO genreDTO);
 
     Genre createGenre(CreateGenreRequestDTO genreDTO) throws InvalidDataException;

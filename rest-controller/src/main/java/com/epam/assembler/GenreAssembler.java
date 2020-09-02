@@ -52,6 +52,8 @@ public class GenreAssembler extends RepresentationModelAssemblerSupport<Genre, G
 
     public CollectionModel<GenreModel> toCollectionModel(Iterable<? extends Genre> entities, UserPrincipal principal) {
         CollectionModel<GenreModel> genreModels = super.toCollectionModel(entities);
+        genreModels.add(linkTo(methodOn(GenreController.class).
+                getGenreByName("", new UserPrincipal())).withSelfRel().withName("get by name"));
         if (principal != null && principal.getRole().equals("ADMIN")) {
             genreModels.forEach(genreModel -> genreModel = addAdminLinks(genreModel));
             genreModels.add(linkTo(methodOn(GenreController.class).

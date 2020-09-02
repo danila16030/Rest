@@ -9,6 +9,7 @@ import com.epam.principal.UserPrincipal;
 import com.epam.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,5 +66,13 @@ public class GenreController {
     public ResponseEntity<GenreModel> getGenre(@PathVariable long genreId,
                                                @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         return ResponseEntity.ok(genreAssembler.toGenreModel(genreService.getGenre(genreId), userPrincipal));
+    }
+
+    @GetMapping(value = "{genreName}")
+    public ResponseEntity<GenreModel> getGenreByName(@PathVariable String genreName,
+                                                     @AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
+        return ResponseEntity.ok().headers(responseHeaders).body(genreAssembler.toGenreModel(genreService.getGenre(genreName), userPrincipal));
     }
 }

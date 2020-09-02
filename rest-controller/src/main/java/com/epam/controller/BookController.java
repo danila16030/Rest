@@ -12,6 +12,7 @@ import com.epam.principal.UserPrincipal;
 import com.epam.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -83,7 +84,9 @@ public class BookController {
                                                                 @RequestParam String type,
                                                                 @AuthenticationPrincipal final
                                                                 UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(bookAssembler.toCollectionModel(bookService.getResult(title,
-                limit, offset,type), userPrincipal));
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
+        return ResponseEntity.ok().headers(responseHeaders).body(bookAssembler.toCollectionModel(bookService.getResult(
+                title, limit, offset, type), userPrincipal));
     }
 }

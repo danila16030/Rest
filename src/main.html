@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>Sing in</title>
+    <link rel="stylesheet" href="css/my.css">
+</head>
+<body class="light-grey">
+<div class="container grey"
+     style="width:100%;height:6%;text-align: center;position:absolute;bottom:87%;z-index:1">
+    <h1 class="medium-text" style="color: white;left:7%; position: absolute; ">
+        Main menu</h1>
+</div>
+<form class="white-back" style="z-index: 2;width:120%;height: 7%;position: absolute;right: 0;top: 0;">
+    <img src="css/resources/icons/menu.svg" alt="menu" style="position: absolute;bottom: 15%;left: 17.5%">
+    <h1 class="bold logo" style="color: black; position: absolute;left:19.5%;bottom:4%;">
+        Logo</h1>
+    <label>
+        <input type="text" id="search"
+               value="" placeholder=" Search by item name"
+               class=" border"
+               style="height: 60%;width:29%; position: absolute;left: 38%;bottom: 20%;"><br/>
+    </label>
+    <select class="grey-border" id="type" style="position: absolute;right: 23.1%;height: 60%;width: 10%;bottom: 20%;">
+        <option>Book by partial coincidence</option>
+        <option>Book by full coincidence</option>
+        <option>Book by Genre</option>
+    </select>
+    <button type="submit" class="margin white-back "
+            style=";position: absolute;border: white;bottom: 5%;right:3.3%">
+        Login
+    </button>
+    <img src="css/resources/icons/favorite.svg" alt="favorite" style="position: absolute; bottom: 28%;right: 7.5%">
+    <img src="css/resources/icons/shopping.svg" alt="cart" style="position: absolute; bottom: 28%;right: 6%">
+    <h1 class="bold small-text" style="color: black; position: absolute;bottom:15%;right: 3%;">
+        |</h1>
+    <button type="submit" class="margin white-back"
+            style="position: absolute; border: white;bottom:5%;right: 0">
+        Sign Up
+    </button>
+</form>
+
+<form method="post">
+    <table id="table"
+           style="position: absolute;top: 20%;left: 21%;table-layout:fixed;height:25% ;width:61%;text-align: center;border-spacing: 7px 7px;">
+    </table>
+    <button type="button" id="top" class="margin goTop-btn">
+    </button>
+    <button type="button" id="bottom" class="margin  goBottom-btn">
+    </button>
+
+</form>
+<script src="scripts/scroll.js"></script>
+<script src="scripts/searcher.js"></script>
+<script src="scripts/positioner.js"></script>
+<script src="scripts/listener.js"></script>
+</body>
+</html>

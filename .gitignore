@@ -4,3 +4,6 @@ target/
 out/
 *.iml
 
+
+/dist
+/node_modules
