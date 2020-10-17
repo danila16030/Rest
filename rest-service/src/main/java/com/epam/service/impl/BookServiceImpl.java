@@ -3,6 +3,7 @@ package com.epam.service.impl;
 import com.epam.dao.BookDAO;
 import com.epam.dao.BookGenreDAO;
 import com.epam.dao.GenreDAO;
+import com.epam.dao.OrderDAO;
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.create.CreateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
@@ -34,6 +35,7 @@ public class BookServiceImpl implements BookService {
     private BookDAO bookDAO;
     private BookValidator bookValidator;
     private GenreDAO genreDAO;
+    private OrderDAO orderDAO;
     private BookGenreDAO bookGenreDAO;
     private BookGenreValidator bookGenreValidator;
     private GenreValidator genreValidator;
@@ -41,13 +43,14 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     public BookServiceImpl(BookDAO bookDAO, BookGenreValidator bookGenreValidator, BookValidator bookValidator,
-                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, GenreValidator genreValidator) {
+                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, OrderDAO orderDAO, GenreValidator genreValidator) {
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
         this.bookGenreDAO = bookGenreDAO;
         this.bookGenreValidator = bookGenreValidator;
         this.genreValidator = genreValidator;
+        this.orderDAO = orderDAO;
     }
 
     /**
@@ -145,7 +148,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void removeBook(long bookId) {
         if (bookValidator.isExist(bookId)) {
-            bookDAO.removeBook(bookId);
+            if (orderDAO.getOrderByBook(bookId).isEmpty()) {
+                bookDAO.removeBook(bookId);
+            }
+            throw new NoSuchElementException("ordered");
         }
         throw new NoSuchElementException();
     }

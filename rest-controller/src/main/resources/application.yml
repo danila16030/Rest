@@ -7,10 +7,13 @@ spring:
     password: root
     hikari:
       idle-timeout: 10000
+    tomcat:
+      max-active: 100
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database: postgresql
   security:
     jwt:
       token:

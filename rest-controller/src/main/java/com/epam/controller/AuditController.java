@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/audit")
 @PreAuthorize("hasAuthority('ADMIN')")
+@CrossOrigin
 public class AuditController {
 
     private BookService bookService;

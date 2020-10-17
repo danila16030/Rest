@@ -1,7 +1,7 @@
 package com.epam.service;
 
 import com.epam.dto.request.create.CreateUserRequestDTO;
-import com.epam.dto.request.update.updateUserRequestDTO;
+import com.epam.dto.request.update.UpdateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.principal.UserPrincipal;
 
@@ -19,9 +19,9 @@ public interface UserService {
 
     void removeUser(long userId);
 
-    User updateUser(updateUserRequestDTO updateUserRequestDTO, long userId);
+    User updateUser(UpdateUserRequestDTO updateUserRequestDTO, long userId);
 
-    User updateUser(updateUserRequestDTO updateUserRequestDTO, UserPrincipal userPrincipal);
+    User updateUser(UpdateUserRequestDTO updateUserRequestDTO, UserPrincipal userPrincipal);
 
 
 }

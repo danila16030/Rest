@@ -11,6 +11,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class OrderDAOImpl extends BaseDAO<Order> implements OrderDAO {
@@ -18,6 +20,21 @@ public class OrderDAOImpl extends BaseDAO<Order> implements OrderDAO {
     @Override
     public Long makeAnOrder(Order order) {
         return create(order).getOrderId();
+    }
+
+    @Override
+    public List<Order> getOrderByBook(long bookId) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> criteria = builder.createQuery(Order.class);
+        Root<Order> root = criteria.from(Order.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get(Order_.BOOK_ID), bookId));
+        try {
+            List<Order> a = entityManager.createQuery(criteria).getResultList();
+            return a;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override

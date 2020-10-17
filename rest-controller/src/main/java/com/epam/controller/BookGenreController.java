@@ -10,7 +10,6 @@ import com.epam.principal.UserPrincipal;
 import com.epam.service.BookGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/book_genre")
+@CrossOrigin
 public class BookGenreController {
 
     @Autowired
@@ -36,9 +36,7 @@ public class BookGenreController {
                                                                      @AuthenticationPrincipal final
                                                                      UserPrincipal userPrincipal) {
         List<Book> books = bookGenreService.getBooksByGenre(genreId, limit, offset);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "*");
-        return ResponseEntity.ok().headers(responseHeaders).body(bookAssembler.toCollection(books, userPrincipal));
+        return ResponseEntity.ok().body(bookAssembler.toCollection(books, userPrincipal));
     }
 
     @GetMapping(value = "/genres/{bookId:[0-9]+}")

@@ -1,7 +1,7 @@
 package com.epam.controller;
 
 import com.epam.assembler.UserAssembler;
-import com.epam.dto.request.update.updateUserRequestDTO;
+import com.epam.dto.request.update.UpdateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.model.UserModel;
 import com.epam.principal.UserPrincipal;
@@ -25,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/users")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class UserController {
     @Autowired
     private JwtTokenProvider provider;
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping()
     public ResponseEntity<UserModel> getUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         String username = userPrincipal.getUsername();
@@ -44,10 +45,11 @@ public class UserController {
         return ResponseEntity.ok().location(location).body(userAssembler.toModel(response));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{id:[0-9]+}")
-    public ResponseEntity<UserModel> getSomeUser(@PathVariable long id) {
-        User response = userService.getUser(id);
+
+    @PreAuthorize(" hasAuthority('ADMIN')")
+    @GetMapping(value = "{username}")
+    public ResponseEntity<UserModel> getSomeUserByName(@AuthenticationPrincipal final UserPrincipal userPrincipal, @PathVariable String username) {
+        User response = userService.getUser(username);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();
         return ResponseEntity.ok().location(location).body(userAssembler.toModel(response));
     }
@@ -60,23 +62,23 @@ public class UserController {
         return ResponseEntity.ok(userAssembler.toCollectionModel(response));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping()
     public ResponseEntity removeUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {
         userService.removeUser(userPrincipal.getUserId());
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping("{id:[0-9]+}")
     public ResponseEntity removeSomeUser(@PathVariable long id) {
         userService.removeUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
-    public ResponseEntity update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO,
+    public ResponseEntity update(@RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO,
                                  @AuthenticationPrincipal final UserPrincipal userPrincipal) {
         User result = userService.updateUser(updateUserRequestDTO, userPrincipal);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + result.getUserId()).build().toUri();
@@ -89,7 +91,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping(value = "{userId:[0-9]+}", headers = {"Accept=application/json"})
-    public ResponseEntity<UserModel> update(@RequestBody @Valid updateUserRequestDTO updateUserRequestDTO,
+    public ResponseEntity<UserModel> update(@RequestBody @Valid UpdateUserRequestDTO updateUserRequestDTO,
                                             @PathVariable long userId) {
         User response = userService.updateUser(updateUserRequestDTO, userId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getUserId()).build().toUri();

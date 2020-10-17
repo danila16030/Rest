@@ -8,11 +8,12 @@ import java.util.List;
 
 public class AuditModel extends RepresentationModel<AuditModel> {
     private long id;
+    private String username;
     private String createdBy;
     private Date createdDate;
     private String lastModifiedBy;
     private Date lastModifiedDate;
-    private List<AuditModel> innerModels=new ArrayList<>();
+    private List<AuditModel> innerModels = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -20,6 +21,14 @@ public class AuditModel extends RepresentationModel<AuditModel> {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getCreatedBy() {

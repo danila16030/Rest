@@ -2,7 +2,7 @@ package com.epam.assembler;
 
 import com.epam.controller.BookController;
 import com.epam.controller.OrderController;
-import com.epam.dto.request.create.MakeAnOrderRequestDTO;
+import com.epam.dto.request.create.MakeAnOrdersRequestDto;
 import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.mapper.Mapper;
@@ -60,7 +60,7 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<Order, O
                     0)).withSelfRel().withName("update some user order"));
 
         }
-        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrderRequestDTO(),
+        orderModels.add(linkTo(methodOn(OrderController.class).makeAnOrder(new MakeAnOrdersRequestDto(),
                 new UserPrincipal())).withSelfRel().withName("create"));
         orderModels.add(linkTo(methodOn(OrderController.class).getAllOrders(new UserPrincipal(), 10, 0)).
                 withSelfRel().withName("get all"));

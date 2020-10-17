@@ -25,8 +25,9 @@ public class ExceptionController {
     }
 
     @ExceptionHandler({NoSuchElementException.class, HttpRequestMethodNotSupportedException.class})
-    public ResponseEntity<ExceptionResponseDTO> hadleNoSuchElement() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ExceptionResponseDTO> hadleNoSuchElement(final Exception exception) {
+        ExceptionResponseDTO responseDTO = new ExceptionResponseDTO(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
 
     @ExceptionHandler({AccessDeniedException.class})

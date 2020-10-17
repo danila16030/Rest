@@ -6,6 +6,7 @@ import com.epam.entity.Genre;
 import com.epam.entity.Genre_;
 import com.epam.exception.NoSuchElementException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class GenreDAOImpl extends BaseDAO<Genre> implements GenreDAO {
 
     @Override

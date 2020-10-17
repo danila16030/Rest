@@ -7,7 +7,7 @@ import com.epam.dto.request.create.MakeAnOrderRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.dto.request.update.UpdateGenreRequestDTO;
 import com.epam.dto.request.update.UpdateOrderRequestDTO;
-import com.epam.dto.request.update.updateUserRequestDTO;
+import com.epam.dto.request.update.UpdateUserRequestDTO;
 import com.epam.entity.*;
 import com.epam.model.*;
 
@@ -47,5 +47,5 @@ public interface Mapper {
 
     User userDTOtUser(CreateUserRequestDTO userDTO);
 
-    User userDTOtUser(updateUserRequestDTO userDTO);
+    User userDTOtUser(UpdateUserRequestDTO userDTO);
 }

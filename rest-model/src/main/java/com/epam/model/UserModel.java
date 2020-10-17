@@ -6,6 +6,7 @@ public class UserModel extends RepresentationModel<UserModel> {
 
     private String username;
     private long userId;
+    private String role;
 
     public long getUserId() {
         return userId;
@@ -21,5 +22,13 @@ public class UserModel extends RepresentationModel<UserModel> {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

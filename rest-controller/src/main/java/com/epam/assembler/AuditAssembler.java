@@ -53,7 +53,7 @@ public class AuditAssembler extends RepresentationModelAssemblerSupport<Auditabl
         auditModel.setId(entity.getUserId());
         auditModel.add(linkTo(
                 methodOn(UserController.class)
-                        .getSomeUser(auditModel.getId()))
+                        .getSomeUserByName(new UserPrincipal(), auditModel.getUsername()))
                 .withSelfRel().withName("get"));
         return auditModel;
     }

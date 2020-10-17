@@ -1,6 +1,6 @@
 package com.epam.service;
 
-import com.epam.dto.request.create.MakeAnOrderRequestDTO;
+import com.epam.dto.request.create.MakeAnOrdersRequestDto;
 import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
@@ -8,7 +8,7 @@ import com.epam.entity.OrderUser;
 import java.util.List;
 
 public interface OrderService {
-    Order makeAnOrder(MakeAnOrderRequestDTO makeAnOrderRequestDTO, long userId);
+    List<Order> makeAnOrder(MakeAnOrdersRequestDto makeAnOrderRequestDTO, long userId);
 
     Order updateOrder(UpdateOrderRequestDTO updateOrderRequestDTO, long userId);
 

@@ -7,7 +7,7 @@ import java.util.List;
 public class CreateBookRequestDTO {
 
     @Size(min = 2, max = 30, message = "Incorrect author name(Should have size 2-30)")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Incorrect author name(Should only contain Latin letters")
+    @Pattern(regexp = "[a-z A-Z]+", message = "Incorrect author name(Should only contain Latin letters")
     @NotBlank(message = "Incorrect author name(Should contain not only spaces)")
     @NotEmpty(message = "Incorrect author name(Should contain some information)")
     private String author;

@@ -1,7 +1,7 @@
 package com.epam.controller;
 
 import com.epam.assembler.OrderAssembler;
-import com.epam.dto.request.create.MakeAnOrderRequestDTO;
+import com.epam.dto.request.create.MakeAnOrdersRequestDto;
 import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
@@ -18,8 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/orders")
 public class OrderController {
 
@@ -31,15 +33,16 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping(headers = {"Accept=application/json"})
-    public ResponseEntity<OrderModel> makeAnOrder(@RequestBody @Valid MakeAnOrderRequestDTO makeAnOrderRequestDTO,
-                                                  @AuthenticationPrincipal final UserPrincipal userPrincipal) {
-        Order response = orderService.makeAnOrder(makeAnOrderRequestDTO, userPrincipal.getUserId());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/" + response.getOrderId()).build().toUri();
-        response.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.created(location).body(orderAssembler.toModel(response));
+    public ResponseEntity<CollectionModel<OrderModel>> makeAnOrder(@RequestBody @Valid MakeAnOrdersRequestDto makeAnOrderRequestDTO,
+                                                                   @AuthenticationPrincipal final UserPrincipal userPrincipal) {
+        List<Order> response = orderService.makeAnOrder(makeAnOrderRequestDTO, userPrincipal.getUserId());
+        for (Order order : response) {
+            order.setUserId(userPrincipal.getUserId());
+        }
+        return ResponseEntity.ok().body(orderAssembler.toCollectionModel(response));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping()
     public ResponseEntity<CollectionModel<OrderModel>> getAllOrders(@AuthenticationPrincipal final UserPrincipal userPrincipal,
                                                                     @RequestParam(defaultValue = "10") int limit,
@@ -50,17 +53,17 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{userId:[0-9]+}")
+    @GetMapping("{userId:[0-9]+},{limit:[0-9]+},{offset:[0-9]+}")
     public ResponseEntity<CollectionModel<OrderModel>> getAllUserOrders(@PathVariable int userId,
-                                                                        @RequestParam(defaultValue = "10") int limit,
-                                                                        @RequestParam(defaultValue = "0") int offset,
+                                                                        @PathVariable int limit,
+                                                                        @PathVariable int offset,
                                                                         @AuthenticationPrincipal final
                                                                         UserPrincipal userPrincipal) {
         return ResponseEntity.ok(orderAssembler.toCollectionModel(orderService.getOrders(userId, limit, offset),
                 userPrincipal));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("{orderId:[0-9]+}")
     public ResponseEntity<OrderModel> getOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal,
                                                @PathVariable long orderId) {
@@ -75,7 +78,7 @@ public class OrderController {
         return ResponseEntity.ok(orderAssembler.toModel(orderService.getOrder(new OrderUser(userId, orderId))));
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping("{orderId:[0-9]+}")
     public ResponseEntity removeOrder(@AuthenticationPrincipal final UserPrincipal userPrincipal, @PathVariable long orderId) {
         long userId = userPrincipal.getUserId();
@@ -90,7 +93,7 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping(headers = {"Accept=application/json"})
     public ResponseEntity<OrderModel> updateOrder(@RequestBody @Valid UpdateOrderRequestDTO updateOrderRequestDTO,
                                                   @AuthenticationPrincipal final UserPrincipal userPrincipal) {

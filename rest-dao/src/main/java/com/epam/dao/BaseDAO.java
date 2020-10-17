@@ -40,6 +40,7 @@ public abstract class BaseDAO<T> {
             throw new NoSuchElementException();
         }
         entityManager.remove(entity);
+        entityManager.getTransaction().commit();
     }
 
     protected int limiting(int limit) {

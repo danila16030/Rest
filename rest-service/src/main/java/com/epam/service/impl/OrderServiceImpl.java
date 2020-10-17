@@ -3,6 +3,7 @@ package com.epam.service.impl;
 import com.epam.dao.OrderDAO;
 import com.epam.dao.OrderUserDAO;
 import com.epam.dto.request.create.MakeAnOrderRequestDTO;
+import com.epam.dto.request.create.MakeAnOrdersRequestDto;
 import com.epam.dto.request.update.UpdateOrderRequestDTO;
 import com.epam.entity.Order;
 import com.epam.entity.OrderUser;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,10 +47,15 @@ public class OrderServiceImpl implements OrderService {
      * @see MakeAnOrderRequestDTO
      */
     @Override
-    public Order makeAnOrder(MakeAnOrderRequestDTO requestDTO, long userId) {
-        long orderId = orderDAO.makeAnOrder(mapper.orderDTOtOrder(requestDTO));
-        orderUserDAO.createConnection(new OrderUser(userId, orderId));
-        return new Order(requestDTO.getOrderTime(), requestDTO.getPrice(), requestDTO.getBookId(), orderId, userId);
+    public List<Order> makeAnOrder(MakeAnOrdersRequestDto requestDTO, long userId) {
+        List<Order> result = new ArrayList<>();
+        for (int i = 0; i < requestDTO.getOrders().size(); i++) {
+            long orderId = orderDAO.makeAnOrder(mapper.orderDTOtOrder(requestDTO.getOrders().get(i)));
+            orderUserDAO.createConnection(new OrderUser(userId, orderId));
+            result.add(new Order(requestDTO.getOrders().get(i).getOrderTime(), requestDTO.getOrders().get(i).getPrice(),
+                    requestDTO.getOrders().get(i).getBookId(), orderId, userId));
+        }
+        return result;
     }
 
     /**

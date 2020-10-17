@@ -2,7 +2,7 @@ package com.epam.service.impl;
 
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserRequestDTO;
-import com.epam.dto.request.update.updateUserRequestDTO;
+import com.epam.dto.request.update.UpdateUserRequestDTO;
 import com.epam.entity.User;
 import com.epam.exception.DuplicatedException;
 import com.epam.exception.ForbitenToDelete;
@@ -138,10 +138,10 @@ public class UserServiceImpl implements UserService {
      * @throws NoSuchElementException
      * @throws DuplicatedException
      * @see User
-     * @see updateUserRequestDTO
+     * @see UpdateUserRequestDTO
      */
     @Override
-    public User updateUser(updateUserRequestDTO userDTO, long userId) {
+    public User updateUser(UpdateUserRequestDTO userDTO, long userId) {
         if (userValidator.isExistById(userId)) {
             User user = mapper.userDTOtUser(userDTO);
             user.setUserId(userId);
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(updateUserRequestDTO userDTO, UserPrincipal userPrincipal) {
+    public User updateUser(UpdateUserRequestDTO userDTO, UserPrincipal userPrincipal) {
         if (userPrincipal != null && userValidator.isExistById(userPrincipal.getUserId())) {
             User user = mapper.userDTOtUser(userDTO);
             user.setUserId(userPrincipal.getUserId());

@@ -3,6 +3,7 @@ package com.epam.service.impl;
 import com.epam.details.UserPrincipalDetailsService;
 import com.epam.dto.request.AuthenticationRequestDTO;
 import com.epam.dto.request.create.CreateUserRequestDTO;
+import com.epam.entity.User;
 import com.epam.principal.UserPrincipal;
 import com.epam.provider.JwtTokenProvider;
 import com.epam.service.AuthenticationService;
@@ -42,8 +43,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String username = request.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
         String token = provider.createToken(username);
+        String role = userService.getUser(username).getRole();
         Map<Object, Object> response = new HashMap<>();
         response.put("username", username);
+        response.put("role", role);
         response.put("token", token);
         return response;
     }
@@ -57,13 +60,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String username = request.getUsername();
         String token = provider.createToken(username);
         Map<Object, Object> response = new HashMap<>();
+        String role = userService.getUser(username).getRole();
         response.put("username", username);
+        response.put("role", role);
         response.put("token", token);
         return response;
     }
 
     private void authentication(CreateUserRequestDTO userDTO) {
-        UserPrincipal user = service.loadUserByUsername(userDTO.getUsername());
+        UserPrincipal user = new UserPrincipal(new User());
         user.setUsername(userDTO.getUsername());
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "",
                 user.getAuthorities());
