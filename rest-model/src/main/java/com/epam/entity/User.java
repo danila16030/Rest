@@ -1,12 +1,13 @@
 package com.epam.entity;
 
+import java.util.Objects;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user", schema = "public")
-
 @EntityListeners(AuditingEntityListener.class)
 public class User extends Auditable {
     @Column(name = "username", nullable = false)
@@ -22,6 +23,9 @@ public class User extends Auditable {
     @Column(name = "role", nullable = false)
     private String role = "USER";
 
+    @Column(name = "logined", nullable = false)
+    private boolean logined;
+    
     public User() {
     }
 
@@ -72,19 +76,34 @@ public class User extends Auditable {
         this.active = active;
     }
 
+    public boolean isLogined() {
+        return logined;
+    }
+
+    public void setLogined(boolean logined) {
+        this.logined = logined;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         User user = (User) o;
 
-        if (userId != user.userId) return false;
-        if (active != user.active) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        return role != null ? role.equals(user.role) : user.role == null;
+        if (userId != user.userId)
+            return false;
+        if (active != user.active)
+            return false;
+        if (logined != user.logined)
+            return false;
+        if (!Objects.equals(username, user.username))
+            return false;
+        if (!Objects.equals(password, user.password))
+            return false;
+        return Objects.equals(role, user.role);
     }
 
     @Override
@@ -94,6 +113,7 @@ public class User extends Auditable {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + active;
         result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (logined ? 1 : 0);
         return result;
     }
 

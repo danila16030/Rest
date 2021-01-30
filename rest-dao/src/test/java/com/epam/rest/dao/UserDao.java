@@ -1,5 +1,9 @@
 package com.epam.rest.dao;
 
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import com.epam.dao.UserDAO;
 import com.epam.entity.User;
 import com.epam.rest.config.Config;
@@ -19,12 +23,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.sql.DataSource;
-import java.util.List;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {Config.class})
+@ContextConfiguration(classes = { Config.class })
 public class UserDao {
+
     @InjectMocks
     private JdbcTemplate jdbcTemplate;
 
@@ -75,12 +77,12 @@ public class UserDao {
     @Test
     public void getByNameWithoutExceptionTest() {
         User user = userDAO.getUserByNameWithoutException("qwettui");
-        Assert.assertNull( user);
+        Assert.assertNull(user);
     }
 
     @Test
     public void getByIdWithoutExceptionTest() {
         User user = userDAO.getUserByIdWithoutException(10);
-        Assert.assertNull( user);
+        Assert.assertNull(user);
     }
 }
