@@ -1,5 +1,14 @@
 package com.epam.service.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.epam.dao.BookDAO;
 import com.epam.dao.BookGenreDAO;
 import com.epam.dao.GenreDAO;
@@ -21,29 +30,31 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
-    private BookDAO bookDAO;
-    private BookValidator bookValidator;
-    private GenreDAO genreDAO;
-    private OrderDAO orderDAO;
-    private BookGenreDAO bookGenreDAO;
-    private BookGenreValidator bookGenreValidator;
-    private GenreValidator genreValidator;
+
     private final Mapper mapper = Mappers.getMapper(Mapper.class);
+
+    private BookDAO bookDAO;
+
+    private BookValidator bookValidator;
+
+    private GenreDAO genreDAO;
+
+    private OrderDAO orderDAO;
+
+    private BookGenreDAO bookGenreDAO;
+
+    private BookGenreValidator bookGenreValidator;
+
+    private GenreValidator genreValidator;
 
     @Autowired
     public BookServiceImpl(BookDAO bookDAO, BookGenreValidator bookGenreValidator, BookValidator bookValidator,
-                           GenreDAO genreDAO, BookGenreDAO bookGenreDAO, OrderDAO orderDAO, GenreValidator genreValidator) {
+            GenreDAO genreDAO, BookGenreDAO bookGenreDAO, OrderDAO orderDAO, GenreValidator genreValidator) {
         this.bookDAO = bookDAO;
         this.bookValidator = bookValidator;
         this.genreDAO = genreDAO;
@@ -302,6 +313,14 @@ public class BookServiceImpl implements BookService {
             }
         }
         throw new InvalidDataException();
+    }
+
+    @Override
+    public void saveImage(MultipartFile imageFile) throws Exception {
+        String folder = "/image/";
+        byte[] bytes = imageFile.getBytes();
+        Path path = Paths.get(folder + imageFile.getOriginalFilename());
+        Files.write(path, bytes);
     }
 
     /**

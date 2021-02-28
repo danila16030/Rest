@@ -1,5 +1,7 @@
 package com.epam.service.impl;
 
+import java.util.List;
+
 import com.epam.dao.UserDAO;
 import com.epam.dto.request.create.CreateUserRequestDTO;
 import com.epam.dto.request.update.UpdateUserRequestDTO;
@@ -17,15 +19,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private UserDAO userDAO;
-    private UserValidator userValidator;
     private final Mapper mapper = Mappers.getMapper(Mapper.class);
+
+    private UserDAO userDAO;
+
+    private UserValidator userValidator;
+
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -102,6 +105,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll(int limit, int offset) {
         return userDAO.getAll(limit, offset).get();
+    }
+
+    /**
+     * Returns an list of users.
+     * The limit argument specify maximum size of list
+     * The offset argument specify offset from the beginning in database
+     * The userName argument specify part of the name
+     * <p>
+     * This method return list of users from database
+     *
+     * @param limit  the maximum number of books in list
+     * @param offset the offset in database from beginning
+     * @return list that contain users from database
+     * @see User
+     */
+    @Override
+    public List<User> getAllByPartialName(String userName, int limit, int offset) {
+        return userDAO.getAllByPartialName(userName, limit, offset).get();
     }
 
     /**

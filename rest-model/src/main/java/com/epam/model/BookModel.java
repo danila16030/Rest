@@ -1,17 +1,27 @@
 package com.epam.model;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 public class BookModel extends RepresentationModel<BookModel> {
+
     private String title;
+
     private String author;
+
     private String description;
+
     private float price;
+
     private String writingDate;
+
     private int numberOfPages;
+
     private long bookId;
+
+    private byte[] image;
+
     private List<GenreModel> genres;
 
     public String getAuthor() {
@@ -76,5 +86,13 @@ public class BookModel extends RepresentationModel<BookModel> {
 
     public void setGenres(List<GenreModel> genres) {
         this.genres = genres;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

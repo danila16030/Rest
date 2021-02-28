@@ -1,14 +1,16 @@
 package com.epam.service;
 
+import java.util.List;
+
 import com.epam.dto.request.create.CreateBookRequestDTO;
 import com.epam.dto.request.update.UpdateBookRequestDTO;
 import com.epam.entity.Book;
 import com.epam.entity.Genre;
 import com.epam.exception.InvalidDataException;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface BookService {
+
     Book getBook(long bookId);
 
     List<Book> getAllBooks(int limit, int offset);
@@ -27,5 +29,7 @@ public interface BookService {
 
     List<Book> getBooksSortedByAuthor(int limit, int offset);
 
-    List<Book> getResult(String title, int limit, int offset,String type);
+    List<Book> getResult(String title, int limit, int offset, String type);
+
+    void saveImage(MultipartFile file) throws Exception;
 }

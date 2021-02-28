@@ -1,5 +1,10 @@
 package com.epam.assembler;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 import com.epam.controller.BookController;
 import com.epam.controller.GenreController;
 import com.epam.dto.request.create.CreateBookRequestDTO;
@@ -10,12 +15,11 @@ import com.epam.mapper.Mapper;
 import com.epam.model.BookModel;
 import com.epam.model.GenreModel;
 import com.epam.principal.UserPrincipal;
+import org.jetbrains.annotations.NotNull;
 import org.mapstruct.factory.Mappers;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -29,9 +33,13 @@ public class BookAssembler extends RepresentationModelAssemblerSupport<Book, Boo
         super(BookController.class, BookModel.class);
     }
 
-
-    public BookModel toModel(Book entity) {
+    public BookModel toModel(@NotNull Book entity) {
         BookModel bookModel = mapper.bookToBookModel(entity);
+        try {
+            bookModel.setImage(Files.readAllBytes(Path.of("/image/" + entity.getImageName())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         bookModel.add(linkTo(
                 methodOn(BookController.class)
                         .getBook(entity.getBookId(), new UserPrincipal()))

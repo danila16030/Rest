@@ -74,6 +74,16 @@ public class UserController {
         return ResponseEntity.ok(userAssembler.toCollectionModel(response));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("all/{username}")
+    public ResponseEntity<CollectionModel<UserModel>> getAllUsersByPartialName(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int offset) {
+        List<User> response = userService.getAllByPartialName(username, limit, offset);
+        return ResponseEntity.ok(userAssembler.toCollectionModel(response));
+    }
+
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping()
     public ResponseEntity removeUser(@AuthenticationPrincipal final UserPrincipal userPrincipal) {

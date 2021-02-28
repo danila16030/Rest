@@ -16,6 +16,8 @@ public interface UserDAO{
 
     Optional<List<User>> getAll(int limit, int offset);
 
+    Optional<List<User>> getAllByPartialName(String userName,int limit, int offset);
+
     User createUser(User user);
 
     void removeUser(long userId);
